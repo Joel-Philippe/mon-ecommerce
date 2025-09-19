@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Allow public read for 'cards' (products)
+    // Allow authenticated users to write (for now, can be refined to admin later)
+    match /cards/{cardId} {
+      allow read: if true;
+      allow write: if request.auth.uid != null;
+    }
+
+    // Cart rules:
+    // Authenticated users can read/write their own cart (document ID matches UID)
+    // For guest carts, the API routes will act as the gatekeeper,
+    // so the rule here will primarily focus on authenticated users.
+    // The API will ensure that guest cart IDs are unique and not guessable.
+    match /carts/{cartId} {
+      allow read, write: if request.auth.uid != null && request.auth.uid == cartId;
+      // For guest carts, the API is responsible for security.
+      // This rule implicitly denies direct guest access to Firestore 'carts' collection,
+      // forcing them through the API which uses the cookie.
+    }
+
+    // Order rules:
+    // Authenticated users can create their own orders.
+    // Users can read their own orders.
+    // No direct write access after creation.
+    match /orders/{orderId} {
+      allow create: if request.auth.uid != null; // Only authenticated users can create directly
+      allow read: if request.auth.uid != null && request.auth.uid == resource.data.customer_uid; // Assuming customer_uid field in order
+      allow update, delete: if false; // Orders are immutable
+    }
+
+    // Default rule: deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
