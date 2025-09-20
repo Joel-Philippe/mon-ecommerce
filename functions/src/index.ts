@@ -27,7 +27,7 @@ import * as logger from "firebase-functions/logger";
 // In the v1 API, each function can only serve one request per container, so
 // this will be the maximum concurrent request count.
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+export const helloWorld = onRequest((request, response) => {
+  logger.info("Hello logs!", {structuredData: true});
+  response.send("Hello from Firebase!");
+});
