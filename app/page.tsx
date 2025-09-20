@@ -365,38 +365,39 @@ import './Cards.css';
       </div>
       
       <div className="menu-container">
-        <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? 'Fermer' : 'Découvrir les options'}
-        </button>
+        <div className="menu-header">
+          <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? 'Fermer' : 'Découvrir les options'}
+          </button>
+          <button
+            className={`header-categorie-button ${selectedButton === 'Tout' ? 'selected' : ''}`}
+            onClick={() => {
+              setShowNew(false);
+              setSelectedCategory(null);
+              setSelectedButton('Tout');
+              setClickedButton(null);
+              setActiveFilter('all');
+            }}
+          >
+            <FaRegListAlt size="1.2em" />
+            <span>Tout</span>
+          </button>
+          <button
+            className={`header-categorie-button ${selectedButton === 'Nouveau' ? 'selected' : ''}`}
+            onClick={() => {
+              setShowNew(true);
+              setSelectedCategory(null);
+              setSelectedButton('Nouveau');
+              setClickedButton(null);
+              setActiveFilter('new');
+            }}
+          >
+            <FaNewspaper size="1.2em" />
+            <span>Nouveau</span>
+          </button>
+        </div>
         <div className={`menu-content ${isMenuOpen ? 'open' : ''}`}>
           <div className="categories-container">
-            <button
-              className={`categorie_button ${selectedButton === 'Tout' ? 'selected' : ''}`}
-              onClick={() => {
-                setShowNew(false);
-                setSelectedCategory(null);
-                setSelectedButton('Tout');
-                setClickedButton(null);
-                setActiveFilter('all');
-              }}
-            >
-              <FaRegListAlt size="2em" />
-              <span>Tout</span>
-            </button>
-            <button
-              className={`categorie_button ${selectedButton === 'Nouveau' ? 'selected' : ''}`}
-              onClick={() => {
-                setShowNew(true);
-                setSelectedCategory(null);
-                setSelectedButton('Nouveau');
-                setClickedButton(null);
-                setActiveFilter('new');
-              }}
-            >
-              <FaNewspaper size="2em" />
-              <span>Nouveau</span>
-            </button>
-
             {[...new Set(cards.map(card => card.categorie))].map(category => {
               const card = cards.find(card => card.categorie === category);
               return (
