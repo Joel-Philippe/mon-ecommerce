@@ -35,10 +35,9 @@ export default function BackgroundSVG() {
 
         {/* --- CHAUSETTES --- */}
         <motion.g
-          transform="translate(200,300) scale(1.5)"
           animate={{
-            x: [0, 20, -10, 15, 0],
-            y: [0, -15, 10, -5, 0],
+            x: [200, 220, 190, 215, 200], // Initial x + floating
+            y: [300, 285, 310, 295, 300], // Initial y + floating
             rotate: [0, 360],
             scale: [1.5, 1.55, 1.5],
           }}
@@ -58,10 +57,9 @@ export default function BackgroundSVG() {
           />
         </motion.g>
         <motion.g
-          transform="translate(1500,200) scale(0.8)"
           animate={{
-            x: [0, -25, 15, -10, 0],
-            y: [0, 20, -10, 15, 0],
+            x: [1500, 1475, 1515, 1490, 1500],
+            y: [200, 220, 190, 215, 200],
             rotate: [0, -360],
             scale: [0.8, 0.75, 0.8],
           }}
@@ -83,10 +81,9 @@ export default function BackgroundSVG() {
 
         {/* --- CHAPEAUX --- */}
         <motion.g
-          transform="translate(400,700) scale(1.2)"
           animate={{
-            x: [0, 30, -20, 25, 0],
-            y: [0, -20, 15, -10, 0],
+            x: [400, 430, 380, 425, 400],
+            y: [700, 680, 715, 690, 700],
             rotate: [0, 360],
             scale: [1.2, 1.25, 1.2],
           }}
@@ -106,10 +103,9 @@ export default function BackgroundSVG() {
           <ellipse cx="100" cy="70" rx="80" ry="20" fill="url(#grad1)" opacity="0.7" />
         </motion.g>
         <motion.g
-          transform="translate(1200,500) scale(0.7)"
           animate={{
-            x: [0, -15, 10, -12, 0],
-            y: [0, 18, -12, 15, 0],
+            x: [1200, 1185, 1210, 1190, 1200],
+            y: [500, 518, 488, 515, 500],
             rotate: [0, -360],
             scale: [0.7, 0.65, 0.7],
           }}
@@ -130,10 +126,9 @@ export default function BackgroundSVG() {
 
         {/* --- VERRES À COCKTAIL --- */}
         <motion.g
-          transform="translate(800,300) scale(1.5)"
           animate={{
-            x: [0, 25, -15, 20, 0],
-            y: [0, -20, 15, -10, 0],
+            x: [800, 825, 785, 820, 800],
+            y: [300, 280, 315, 290, 300],
             rotate: [0, 360],
             scale: [1.5, 1.58, 1.5],
           }}
@@ -155,10 +150,9 @@ export default function BackgroundSVG() {
           <circle cx="50" cy="-10" r="12" fill="#e63198" />
         </motion.g>
         <motion.g
-          transform="translate(1700,600) scale(0.9)"
           animate={{
-            x: [0, -18, 12, -15, 0],
-            y: [0, 22, -15, 18, 0],
+            x: [1700, 1682, 1712, 1695, 1700],
+            y: [600, 622, 585, 618, 600],
             rotate: [0, -360],
             scale: [0.9, 0.85, 0.9],
           }}
@@ -180,10 +174,9 @@ export default function BackgroundSVG() {
 
         {/* --- LUNETTES --- */}
         <motion.g
-          transform="translate(600,900) scale(1.4)"
           animate={{
-            x: [0, 20, -10, 15, 0],
-            y: [0, -15, 10, -5, 0],
+            x: [600, 620, 590, 615, 600],
+            y: [900, 885, 910, 895, 900],
             rotate: [0, 360],
             scale: [1.4, 1.45, 1.4],
           }}
@@ -199,10 +192,9 @@ export default function BackgroundSVG() {
           <rect x="80" y="30" width="20" height="20" fill="#e63198" />
         </motion.g>
         <motion.g
-          transform="translate(1400,850) scale(0.8)"
           animate={{
-            x: [0, -12, 8, -10, 0],
-            y: [0, 15, -10, 12, 0],
+            x: [1400, 1388, 1408, 1390, 1400],
+            y: [850, 865, 840, 858, 850],
             rotate: [0, -360],
             scale: [0.8, 0.78, 0.8],
           }}
