@@ -21,7 +21,7 @@ const SvgBackground = () => {
     const loader1Bar4Heights = [30, 45, 13, 80, 56, 72, 45, 76, 34, 23, 67, 30];
     const loader1Bar4Timeline = gsap.timeline({ repeat: -1 });
 
-    function tlArrayStep(element, timeline, duration, array) {
+    function tlArrayStep(element: string, timeline: gsap.core.Timeline, duration: number, array: number[]) {
       for (let i = 0, length = array.length; i < length; i++) {
         timeline.to(element, { duration, height: array[i] });
       }
