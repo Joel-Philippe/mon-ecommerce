@@ -1,12 +1,12 @@
 'use client';
 import { useCallback } from 'react';
-import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles'; // or 'tsparticles/load' if you prefer
-import type { Engine } from 'tsparticles';
+import Particles from '@tsparticles/react'; // Updated import
+import { loadSlim } from '@tsparticles/slim'; // Updated import
+import type { Engine } from '@tsparticles/engine'; // Updated import
 
 export default function AnimatedBackground() {
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadFull(engine);
+    await loadSlim(engine); // Updated to loadSlim
   }, []);
 
   const particlesLoaded = useCallback(async (container: any) => {
@@ -21,7 +21,7 @@ export default function AnimatedBackground() {
       options={{
         background: {
           color: {
-            value: "#blanchedalmond", // Match the div background
+            value: "#blanchedalmond",
           },
         },
         fpsLimit: 60,
@@ -33,7 +33,7 @@ export default function AnimatedBackground() {
             },
             onHover: {
               enable: true,
-              mode: "repulse", // Repel on hover
+              mode: "repulse",
             },
             resize: true,
           },
@@ -49,17 +49,17 @@ export default function AnimatedBackground() {
         },
         particles: {
           color: {
-            value: ["#f87e12", "#e63199", "#07f916"], // Stylish colors
+            value: ["#f87e12", "#e63199", "#07f916"],
           },
           links: {
             color: "#ffffff",
             distance: 150,
-            enable: false, // No lines between particles
+            enable: false,
             opacity: 0.5,
             width: 1,
           },
           collisions: {
-            enable: true, // Enable collisions
+            enable: true,
           },
           move: {
             direction: "none",
@@ -68,7 +68,7 @@ export default function AnimatedBackground() {
               default: "bounce",
             },
             random: true,
-            speed: 1, // Slower, fluid movement
+            speed: 1,
             straight: false,
           },
           number: {
@@ -76,7 +76,7 @@ export default function AnimatedBackground() {
               enable: true,
               area: 800,
             },
-            value: 80, // Number of particles
+            value: 80,
           },
           opacity: {
             value: 0.8,
@@ -89,7 +89,7 @@ export default function AnimatedBackground() {
             },
           },
           shape: {
-            type: ["circle", "triangle", "square", "star"], // Stylish shapes
+            type: ["circle", "triangle", "square", "star"],
             options: {
               polygon: {
                 sides: 5,
@@ -97,7 +97,7 @@ export default function AnimatedBackground() {
             },
           },
           size: {
-            value: { min: 5, max: 15 }, // Varied sizes
+            value: { min: 5, max: 15 },
             random: true,
             anim: {
               enable: true,
@@ -106,7 +106,7 @@ export default function AnimatedBackground() {
               sync: false,
             },
           },
-          rotate: { // Add rotation
+          rotate: {
             value: 0,
             animation: {
               enable: true,
