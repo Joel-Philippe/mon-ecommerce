@@ -21,7 +21,6 @@ export default function BackgroundSVG() {
         viewBox="0 0 1920 1080"
         preserveAspectRatio="xMidYMid slice"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ display: 'block' }}
       >
         <defs>
           <linearGradient id="grad1" x1="0" x2="1">
@@ -34,237 +33,190 @@ export default function BackgroundSVG() {
           </linearGradient>
         </defs>
 
-        {/* Triangles */}
-        <motion.polygon
-          points="200,100 250,200 150,200"
-          fill="url(#grad1)"
-          opacity="0.8"
+        {/* --- CHAUSETTES --- */}
+        <motion.g
+          transform="translate(200,300) scale(1.5)"
           animate={{
-            x: [0, 20, -10, 15, 0], // More varied movement
-            y: [0, -10, 15, -5, 0],
+            x: [0, 20, -10, 15, 0],
+            y: [0, -15, 10, -5, 0],
             rotate: [0, 360],
-            scale: [1, 1.05, 1], // Subtle scale
+            scale: [1.5, 1.55, 1.5],
           }}
           transition={{
-            duration: 20, // Increased duration
+            duration: 25,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 0.2, // Varied delay
+            delay: 0.5,
           }}
-        />
-        <motion.polygon
-          points="600,300 700,500 500,500"
-          stroke="#e63198"
-          strokeWidth="12"
-          fill="none"
+        >
+          <path
+            d="M50 10 v100 q0 30 30 30 h40 q30 0 30 -30 v-40 q0 -20 -20 -20 h-20 v-40 q0 -20 -20 -20 z"
+            fill="url(#grad1)"
+            stroke="#e63198"
+            strokeWidth="6"
+            opacity="0.85"
+          />
+        </motion.g>
+        <motion.g
+          transform="translate(1500,200) scale(0.8)"
           animate={{
             x: [0, -25, 15, -10, 0],
             y: [0, 20, -10, 15, 0],
-            rotate: [0, -360], // Counter-clockwise
-            scale: [1, 0.95, 1],
+            rotate: [0, -360],
+            scale: [0.8, 0.75, 0.8],
           }}
           transition={{
-            duration: 25, // Increased duration
+            duration: 30,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 3,
+            delay: 2,
           }}
-        />
-        <motion.polygon
-          points="1400,200 1500,400 1300,400"
-          fill="url(#grad2)"
-          opacity="0.7"
+        >
+          <path
+            d="M50 10 v100 q0 30 30 30 h40 q30 0 30 -30 v-40 q0 -20 -20 -20 h-20 v-40 q0 -20 -20 -20 z"
+            fill="url(#grad2)"
+            stroke="#e63198"
+            strokeWidth="4"
+            opacity="0.7"
+          />
+        </motion.g>
+
+        {/* --- CHAPEAUX --- */}
+        <motion.g
+          transform="translate(400,700) scale(1.2)"
           animate={{
             x: [0, 30, -20, 25, 0],
-            y: [0, -15, 20, -10, 0],
-            rotate: [0, 360],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 1.5,
-          }}
-        />
-
-        {/* Cercles */}
-        <motion.circle
-          cx="400"
-          cy="600"
-          r="80"
-          fill="url(#grad2)"
-          opacity="0.9"
-          animate={{
-            x: [0, 15, -8, 12, 0],
-            y: [0, -12, 10, -7, 0],
-            rotate: [0, 360],
-            scale: [1, 1.03, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.8,
-          }}
-        />
-        <motion.circle
-          cx="900"
-          cy="400"
-          r="50"
-          stroke="#e63198"
-          strokeWidth="8"
-          fill="none"
-          animate={{
-            x: [0, -10, 5, -15, 0],
-            y: [0, 15, -8, 10, 0],
-            rotate: [0, -360],
-            scale: [1, 0.97, 1],
-          }}
-          transition={{
-            duration: 23,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 4,
-          }}
-        />
-        <motion.circle
-          cx="1600"
-          cy="700"
-          r="100"
-          fill="url(#grad1)"
-          opacity="0.6"
-          animate={{
-            x: [0, 22, -18, 20, 0],
             y: [0, -20, 15, -10, 0],
             rotate: [0, 360],
-            scale: [1, 1.06, 1],
+            scale: [1.2, 1.25, 1.2],
           }}
           transition={{
             duration: 28,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 2,
-          }}
-        />
-
-        {/* Carrés */}
-        <motion.rect
-          x="200"
-          y="800"
-          width="120"
-          height="120"
-          fill="url(#grad1)"
-          opacity="0.9"
-          animate={{
-            x: [0, 18, -12, 10, 0],
-            y: [0, -15, 10, -8, 0],
-            rotate: [0, 360],
-            scale: [1, 1.04, 1],
-          }}
-          transition={{
-            duration: 21,
-            repeat: Infinity,
-            ease: 'easeInOut',
             delay: 1,
           }}
-        />
-        <motion.rect
-          x="800"
-          y="700"
-          width="150"
-          height="150"
-          stroke="#e63198"
-          strokeWidth="10"
-          fill="none"
+        >
+          <path
+            d="M50 60 q50 -80 100 0 z"
+            fill="url(#grad2)"
+            stroke="#e63198"
+            strokeWidth="6"
+          />
+          <ellipse cx="100" cy="70" rx="80" ry="20" fill="url(#grad1)" opacity="0.7" />
+        </motion.g>
+        <motion.g
+          transform="translate(1200,500) scale(0.7)"
           animate={{
             x: [0, -15, 10, -12, 0],
             y: [0, 18, -12, 15, 0],
             rotate: [0, -360],
-            scale: [1, 0.96, 1],
+            scale: [0.7, 0.65, 0.7],
+          }}
+          transition={{
+            duration: 32,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 3.5,
+          }}
+        >
+          <path
+            d="M50 60 q50 -80 100 0 z"
+            fill="#e63198"
+            opacity="0.8"
+          />
+          <ellipse cx="100" cy="70" rx="80" ry="20" fill="url(#grad2)" />
+        </motion.g>
+
+        {/* --- VERRES À COCKTAIL --- */}
+        <motion.g
+          transform="translate(800,300) scale(1.5)"
+          animate={{
+            x: [0, 25, -15, 20, 0],
+            y: [0, -20, 15, -10, 0],
+            rotate: [0, 360],
+            scale: [1.5, 1.58, 1.5],
+          }}
+          transition={{
+            duration: 27,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 1.8,
+          }}
+        >
+          <polygon
+            points="0,0 100,0 50,120"
+            fill="url(#grad1)"
+            stroke="#e63198"
+            strokeWidth="5"
+            opacity="0.85"
+          />
+          <rect x="45" y="120" width="10" height="60" fill="url(#grad2)" />
+          <circle cx="50" cy="-10" r="12" fill="#e63198" />
+        </motion.g>
+        <motion.g
+          transform="translate(1700,600) scale(0.9)"
+          animate={{
+            x: [0, -18, 12, -15, 0],
+            y: [0, 22, -15, 18, 0],
+            rotate: [0, -360],
+            scale: [0.9, 0.85, 0.9],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 4.5,
+          }}
+        >
+          <polygon
+            points="0,0 100,0 50,120"
+            fill="url(#grad2)"
+            stroke="#e63198"
+            strokeWidth="3"
+          />
+          <rect x="45" y="120" width="10" height="50" fill="url(#grad1)" />
+        </motion.g>
+
+        {/* --- LUNETTES --- */}
+        <motion.g
+          transform="translate(600,900) scale(1.4)"
+          animate={{
+            x: [0, 20, -10, 15, 0],
+            y: [0, -15, 10, -5, 0],
+            rotate: [0, 360],
+            scale: [1.4, 1.45, 1.4],
           }}
           transition={{
             duration: 26,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 3.5,
+            delay: 0.8,
           }}
-        />
-        <motion.rect
-          x="1300"
-          y="850"
-          width="100"
-          height="100"
-          fill="url(#grad2)"
-          opacity="0.8"
+        >
+          <circle cx="40" cy="40" r="40" fill="none" stroke="url(#grad1)" strokeWidth="8" />
+          <circle cx="140" cy="40" r="40" fill="none" stroke="url(#grad2)" strokeWidth="8" />
+          <rect x="80" y="30" width="20" height="20" fill="#e63198" />
+        </motion.g>
+        <motion.g
+          transform="translate(1400,850) scale(0.8)"
           animate={{
-            x: [0, 20, -15, 18, 0],
-            y: [0, -18, 12, -15, 0],
-            rotate: [0, 360],
-            scale: [1, 1.07, 1],
-          }}
-          transition={{
-            duration: 24,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 1.8,
-          }}
-        />
-
-        {/* Petits éléments dispersés */}
-        <motion.circle
-          cx="300"
-          cy="300"
-          r="12"
-          fill="#e63198"
-          animate={{
-            x: [0, 8, -4, 6, 0],
-            y: [0, -5, 6, -3, 0],
-            rotate: [0, 360],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.1,
-          }}
-        />
-        <motion.rect
-          x="1100"
-          y="150"
-          width="40"
-          height="40"
-          fill="url(#grad2)"
-          animate={{
-            x: [0, -10, 5, -8, 0],
-            y: [0, 6, -4, 5, 0],
+            x: [0, -12, 8, -10, 0],
+            y: [0, 15, -10, 12, 0],
             rotate: [0, -360],
-            scale: [1, 0.9, 1],
+            scale: [0.8, 0.78, 0.8],
           }}
           transition={{
-            duration: 17,
+            duration: 29,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 0.5,
+            delay: 3,
           }}
-        />
-        <motion.polygon
-          points="1700,150 1750,230 1650,230"
-          fill="url(#grad1)"
-          animate={{
-            x: [0, 12, -6, 10, 0],
-            y: [0, -8, 7, -5, 0],
-            rotate: [0, 360],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 19,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.9,
-          }}
-        />
+        >
+          <circle cx="40" cy="40" r="40" fill="none" stroke="#e63198" strokeWidth="6" />
+          <circle cx="140" cy="40" r="40" fill="none" stroke="url(#grad1)" strokeWidth="6" />
+          <rect x="80" y="30" width="20" height="20" fill="url(#grad2)" />
+        </motion.g>
       </svg>
     </div>
   );
