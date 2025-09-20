@@ -64,13 +64,10 @@ html, body {
     width: 397px;
     transition: box-shadow 0.8s ease;
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: rgb(244, 244, 244) 0px 0px 30px;
-    backdrop-filter: blur(10px);
     margin: 15px;
     display: flex;
     flex-direction: column;
-    background: #ffebcdb0;
-    border: 5px solid white;
+    background: #ffebcd;
     transition: box-shadow 0.3s ease;
 }
 
@@ -180,7 +177,7 @@ html, body {
     transition: background 0.3s ease;
   }
   .title_card .title-button:hover {
-    background: #0056b3;
+    background: #EF6C00;
   }
 .title_card_subtitle {
     position: relative;
@@ -238,8 +235,8 @@ html, body {
     margin-right: auto;
     font-family: cursive;
     font-weight: 700;
-    font-size: medium;
-    color: #ffffff;
+    font-size: small;
+    color: #216d24;
     margin-left: 0;
 }
 .initial_price{
@@ -481,8 +478,7 @@ h4{
         margin-bottom: 2px;
         border-radius: 10px;
         transition: box-shadow 0.3s ease;
-        background: #ffebcdd1;
-        border: 5px solid white;
+        background: #ffebcd00;
         transition: box-shadow 0.3s ease;
     }
     .cards-container {
@@ -497,7 +493,6 @@ h4{
         width: max-content;
         font-weight: 900;
         top: 0;
-        font-size: 15px;
         width: 100%;
     }
     .picture_card {

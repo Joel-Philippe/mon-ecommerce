@@ -24,7 +24,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
   const percentage = calculateStockRemainingPercentage(stock, stock_reduc);
 
   const getGradient = () => {
-    if (percentage >= 60) return '#e63198';
+    if (percentage >= 60) return '#8BC34A';
     if (percentage <= 50) return 'linear-gradient(90deg,rgb(188, 0, 0),rgb(246, 0, 0))';
     return 'linear-gradient(90deg,rgb(255, 174, 0),rgb(246, 139, 0))';
   };
@@ -34,7 +34,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
             <div style={{
         fontSize: '0.85rem',
         textAlign: 'left',
-        color: percentage < 30 ? '#cc0000' : '#e63198',
+        color: percentage < 30 ? '#cc0000' : 'rgb(72 134 0)',
         fontWeight: 500,
       }}>
         {isAnimated ? `${percentage}%` : '0%'} Disponible
