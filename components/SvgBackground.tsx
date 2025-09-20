@@ -252,7 +252,7 @@ const SvgBackground = () => {
         </li>
         <li>
           <svg version="1.1" className="loader5" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            viewBox="0 0 52 52" style={{ enableBackground: 'new 0 0 52 52' }} xmlSpace="preserve">
+            viewBox="0 0 52 52" enableBackground="new 0 0 52 52" xmlSpace="preserve">
             <path className="loader5__front" d="M51,26c0,13.8-11.2,25-25,25S1,39.8,1,26S12.2,1,26,1S51,12.2,51,26z" />
             <path className="loader5__back" d="M51,26c0,13.8-11.2,25-25,25S1,39.8,1,26S12.2,1,26,1S51,12.2,51,26z" />
           </svg>
