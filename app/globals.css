@@ -540,8 +540,8 @@ html::-webkit-scrollbar {
   width: 100%;
   font-family:'allroundgothic';
   align-items: center;
-  color: #ff9900;
-  background: rgb(196, 249, 255);
+  color:rgb(196, 249, 255) ;
+  background: #e63198;
   padding: 10px;
   margin: 11px;
   border-radius: 10px;
