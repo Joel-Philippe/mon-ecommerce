@@ -26,30 +26,31 @@
 }
 
 .menuButtons {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid */
+  gap: 12px; /* Increased gap for better spacing */
   max-width: 1200px;
   margin: 0 auto;
-  flex-wrap: wrap;
+  padding: 10px 0; /* Add some vertical padding */
+  justify-items: center; /* Center grid items */
+  align-items: center;
 }
 
 .menuButton {
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 10px 16px;
-  font-size: 12px;
+  border-radius: 16px; /* Slightly more rounded corners */
+  padding: 14px 20px; /* Increased padding */
+  font-size: 14px; /* Slightly larger font */
   font-weight: 600;
   color: #475569;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  flex: 1 1 auto;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
+  width: 100%; /* Ensure button takes full grid cell width */
 }
 
 .menuButton::before {
@@ -83,22 +84,22 @@
 .cartButton {
   background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
   border: 1px solid #94a3b8;
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-size: 13px;
+  border-radius: 16px; /* Slightly more rounded corners */
+  padding: 14px 20px; /* Increased padding */
+  font-size: 14px; /* Slightly larger font */
   font-weight: 700;
   color: #64748b;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  flex: 1 1 auto;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  width: 100%; /* Ensure button takes full grid cell width */
 }
 
 .cartButton:disabled {
@@ -234,15 +235,13 @@
   }
 
   .menuButton {
-    padding: 8px 12px;
-    font-size: 11px;
-    min-width: 70px;
+    padding: 10px 14px;
+    font-size: 12px;
   }
 
   .cartButton {
-    padding: 10px 16px;
-    font-size: 12px;
-    min-width: 90px;
+    padding: 12px 18px;
+    font-size: 13px;
   }
 
   .cartIcon {
@@ -263,20 +262,17 @@
   }
 
   .menuButtons {
-    gap: 4px;
-    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .menuButton {
-    padding: 6px 10px;
-    font-size: 10px;
-    flex: 1;
+    padding: 8px 12px;
+    font-size: 11px;
   }
 
   .cartButton {
-    padding: 8px 12px;
-    font-size: 11px;
-    flex: 1;
+    padding: 10px 14px;
+    font-size: 12px;
   }
 
   .cartIcon {
