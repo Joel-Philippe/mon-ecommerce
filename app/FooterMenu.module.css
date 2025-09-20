@@ -47,7 +47,7 @@
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  min-width: 80px;
+  flex: 1 1 auto;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -92,7 +92,7 @@
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  min-width: 100px;
+  flex: 1 1 auto;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -270,17 +270,13 @@
   .menuButton {
     padding: 6px 10px;
     font-size: 10px;
-    min-width: 60px;
     flex: 1;
-    max-width: 80px;
   }
 
   .cartButton {
     padding: 8px 12px;
     font-size: 11px;
-    min-width: 80px;
     flex: 1;
-    max-width: 100px;
   }
 
   .cartIcon {
