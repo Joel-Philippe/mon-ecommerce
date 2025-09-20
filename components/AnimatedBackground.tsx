@@ -1,26 +1,37 @@
 'use client';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Particles from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
 import type { Engine } from '@tsparticles/engine';
 
 export default function AnimatedBackground() {
-  console.log("AnimatedBackground component rendered"); // Debug log
+  console.log("AnimatedBackground component rendered");
+  const [engineLoaded, setEngineLoaded] = useState(false);
 
-  const particlesInit = useCallback(async (engine: Engine) => {
-    console.log("Particles Engine Initializing...");
-    await loadSlim(engine);
-    console.log("Particles Engine Initialized!");
-  }, []);
+  useEffect(() => {
+    const loadParticlesEngine = async () => {
+      console.log("Particles Engine Initializing from useEffect...");
+      const engine = await loadSlim(null); // Pass null as engine is not yet available
+      console.log("Particles Engine Initialized from useEffect!", engine);
+      setEngineLoaded(true);
+    };
+
+    if (!engineLoaded) {
+      loadParticlesEngine();
+    }
+  }, [engineLoaded]);
 
   const particlesLoaded = useCallback(async (container: any) => {
     console.log("Particles container loaded", container);
   }, []);
 
+  if (!engineLoaded) {
+    return null; // Or a loading spinner
+  }
+
   return (
     <Particles
       id="tsparticles"
-      init={particlesInit}
       loaded={particlesLoaded}
       options={{
         background: {
