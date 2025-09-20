@@ -1,12 +1,14 @@
 'use client';
 import { useCallback } from 'react';
-import Particles from '@tsparticles/react'; // Updated import
-import { loadSlim } from '@tsparticles/slim'; // Updated import
-import type { Engine } from '@tsparticles/engine'; // Updated import
+import Particles from '@tsparticles/react';
+import { loadSlim } from '@tsparticles/slim';
+import type { Engine } from '@tsparticles/engine';
 
 export default function AnimatedBackground() {
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine); // Updated to loadSlim
+    console.log("Particles Engine Initializing...");
+    await loadSlim(engine);
+    console.log("Particles Engine Initialized!");
   }, []);
 
   const particlesLoaded = useCallback(async (container: any) => {
@@ -21,7 +23,7 @@ export default function AnimatedBackground() {
       options={{
         background: {
           color: {
-            value: "#blanchedalmond",
+            value: "#000000", // Temporarily change background to black for visibility test
           },
         },
         fpsLimit: 60,
