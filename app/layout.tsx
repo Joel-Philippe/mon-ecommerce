@@ -8,7 +8,7 @@ import './video-banner.css';
 import './style.css';
 
 import FixedCartButton from '@/components/FixedCartButton';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import SvgBackground from '@/components/SvgBackground';
 
 export default function RootLayout({
   children,
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <AnimatedBackground />
+        <SvgBackground />
         <AuthProvider>
           <CheckboxProvider>
             <GlobalCartProvider>

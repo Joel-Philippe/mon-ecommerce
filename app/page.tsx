@@ -97,6 +97,7 @@ import './Cards.css';
   
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all' | 'new'>('all');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [visibleCategory, setVisibleCategory] = useState<string | null>(null);
 
   // cartInfo state is no longer needed as globalCart from context provides the data
@@ -363,103 +364,99 @@ import './Cards.css';
         <AnimatedBanner onEnd={handleVideoEnd} />
       </div>
       
-      <div className="menu-items">
-        <div className='overlap-group-container' ref={categoryMenuRef}>
-          <div className='overlap-group'>
-            <p className='categories'>
-              <button
-                className={`button-text ${selectedButton === 'Tout' ? 'selected' : ''}`}
-                onClick={() => {
-                  setShowNew(false);
-                  setSelectedCategory(null);
-                  setSelectedButton('Tout');
-                  setClickedButton(null);
-                  setActiveFilter('all');
-                }}
-              >
-                <FaRegListAlt size="2em" />
-                Tout
-              </button>
-            </p>
-            <p className='categories'>
-              <button
-                className={`button-text ${selectedButton === 'Nouveau' ? 'selected' : ''}`}
-                onClick={() => {
-                  setShowNew(true);
-                  setSelectedCategory(null);
-                  setSelectedButton('Nouveau');
-                  setClickedButton(null);
-                  setActiveFilter('new');
-                }}
-              >
-                <FaNewspaper size="2em" />
-                Nouveau
-              </button>
-            </p>
+      <div className="menu-container">
+        <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {isMenuOpen ? 'Fermer' : 'Découvrir les options'}
+        </button>
+        <div className={`menu-content ${isMenuOpen ? 'open' : ''}`}>
+          <div className="categories-container">
+            <button
+              className={`categorie_button ${selectedButton === 'Tout' ? 'selected' : ''}`}
+              onClick={() => {
+                setShowNew(false);
+                setSelectedCategory(null);
+                setSelectedButton('Tout');
+                setClickedButton(null);
+                setActiveFilter('all');
+              }}
+            >
+              <FaRegListAlt size="2em" />
+              <span>Tout</span>
+            </button>
+            <button
+              className={`categorie_button ${selectedButton === 'Nouveau' ? 'selected' : ''}`}
+              onClick={() => {
+                setShowNew(true);
+                setSelectedCategory(null);
+                setSelectedButton('Nouveau');
+                setClickedButton(null);
+                setActiveFilter('new');
+              }}
+            >
+              <FaNewspaper size="2em" />
+              <span>Nouveau</span>
+            </button>
 
-            <div className='special_categories'>
-              <p className='categories2'>
-                {[...new Set(cards.map(card => card.categorie))].map(category => {
-                  const card = cards.find(card => card.categorie === category);
-                  return (
-                    <button
-                      className={`categorie_button ${(selectedButton === category || clickedButton === category) ? 'selected' : ''}`}
-                      key={card ? card._id : category}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setShowNew(false);
-                        setSelectedButton(category);
-                        setClickedButton(category);
-                        setActiveFilter('all');
-                        setVisibleCategory(category);
+            {[...new Set(cards.map(card => card.categorie))].map(category => {
+              const card = cards.find(card => card.categorie === category);
+              return (
+                <button
+                  className={`categorie_button ${(selectedButton === category || clickedButton === category) ? 'selected' : ''}`}
+                  key={card ? card._id : category}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setShowNew(false);
+                    setSelectedButton(category);
+                    setClickedButton(category);
+                    setActiveFilter('all');
+                    setVisibleCategory(category);
+                  }}
+                  onMouseEnter={() => {
+                    setSelectedButton(category);
+                  }}
+                  onMouseLeave={() => {
+                    setSelectedButton('');
+                  }}
+                  style={{ 
+                    backgroundColor: (selectedButton === category || clickedButton === category || visibleCategory === category) 
+                      ? card?.categorieBackgroundColor 
+                      : '' 
+                  }}
+                  ref={(el) => { categoryIconsRef.current[category] = el; }}
+                >
+                  {card && card.categorieImage && (
+                    <img
+                      src={card.categorieImage}
+                      alt={category}
+                      style={{
+                        margin: 'auto',
+                        display: 'block',
+                        height: '60%',
+                        width: '50%',
+                        objectFit: 'contain',
+                        borderRadius: '100%',
                       }}
-                      onMouseEnter={() => {
-                        setSelectedButton(category);
-                      }}
-                      onMouseLeave={() => {
-                        setSelectedButton('');
-                      }}
-                      style={{ 
-                        backgroundColor: (selectedButton === category || clickedButton === category || visibleCategory === category) 
-                          ? card?.categorieBackgroundColor 
-                          : '' 
-                      }}
-                      ref={(el) => { categoryIconsRef.current[category] = el; }}
-                    >
-                      {card && card.categorieImage && (
-                        <img
-                          src={card.categorieImage}
-                          alt={category}
-                          style={{
-                            marginRight: '10px',
-                            height: '90%',
-                            width: '100%',
-                            objectFit: 'contain',
-                            borderRadius: '100%',
-                          }}
-                        />
-                      )}
-                      <span className="categorie-text" style={{ color: card ? card.categorieBackgroundColor : '' }}>
-                        {category}
-                      </span>
-                    </button>
-                  );
-                })}
-              </p>
-            </div>
+                    />
+                  )}
+                  <span className="categorie-text" style={{ color: card ? card.categorieBackgroundColor : '' }}>
+                    {category}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="search-container">
+            <SearchBar
+              onSearch={handleSearch}
+              resultsCount={finalFilteredCards?.length || 0}
+              showResultsCount={searchTerm.length > 0}
+              className="search-component"
+            />
           </div>
         </div>
       </div>
       
-      <div className="search-filter-container-left">
-        <SearchBar
-          onSearch={handleSearch}
-          resultsCount={finalFilteredCards?.length || 0}
-          showResultsCount={searchTerm.length > 0}
-          className="search-component"
-        />
-        
-      </div>
+      
       
       <div className={`page-content ${isPopupOpen ? 'slide-left' : ''}`}>
         {searchTerm && finalFilteredCards.length === 0 && (
