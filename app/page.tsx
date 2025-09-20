@@ -367,7 +367,7 @@ import './Cards.css';
       <div className="menu-container">
         <div className="menu-header">
           <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? 'Fermer' : 'Découvrir les options'}
+            {isMenuOpen ? 'Fermer' : 'Catégories'}
           </button>
           <button
             className={`header-categorie-button ${selectedButton === 'Tout' ? 'selected' : ''}`}
@@ -505,11 +505,6 @@ import './Cards.css';
                           <div className="title_card_1 vtt-cool-style valign-text-middle">
                             {card.title}
                           </div>
-                          {card.subtitle && (
-                            <div className="title_card_subtitle vtt-cool-style valign-text-middle">
-                              {card.subtitle}
-                            </div>
-                          )}
                       <div className="title_card_1 vtt-cool-style valign-text-middle">
                       {card._id && (
                         <RatingStars

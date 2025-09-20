@@ -24,18 +24,18 @@
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4);
 }
 
-.loading__wrapper > li:nth-child(1) { background: #1abc9c63; }
-.loading__wrapper > li:nth-child(2) { background: #34495E; }
-.loading__wrapper > li:nth-child(3) { background: #F39C12; }
-.loading__wrapper > li:nth-child(4) { background: #9B59B6; }
-.loading__wrapper > li:nth-child(5) { background: #3498DB; }
-.loading__wrapper > li:nth-child(6) { background: #E74C3C; }
-.loading__wrapper > li:nth-child(7) { background: #2ECC71; }
-.loading__wrapper > li:nth-child(8) { background: #2C3E50; }
-.loading__wrapper > li:nth-child(9) { background: #F1C40F; }
-.loading__wrapper > li:nth-child(10) { background: #8E44AD; }
-.loading__wrapper > li:nth-child(11) { background: #2980B9; }
-.loading_wrapper > li:nth-child(12) { background: #E74C3C; }
+.loading__wrapper > li:nth-child(1) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(2) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(3) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(4) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(5) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(6) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(7) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(8) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(9) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(10) { background: blanchedalmond; }
+.loading__wrapper > li:nth-child(11) { background: blanchedalmond; }
+.loading_wrapper > li:nth-child(12) { background: blanchedalmond; }
 
 .loading__wrapper > li > svg {
   position: absolute;

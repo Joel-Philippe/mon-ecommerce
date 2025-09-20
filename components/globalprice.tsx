@@ -181,7 +181,7 @@ const GlobalPrice: React.FC<GlobalPriceProps> = ({ isOpen, onClose }) => {
 
 return (
 <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={{ base: 'full', md: 'sm' }}>
-  <DrawerOverlay bg="none" />
+  <DrawerOverlay bg="rgba(0, 0, 0, 0.4)" />
   <DrawerContent 
     borderTopLeftRadius="20px" 
     borderBottomLeftRadius="20px" 
