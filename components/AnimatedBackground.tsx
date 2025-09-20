@@ -5,6 +5,8 @@ import { loadSlim } from '@tsparticles/slim';
 import type { Engine } from '@tsparticles/engine';
 
 export default function AnimatedBackground() {
+  console.log("AnimatedBackground component rendered"); // Debug log
+
   const particlesInit = useCallback(async (engine: Engine) => {
     console.log("Particles Engine Initializing...");
     await loadSlim(engine);
@@ -23,98 +25,37 @@ export default function AnimatedBackground() {
       options={{
         background: {
           color: {
-            value: "#000000", // Temporarily change background to black for visibility test
+            value: "#FF0000", // Temporarily change background to red for maximum visibility
           },
         },
         fpsLimit: 60,
-        interactivity: {
-          events: {
-            onClick: {
-              enable: true,
-              mode: "push",
-            },
-            onHover: {
-              enable: true,
-              mode: "repulse",
-            },
-            resize: true,
-          },
-          modes: {
-            push: {
-              quantity: 4,
-            },
-            repulse: {
-              distance: 100,
-              duration: 0.4,
-            },
-          },
-        },
         particles: {
           color: {
-            value: ["#f87e12", "#e63199", "#07f916"],
-          },
-          links: {
-            color: "#ffffff",
-            distance: 150,
-            enable: false,
-            opacity: 0.5,
-            width: 1,
-          },
-          collisions: {
-            enable: true,
+            value: "#FFFFFF", // White particles
           },
           move: {
-            direction: "none",
             enable: true,
+            speed: 1,
+            direction: "none",
+            random: true,
+            straight: false,
             outModes: {
               default: "bounce",
             },
-            random: true,
-            speed: 1,
-            straight: false,
           },
           number: {
-            density: {
-              enable: true,
-              area: 800,
-            },
-            value: 80,
-          },
-          opacity: {
-            value: 0.8,
-            random: true,
-            anim: {
-              enable: true,
-              speed: 1,
-              opacity_min: 0.1,
-              sync: false,
-            },
-          },
-          shape: {
-            type: ["circle", "triangle", "square", "star"],
-            options: {
-              polygon: {
-                sides: 5,
-              },
-            },
+            value: 20, // Fewer particles for basic test
           },
           size: {
-            value: { min: 5, max: 15 },
+            value: { min: 5, max: 10 },
             random: true,
-            anim: {
-              enable: true,
-              speed: 4,
-              size_min: 0.1,
-              sync: false,
-            },
           },
-          rotate: {
-            value: 0,
-            animation: {
-              enable: true,
-              speed: 5,
-              sync: false,
-            },
+          opacity: {
+            value: 0.5,
+            random: true,
+          },
+          shape: {
+            type: "circle", // Simple shape
           },
         },
         detectRetina: true,
