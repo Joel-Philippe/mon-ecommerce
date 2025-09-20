@@ -68,7 +68,6 @@ html, body {
     margin: 15px;
     display: flex;
     flex-direction: column;
-    background-color:white;
 }
 
 /* Style pour le badge "Nouveau" */
@@ -155,7 +154,7 @@ html, body {
   .title_card_1 {
     z-index: 10000;
     font-family: 'allroundgothic';
-    font-size: x-large;
+    font-size: smaller;
     font-weight: 700;
     color: white;
     margin: 10px;
@@ -183,7 +182,7 @@ html, body {
     position: relative;
     font-family:'allroundgothic';
     font-weight: 700;
-    font-size: large;
+    font-size: small;
     margin-left: 13px;
     color: #ffffff;
     margin-right: auto;
@@ -236,11 +235,11 @@ html, body {
     font-family: cursive;
     font-weight: 700;
     font-size: medium;
-    color: #3f7c42;
+    color: #ffffff;
     margin-left: 0;
 }
 .initial_price{
-    color: rgb(65 202 1);
+    color: rgb(0, 0, 0);
     font-weight: 700;
     margin-left: 10px;
     font-size: 2em;
@@ -469,7 +468,7 @@ h4{
 @media (max-width: 1050px) {
       .title_card_1 {
     font-family: 'allroundgothic';
-    font-size: 19px;
+    font-size: small;
   }
     .card {
         margin-left: auto;
