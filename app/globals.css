@@ -1,3 +1,13 @@
+body {
+  overflow: auto !important;
+}
+
+@media (min-width: 769px) {
+  body {
+    background-color: blanchedalmond;
+  }
+}
+
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 @import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
@@ -150,117 +160,60 @@ html::-webkit-scrollbar {
 .css-1mayg29{
   background: rgb(255, 246, 241);
 }
-.menu-items {
+/* The main container for the menu */
+.menu-container {
   position: sticky;
   top: 0;
-  align-items: flex-start;
-  gap: 20px;
-  margin-right: 0.15px;
-  width: 100%;
-  height: 115px;
-  z-index: 3;
-  overflow-x: auto;
-  transition: background-color 0.05s;
-  background: blanchedalmond;
-  display: flex;
-}
-
-.overlap-group-container {
-  align-items: center;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 19px;
-  min-width: 100%;
-  height: 100%;
-}
-
-.overlap-group {
-  justify-content: center;
-  display: flex;
-  flex-wrap: nowrap;
-  background-color: var(--gray-nurse);
-  border-radius: 5px;
-  height: 35px;
-  position: relative;
-  width: auto;
-  margin-left: 2%;
-}
-
-.search-component,
-.filter-component {
-  flex-shrink: 0;
-}
-
-.categories {
-  letter-spacing: 0;
-  font-family: 'allroundgothic';
-  text-align: center;
-  width: 159px;
-  font-size:14px;
-  border-radius: 15px;
-  color: #EF6C00;
-  gap: 70px;
-  margin: auto;
-  transition: color 0.3s ease; /* Ajoutez une transition pour un effet de changement de couleur plus fluide */
-}
-
-.categories:hover {
-  color: #ff9800; /* Changez la couleur au survol de la souris */
-}
-
-
-.special_categories {
-  width: 100%;
-  height: 35px;
-  font-weight: 900;
-  font-size: medium;
-  justify-content: center;
-  align-items: center;
-}
-
-.categories2 {
-  height: 39px;
-  letter-spacing: 0;
-  text-align: center;
-  margin-left: 50px;
-  font-weight: 900;
-  font-size: xx-small;
-  width: auto;
-  color: rgb(54, 57, 77);
-  display: flex;
-  gap: 5px;
-  border-radius: 50px;
-}
-.categorie-text {
-  font-family: 'allroundgothic';
-  border-radius: 8px;
-  font-size: 14px;
-  padding: 6px;
-  background: #8D6E63;
-  backdrop-filter: blur(10px);
-  background: snow;
-}
-
-.categorie_button {
-  width: fit-content;
-}
-
-.selected {
-  color: rgb(134, 124, 150);
-  border-radius: 8px;
-}
-
-/* Optional: Adding smooth scrolling for better UX */
-.menu-items,
-.overlap-group-container {
-  scroll-behavior: smooth;
   z-index: 100;
-  
+  background-color: blanchedalmond;
 }
 
-.overlap-group-container {
-  position: sticky;
-  top: 0; /* Change this to the distance you want the menu to stick from the top of the viewport */
+/* The toggle button */
+.menu-toggle-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.menu-toggle-button:hover {
+  background-color: #2980b9;
+}
+
+/* The content of the menu (categories and search bar) */
+.menu-content {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+}
+
+.menu-content.open {
+  height: 200px; /* Adjust as needed */
+}
+
+.categorie_button img {
+  height: 30px; /* Adjust as needed */
+  width: 30px; /* Adjust as needed */
+  object-fit: contain;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+/* The container for the categories */
+.categories-container {
+  display: flex;
+  align-items: center; /* Vertically center the items */
+  padding: 10px;
+}
+
+/* The container for the search bar */
+.search-container {
+  padding: 10px;
 }
 .css-1kfu8nn{
   background: white;
@@ -477,10 +430,80 @@ html::-webkit-scrollbar {
   transition: transform 0.5s ease-in-out, filter 0.3s ease-in-out;
 }
 
+/* The container for the categories */
+.categories-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  padding: 10px;
+  white-space: nowrap; /* Ensure content stays on one line */
+  gap: 10px; /* Space between category buttons */
+}
+
+.categories-container::-webkit-scrollbar {
+  height: 8px; /* Height of the scrollbar */
+}
+
+.categories-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+  border-radius: 10px;
+}
+
+.categories-container::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scroll thumb */
+  border-radius: 10px;
+}
+
+.categories-container::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scroll thumb on hover */
+}
+
 .categorie_button {
-  border-radius: 30%;
-  min-width: 100px;
-  transition: background-color 0.4s ease-in-out;
+  flex-shrink: 0; /* Prevent shrinking */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80px; /* Fixed width */
+  height: 80px; /* Fixed height */
+  border-radius: 50%; /* Make them circular */
+  background-color: #f0f0f0; /* Default background */
+  color: #333;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.categorie_button:hover {
+  transform: scale(1.05);
+  background-color: #e0e0e0;
+}
+
+.categorie_button.selected {
+  background-color: #3498db; /* Selected state background */
+  color: white;
+}
+
+.categorie_button img {
+  height: 30px;
+  width: 30px;
+  object-fit: contain;
+  border-radius: 100%;
+  margin-bottom: 5px;
+}
+
+.categorie-text {
+  font-family: 'allroundgothic';
+  font-size: 12px;
+  white-space: normal; /* Allow text to wrap if needed */
+  background-color: wheat;
+  padding: 5px;
+  border-radius: 3px;
+  display: list-item;
+  
 }
 .animated-title {
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -710,7 +733,6 @@ font-weight: 400;
   }
 }
 .chakra-ui-light{
-  background: blanchedalmond;
   padding-right: 0 !important;
 }
 
@@ -735,17 +757,7 @@ font-weight: 400;
   97%, 100% { background: #774F38; }
 }
 
-/* Barre de recherche et filtres collante */
-.search-filter-container-left {
-  position: sticky;
-  top: 110px; /* Se positionne juste sous le menu principal */
-  z-index: 2; /* S'affiche sous le menu mais au-dessus du contenu */
-  background: blanchedalmond; /* Même couleur que le menu pour la cohérence */
-  padding: 4px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
+
 
 
 /* Custom Scrollbar for Menu */
