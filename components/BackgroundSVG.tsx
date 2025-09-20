@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export default function BackgroundSVG() { // Renamed from GeometricBackground to match existing file
+export default function BackgroundSVG() {
   return (
     <div
       aria-hidden="true"
@@ -40,14 +40,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           fill="url(#grad1)"
           opacity="0.8"
           animate={{
-            x: [0, 10, 0, -10, 0],
-            y: [0, -5, 0, 5, 0],
+            x: [0, 20, -10, 15, 0], // More varied movement
+            y: [0, -10, 15, -5, 0],
             rotate: [0, 360],
+            scale: [1, 1.05, 1], // Subtle scale
           }}
           transition={{
-            duration: 15,
+            duration: 20, // Increased duration
             repeat: Infinity,
             ease: 'easeInOut',
+            delay: 0.2, // Varied delay
           }}
         />
         <motion.polygon
@@ -56,15 +58,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           strokeWidth="12"
           fill="none"
           animate={{
-            x: [0, -15, 0, 15, 0],
-            y: [0, 10, 0, -10, 0],
-            rotate: [0, -360],
+            x: [0, -25, 15, -10, 0],
+            y: [0, 20, -10, 15, 0],
+            rotate: [0, -360], // Counter-clockwise
+            scale: [1, 0.95, 1],
           }}
           transition={{
-            duration: 20,
+            duration: 25, // Increased duration
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 2,
+            delay: 3,
           }}
         />
         <motion.polygon
@@ -72,15 +75,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           fill="url(#grad2)"
           opacity="0.7"
           animate={{
-            x: [0, 20, 0, -20, 0],
-            y: [0, -10, 0, 10, 0],
+            x: [0, 30, -20, 25, 0],
+            y: [0, -15, 20, -10, 0],
             rotate: [0, 360],
+            scale: [1, 1.08, 1],
           }}
           transition={{
-            duration: 18,
+            duration: 22,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 1,
+            delay: 1.5,
           }}
         />
 
@@ -92,15 +96,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           fill="url(#grad2)"
           opacity="0.9"
           animate={{
-            x: [0, 12, 0, -12, 0],
-            y: [0, -8, 0, 8, 0],
+            x: [0, 15, -8, 12, 0],
+            y: [0, -12, 10, -7, 0],
             rotate: [0, 360],
+            scale: [1, 1.03, 1],
           }}
           transition={{
-            duration: 16,
+            duration: 18,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 0.5,
+            delay: 0.8,
           }}
         />
         <motion.circle
@@ -111,15 +116,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           strokeWidth="8"
           fill="none"
           animate={{
-            x: [0, -8, 0, 8, 0],
-            y: [0, 12, 0, -12, 0],
+            x: [0, -10, 5, -15, 0],
+            y: [0, 15, -8, 10, 0],
             rotate: [0, -360],
+            scale: [1, 0.97, 1],
           }}
           transition={{
-            duration: 19,
+            duration: 23,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 3,
+            delay: 4,
           }}
         />
         <motion.circle
@@ -129,15 +135,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           fill="url(#grad1)"
           opacity="0.6"
           animate={{
-            x: [0, 18, 0, -18, 0],
-            y: [0, -15, 0, 15, 0],
+            x: [0, 22, -18, 20, 0],
+            y: [0, -20, 15, -10, 0],
             rotate: [0, 360],
+            scale: [1, 1.06, 1],
           }}
           transition={{
-            duration: 22,
+            duration: 28,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 1.5,
+            delay: 2,
           }}
         />
 
@@ -150,15 +157,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           fill="url(#grad1)"
           opacity="0.9"
           animate={{
-            x: [0, 10, 0, -10, 0],
-            y: [0, -10, 0, 10, 0],
+            x: [0, 18, -12, 10, 0],
+            y: [0, -15, 10, -8, 0],
             rotate: [0, 360],
+            scale: [1, 1.04, 1],
           }}
           transition={{
-            duration: 17,
+            duration: 21,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 0.8,
+            delay: 1,
           }}
         />
         <motion.rect
@@ -170,15 +178,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           strokeWidth="10"
           fill="none"
           animate={{
-            x: [0, -12, 0, 12, 0],
-            y: [0, 10, 0, -10, 0],
+            x: [0, -15, 10, -12, 0],
+            y: [0, 18, -12, 15, 0],
             rotate: [0, -360],
+            scale: [1, 0.96, 1],
           }}
           transition={{
-            duration: 21,
+            duration: 26,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 2.5,
+            delay: 3.5,
           }}
         />
         <motion.rect
@@ -189,15 +198,16 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           fill="url(#grad2)"
           opacity="0.8"
           animate={{
-            x: [0, 15, 0, -15, 0],
-            y: [0, -12, 0, 12, 0],
+            x: [0, 20, -15, 18, 0],
+            y: [0, -18, 12, -15, 0],
             rotate: [0, 360],
+            scale: [1, 1.07, 1],
           }}
           transition={{
-            duration: 19,
+            duration: 24,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 1.2,
+            delay: 1.8,
           }}
         />
 
@@ -208,12 +218,13 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           r="12"
           fill="#e63198"
           animate={{
-            x: [0, 5, 0, -5, 0],
-            y: [0, -3, 0, 3, 0],
+            x: [0, 8, -4, 6, 0],
+            y: [0, -5, 6, -3, 0],
             rotate: [0, 360],
+            scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 10,
+            duration: 15,
             repeat: Infinity,
             ease: 'easeInOut',
             delay: 0.1,
@@ -226,30 +237,32 @@ export default function BackgroundSVG() { // Renamed from GeometricBackground to
           height="40"
           fill="url(#grad2)"
           animate={{
-            x: [0, -7, 0, 7, 0],
-            y: [0, 4, 0, -4, 0],
+            x: [0, -10, 5, -8, 0],
+            y: [0, 6, -4, 5, 0],
             rotate: [0, -360],
+            scale: [1, 0.9, 1],
           }}
           transition={{
-            duration: 12,
+            duration: 17,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 0.3,
+            delay: 0.5,
           }}
         />
         <motion.polygon
           points="1700,150 1750,230 1650,230"
           fill="url(#grad1)"
           animate={{
-            x: [0, 8, 0, -8, 0],
-            y: [0, -6, 0, 6, 0],
+            x: [0, 12, -6, 10, 0],
+            y: [0, -8, 7, -5, 0],
             rotate: [0, 360],
+            scale: [1, 1.08, 1],
           }}
           transition={{
-            duration: 14,
+            duration: 19,
             repeat: Infinity,
             ease: 'easeInOut',
-            delay: 0.6,
+            delay: 0.9,
           }}
         />
       </svg>
