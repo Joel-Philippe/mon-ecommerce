@@ -224,13 +224,13 @@ html::-webkit-scrollbar {
 
 /* The content of the menu (categories and search bar) */
 .menu-content {
-  /* height: 0; */
+  height: 0;
   overflow: hidden;
-  /* transition: height 0.3s ease-in-out; */
+  transition: height 0.3s ease-in-out;
 }
 
 .menu-content.open {
-  height: 300px; /* Fixed height for debugging */
+  max-height: 300px; /* Set a maximum height for scrolling */
   overflow-y: auto;
   overflow-x: hidden;
 }
