@@ -483,7 +483,7 @@ html::-webkit-scrollbar {
 }
 
 .categorie_button.selected {
-  background-color: #3498db; /* Selected state background */
+  background: linear-gradient(to right, #fb9901 0%, #e63198 100%);
   color: white;
 }
 
