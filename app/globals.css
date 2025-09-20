@@ -168,21 +168,56 @@ html::-webkit-scrollbar {
   background-color: blanchedalmond;
 }
 
+/* The header for the menu, containing the toggle and filter buttons */
+.menu-header {
+  display: flex;
+  justify-content: space-around; /* Distribute space evenly */
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f8f8; /* Light background for the header */
+  border-bottom: 1px solid #eee;
+  gap: 10px; /* Space between buttons */
+}
+
 /* The toggle button */
 .menu-toggle-button {
   background-color: #FF9800;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 15px; /* Smaller padding */
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  margin: 10px;
+  font-size: 14px; /* Smaller font size */
+  margin: 0; /* Remove margin */
   transition: background-color 0.3s ease;
 }
 
 .menu-toggle-button:hover {
   background-color: #2980b9;
+}
+
+.header-categorie-button {
+  background-color: #f0f0f0;
+  color: #333333;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 8px 15px; /* Smaller padding */
+  font-size: 14px; /* Smaller font size */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.header-categorie-button:hover {
+  background-color: #e0e0e0;
+}
+
+.header-categorie-button.selected {
+  background-color: #FF9800;
+  color: white;
+  border-color: #FF9800;
 }
 
 /* The content of the menu (categories and search bar) */
@@ -446,7 +481,7 @@ html::-webkit-scrollbar {
     height: auto; /* Height adapts to content */
     min-height: 80px; /* Ensure a minimum height */
     border-radius: 12px; /* Rounded rectangular shape */
-    background-color: #ffffff; /* Clean background */
+    background-color: #ffffff00; /* Clean background */
     color: #333333; /* Darker text for contrast */
     font-size: 13px;
     text-align: center;
