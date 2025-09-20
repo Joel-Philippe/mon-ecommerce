@@ -170,7 +170,7 @@ html::-webkit-scrollbar {
 
 /* The toggle button */
 .menu-toggle-button {
-  background-color: #3498db;
+  background-color: #FF9800;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -206,9 +206,13 @@ html::-webkit-scrollbar {
 
 /* The container for the categories */
 .categories-container {
-  display: flex;
-  align-items: center; /* Vertically center the items */
-  padding: 10px;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding: 10px;
+    white-space: nowrap;
+    gap: 10px;
 }
 
 /* The container for the search bar */
@@ -430,16 +434,6 @@ html::-webkit-scrollbar {
   transition: transform 0.5s ease-in-out, filter 0.3s ease-in-out;
 }
 
-/* The container for the categories */
-.categories-container {
-  display: flex;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-  padding: 10px;
-  white-space: nowrap; /* Ensure content stays on one line */
-  gap: 10px; /* Space between category buttons */
-}
 
 .categories-container::-webkit-scrollbar {
   height: 8px; /* Height of the scrollbar */
@@ -460,21 +454,23 @@ html::-webkit-scrollbar {
 }
 
 .categorie_button {
-  flex-shrink: 0; /* Prevent shrinking */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 80px; /* Fixed width */
-  height: 80px; /* Fixed height */
-  border-radius: 50%; /* Make them circular */
-  background-color: #f0f0f0; /* Default background */
-  color: #333;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+    display: flex
+;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 59px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    color: #e63198;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 41px;
 }
 
 .categorie_button:hover {
@@ -483,7 +479,6 @@ html::-webkit-scrollbar {
 }
 
 .categorie_button.selected {
-  background: linear-gradient(to right, #fb9901 0%, #e63198 100%);
   color: white;
 }
 
@@ -503,6 +498,7 @@ html::-webkit-scrollbar {
   padding: 5px;
   border-radius: 3px;
   display: list-item;
+  min-width: 115px;
   
 }
 .animated-title {

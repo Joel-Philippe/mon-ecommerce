@@ -30,11 +30,10 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
   };
 
   return (
-    <div ref={inViewRef} style={{ marginTop: '8px' }}>
+    <div ref={inViewRef} >
             <div style={{
-        marginTop: '4px',
         fontSize: '0.85rem',
-        textAlign: 'right',
+        textAlign: 'left',
         color: percentage < 30 ? '#cc0000' : '#e63198',
         fontWeight: 500,
       }}>
