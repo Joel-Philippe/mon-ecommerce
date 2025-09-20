@@ -27,11 +27,11 @@
 
 .menuButtons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid */
-  gap: 12px; /* Increased gap for better spacing */
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive grid */
+  gap: 10px; /* Spacing between grid items */
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 0; /* Add some vertical padding */
+  padding: 10px; /* Padding around the grid */
   justify-items: center; /* Center grid items */
   align-items: center;
 }
@@ -39,17 +39,17 @@
 .menuButton {
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
   border: 1px solid #e2e8f0;
-  border-radius: 16px; /* Slightly more rounded corners */
-  padding: 14px 20px; /* Increased padding */
-  font-size: 14px; /* Slightly larger font */
+  border-radius: 8px; /* Slightly less rounded for a cleaner look */
+  padding: 12px 8px; /* Adjusted padding */
+  font-size: 13px; /* Adjusted font size */
   font-weight: 600;
   color: #475569;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.2s ease-in-out; /* Smoother transition */
   position: relative;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Refined shadow */
   width: 100%; /* Ensure button takes full grid cell width */
 }
 
@@ -84,17 +84,17 @@
 .cartButton {
   background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
   border: 1px solid #94a3b8;
-  border-radius: 16px; /* Slightly more rounded corners */
-  padding: 14px 20px; /* Increased padding */
-  font-size: 14px; /* Slightly larger font */
+  border-radius: 8px; /* Slightly less rounded for a cleaner look */
+  padding: 12px 8px; /* Adjusted padding */
+  font-size: 13px; /* Adjusted font size */
   font-weight: 700;
   color: #64748b;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.2s ease-in-out; /* Smoother transition */
   position: relative;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More pronounced shadow */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Refined shadow */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,13 +235,13 @@
   }
 
   .menuButton {
-    padding: 10px 14px;
-    font-size: 12px;
+    padding: 10px 6px;
+    font-size: 11px;
   }
 
   .cartButton {
-    padding: 12px 18px;
-    font-size: 13px;
+    padding: 10px 6px;
+    font-size: 12px;
   }
 
   .cartIcon {
@@ -262,17 +262,17 @@
   }
 
   .menuButtons {
-    gap: 8px;
+    gap: 6px;
   }
 
   .menuButton {
-    padding: 8px 12px;
-    font-size: 11px;
+    padding: 8px 4px;
+    font-size: 10px;
   }
 
   .cartButton {
-    padding: 10px 14px;
-    font-size: 12px;
+    padding: 8px 4px;
+    font-size: 11px;
   }
 
   .cartIcon {
