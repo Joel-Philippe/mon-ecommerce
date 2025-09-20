@@ -174,7 +174,7 @@ html::-webkit-scrollbar {
   justify-content: space-around; /* Distribute space evenly */
   align-items: center;
   padding: 10px;
-  background-color: #ff80b100; /* Light background for the header */
+  background-color: #f8f8f8; /* Opaque background for the header */
   border-bottom: 1px solid #eee;
   gap: 10px; /* Space between buttons */
 }
