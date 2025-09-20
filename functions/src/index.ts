@@ -10,6 +10,7 @@
 import {onRequest} from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
 
+// Start
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
