@@ -366,7 +366,10 @@ import './Cards.css';
       
       <div className="menu-container">
         <div className="menu-header">
-          <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="menu-toggle-button" onClick={() => {
+            setIsMenuOpen(!isMenuOpen);
+            console.log('isMenuOpen toggled to:', !isMenuOpen);
+          }}>
             {isMenuOpen ? 'Fermer' : 'Catégories'}
           </button>
           <button
