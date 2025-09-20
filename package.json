@@ -20,6 +20,9 @@
     "@next/eslint-plugin-next": "^15.5.2",
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.4.0",
+    "@tsparticles/engine": "^3.9.1",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.9.1",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
@@ -47,12 +50,10 @@
     "react-router-dom": "^6.21.3",
     "react-slick": "^0.30.2",
     "react-swipeable": "^7.0.1",
-    "react-tsparticles": "^2.12.2",
     "recharts": "^2.11.0",
     "resend": "^4.8.0",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.5",
-    "tsparticles": "^3.9.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
