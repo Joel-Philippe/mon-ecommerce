@@ -38,6 +38,13 @@ const Menu: React.FC<MenuProps> = ({ cards, onFilterChange, onSearch, resultsCou
     }
   };
 
+  const handleSearch = (term: string) => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+    onSearch(term);
+  };
+
   const categories = [...new Set(cards.map(card => card.categorie).filter(Boolean))] as string[];
 
   return (
@@ -64,14 +71,6 @@ const Menu: React.FC<MenuProps> = ({ cards, onFilterChange, onSearch, resultsCou
         </div>
       </div>
       <div className={`menu-content ${isMenuOpen ? 'open' : ''}`}>
-        <div className="search-container">
-          <SearchBar
-            onSearch={onSearch}
-            resultsCount={resultsCount}
-            showResultsCount={searchTerm.length > 0}
-            className="search-component"
-          />
-        </div>
         <div className="categories-container">
           {categories.map(category => {
             const card = cards.find(c => c.categorie === category);
@@ -98,7 +97,14 @@ const Menu: React.FC<MenuProps> = ({ cards, onFilterChange, onSearch, resultsCou
             );
           })}
         </div>
-
+      </div>
+      <div className="search-container">
+        <SearchBar
+          onSearch={handleSearch}
+          resultsCount={resultsCount}
+          showResultsCount={searchTerm.length > 0}
+          className="search-component"
+        />
       </div>
     </div>
   );

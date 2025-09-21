@@ -56,7 +56,7 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title }) => {
 
   if (isSmallScreen) {
     if (countdown.days > 10) {
-      textColor = '#4b8705ff';
+      textColor = 'rgb(55 102 1)';
     } else if (countdown.days <= 10 && countdown.days > 5) {
       textColor = 'rgb(145 123 0)';
     } else if (countdown.days <= 5 && countdown.days > 2) {

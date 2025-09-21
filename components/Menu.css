@@ -3,7 +3,6 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: blanchedalmond;
   width: 100%;
 }
 
@@ -12,11 +11,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background-color: blanchedalmond;
+  background-color: #ffd5b8;
 }
 
 .menu-toggle-button {
-  background-color: #FF9800;
+  background-color: #d27d00;
   color: white;
   border: none;
   padding: 8px 15px;
@@ -28,7 +27,10 @@
 }
 
 .menu-toggle-button:hover {
-  background-color: #e68a00;
+  background-color: #f0f0f0;
+  color: #d27d00;
+  border: 1px solid #e0e0e0;
+  
 }
 
 .header-main-buttons {
@@ -38,7 +40,7 @@
 
 .header-categorie-button {
   background-color: #f0f0f0;
-  color: #FF9800;
+  color: #d27d00;
   border: 1px solid #e0e0e0;
   font-weight: 900;
   border-radius: 5px;
@@ -56,9 +58,9 @@
 }
 
 .header-categorie-button.selected {
-  background-color: #FF9800;
-  color: white;
-  border-color: #FF9800;
+    background-color: #f0f0eb;
+    color: #d27d00;
+    border-color: #d27d00;
 }
 
 .menu-content {
@@ -78,7 +80,7 @@
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 15px;
   padding: 15px;
-  background-color: blanchedalmond;
+  background-color: #ffd5b8;
 }
 
 .categorie_button {
@@ -119,11 +121,24 @@
 
 .search-container {
   padding: 15px;
-  background-color: blanchedalmond;
+  background-color: #ffd5b8;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+  .menu-toggle-button {
+  background-color: #f0f0f0;
+  color: #d27d00;
+  border: 1px solid #e0e0e0;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
   .menu-header {
     flex-wrap: wrap;
     justify-content: space-around; /* Distribute space more evenly */
