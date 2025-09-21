@@ -230,9 +230,12 @@ html::-webkit-scrollbar {
 }
 
 .menu-content.open {
-  max-height: 300px; /* Set a maximum height for scrolling */
-  overflow-y: auto;
-  overflow-x: hidden;
+  max-height: 300px !important; /* Ensure max-height is applied */
+  overflow-y: auto !important; /* Ensure vertical scrolling */
+  overflow-x: hidden !important; /* Ensure horizontal scrolling is hidden */
+  display: block !important; /* Ensure it's displayed */
+  opacity: 1 !important; /* Ensure it's not transparent */
+  visibility: visible !important; /* Ensure it's visible */
 }
 
 .categorie_button img {
