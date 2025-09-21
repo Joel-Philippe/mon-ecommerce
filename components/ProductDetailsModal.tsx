@@ -133,19 +133,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ isOpen, onClo
                 <div className="gallery-col">
                   <div className="main-image-wrap">
                     {/* Flèches */}
-                    <IconButton
-                      aria-label="Précédent"
-                      icon={<ChevronLeftIcon />}
-                      className="nav-arrow left"
-                      onClick={goPrev}
-                    />
                     <img src={mainImage ?? ""} alt={product.title} className="mainImageFull" />
-                    <IconButton
-                      aria-label="Suivant"
-                      icon={<ChevronRightIcon />}
-                      className="nav-arrow right"
-                      onClick={goNext}
-                    />
                   </div>
 
                   {/* Miniatures : scroll-snap horizontal avec fallback grid wrap */}
