@@ -160,106 +160,7 @@ html::-webkit-scrollbar {
 .css-1mayg29{
   background: rgb(255, 246, 241);
 }
-/* The main container for the menu */
-.menu-container {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: blanchedalmond;
-}
 
-/* The header for the menu, containing the toggle and filter buttons */
-.menu-header {
-  display: flex;
-  justify-content: space-around; /* Distribute space evenly */
-  align-items: center;
-  padding: 10px;
-  background-color: #f8f8f8; /* Opaque background for the header */
-  border-bottom: 1px solid #eee;
-  gap: 10px; /* Space between buttons */
-}
-
-/* The toggle button */
-.menu-toggle-button {
-  background-color: #FF9800;
-  color: white;
-  border: none;
-  padding: 8px 15px; /* Smaller padding */
-  border-radius: 5px;
-  font-weight: 900;
-  cursor: pointer;
-  font-size: 14px; /* Smaller font size */
-  margin: 0; /* Remove margin */
-  transition: background-color 0.3s ease;
-}
-
-.menu-toggle-button:hover {
-  background-color: #FF9800;
-}
-
-.header-categorie-button {
-  background-color: #f0f0f0;
-  color: #FF9800;
-  border: 1px solid #e0e0e0;
-  font-weight: 900;
-  border-radius: 5px;
-  padding: 8px 15px; /* Smaller padding */
-  font-size: 14px; /* Smaller font size */
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.header-categorie-button:hover {
-  background-color: #e0e0e0;
-}
-
-.header-categorie-button.selected {
-  background-color: #FF9800;
-  color: white;
-  border-color: #FF9800;
-}
-
-/* The content of the menu (categories and search bar) */
-.menu-content {
-  height: 0;
-  overflow: hidden;
-  transition: height 0.3s ease-in-out;
-}
-
-.menu-content.open {
-  max-height: 300px !important; /* Ensure max-height is applied */
-  overflow-y: auto !important; /* Ensure vertical scrolling */
-  overflow-x: hidden !important; /* Ensure horizontal scrolling is hidden */
-  display: block !important; /* Ensure it's displayed */
-  opacity: 1 !important; /* Ensure it's not transparent */
-  visibility: visible !important; /* Ensure it's visible */
-}
-
-.categorie_button img {
-  height: 30px; /* Adjust as needed */
-  width: 30px; /* Adjust as needed */
-  object-fit: contain;
-  border-radius: 50%;
-  margin-right: 5px;
-}
-
-/* The container for the categories */
-.categories-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Responsive grid */
-    gap: 15px; /* Increased gap for better spacing */
-    padding: 15px; /* Padding around the grid */
-    justify-items: center; /* Center grid items */
-    align-items: center;
-}
-
-/* The container for the search bar */
-.search-container {
-  padding: 10px;
-}
 .css-1kfu8nn{
   background: white;
   z-index: 10;
@@ -488,7 +389,6 @@ html::-webkit-scrollbar {
     height: auto; /* Height adapts to content */
     min-height: 80px; /* Ensure a minimum height */
     border-radius: 12px; /* Rounded rectangular shape */
-    background-color: #ffffff00; /* Clean background */
     color: #333333; /* Darker text for contrast */
     font-size: 13px;
     text-align: center;
@@ -752,6 +652,7 @@ font-weight: 400;
 }
 .chakra-ui-light{
   padding-right: 0 !important;
+  background-color: blanchedalmond;
 }
 
 .body-slider {

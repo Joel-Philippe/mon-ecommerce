@@ -31,7 +31,7 @@ import RatingStars from '@/components/RatingStars';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { PlusCircle } from "lucide-react";
-import SearchBar from "@/components/SearchBar";
+import Menu from '@/components/Menu';
 import FilterButtons from "@/components/FilterButtons";
 import NoSearchResults from "@/components/NoSearchResults";
 import { Grid3X3, Sparkles } from 'lucide-react';
@@ -63,9 +63,7 @@ import './Cards.css';
   const [formCard, setFormCard] = useState<Card | null>(null);
   const [imageValues, setImageValues] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [showNew, setShowNew] = useState(false);
-  const [selectedButton, setSelectedButton] = useState('');
-  const [clickedButton, setClickedButton] = useState<string | null>(null);
+
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [carouselImages, setCarouselImages] = useState<string[]>([]);
@@ -97,8 +95,7 @@ import './Cards.css';
   
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all' | 'new'>('all');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [visibleCategory, setVisibleCategory] = useState<string | null>(null);
+
 
   // cartInfo state is no longer needed as globalCart from context provides the data
   // const [cartInfo, setCartInfo] = useState<Array<{
@@ -281,21 +278,7 @@ import './Cards.css';
     setSearchTerm('');
   };
 
-  const handleShowAll = () => {
-    setShowNew(false);
-    setSelectedCategory(null);
-    setSelectedButton('Tout');
-    setClickedButton(null);
-    setActiveFilter('all');
-  };
 
-  const handleShowNew = () => {
-    setShowNew(true);
-    setSelectedCategory(null);
-    setSelectedButton('Nouveau');
-    setClickedButton(null);
-    setActiveFilter('new');
-  };
 
   const allProductsWithDerives = (card: Card) => {
     const mainProduct = { title: card.title, price: card.price, price_promo: card.price_promo, images: card.images };
@@ -364,98 +347,16 @@ import './Cards.css';
         <AnimatedBanner onEnd={handleVideoEnd} />
       </div>
       
-      <div className="menu-container">
-        <div className="menu-header">
-          <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? 'Fermer' : 'Catégories'}
-          </button>
-          <button
-            className={`header-categorie-button ${selectedButton === 'Tout' ? 'selected' : ''}`}
-            onClick={() => {
-              setShowNew(false);
-              setSelectedCategory(null);
-              setSelectedButton('Tout');
-              setClickedButton(null);
-              setActiveFilter('all');
-            }}
-          >
-            <FaRegListAlt size="1.2em" />
-            <span>Tout</span>
-          </button>
-          <button
-            className={`header-categorie-button ${selectedButton === 'Nouveau' ? 'selected' : ''}`}
-            onClick={() => {
-              setShowNew(true);
-              setSelectedCategory(null);
-              setSelectedButton('Nouveau');
-              setClickedButton(null);
-              setActiveFilter('new');
-            }}
-          >
-            <FaNewspaper size="1.2em" />
-            <span>Nouveau</span>
-          </button>
-        </div>
-        <div className={`menu-content ${isMenuOpen ? 'open' : ''}`}>
-          <div className="categories-container">
-            {[...new Set(cards.map(card => card.categorie))].map(category => {
-              const card = cards.find(card => card.categorie === category);
-              return (
-                <button
-                  className={`categorie_button ${(selectedButton === category || clickedButton === category) ? 'selected' : ''}`}
-                  key={card ? card._id : category}
-                  onClick={() => {
-                    setSelectedCategory(category);
-                    setShowNew(false);
-                    setSelectedButton(category);
-                    setClickedButton(category);
-                    setActiveFilter('all');
-                    setVisibleCategory(category);
-                  }}
-                  onMouseEnter={() => {
-                    setSelectedButton(category);
-                  }}
-                  onMouseLeave={() => {
-                    setSelectedButton('');
-                  }}
-                  style={{ 
-                    backgroundColor: (selectedButton === category || clickedButton === category || visibleCategory === category) 
-                      ? card?.categorieBackgroundColor 
-                      : '' 
-                  }}
-                  ref={(el) => { categoryIconsRef.current[category] = el; }}
-                >
-                  {card && card.categorieImage && (
-                    <img
-                      src={card.categorieImage}
-                      alt={category}
-                      style={{
-                        margin: 'auto',
-                        display: 'block',
-                        height: '60%',
-                        width: '50%',
-                        objectFit: 'contain',
-                        borderRadius: '100%',
-                      }}
-                    />
-                  )}
-                  <span className="categorie-text" style={{ color: card ? card.categorieBackgroundColor : '' }}>
-                    {category}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="search-container">
-            <SearchBar
-              onSearch={handleSearch}
-              resultsCount={finalFilteredCards?.length || 0}
-              showResultsCount={searchTerm.length > 0}
-              className="search-component"
-            />
-          </div>
-        </div>
-      </div>
+      <Menu
+        cards={cards}
+        onFilterChange={(category, filter) => {
+          setSelectedCategory(category);
+          setActiveFilter(filter);
+        }}
+        onSearch={handleSearch}
+        resultsCount={finalFilteredCards.length}
+        searchTerm={searchTerm}
+      />
       
       
       
