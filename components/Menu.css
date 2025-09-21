@@ -18,15 +18,13 @@
 .menu-toggle-button {
 background-color: #989898;
   color: white;
-  border: 1px solid #e0e0e0;
-  border: 1px solid #e0e0e0;
   padding: 8px 15px;
   border-radius: 5px;
   font-weight: 900;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
-  border: 1px solid #ffffff;
+  border: 1px solid #e0e0e0;
 }
 
 .menu-toggle-button:hover {
@@ -132,7 +130,6 @@ background-color: #989898;
   background-color: #989898;
   color: #ffffff;
   border: 1px solid #e0e0e0;
-  border: none;
   padding: 8px 15px;
   border-radius: 5px;
   font-weight: 900;
