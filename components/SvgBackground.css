@@ -24,18 +24,18 @@
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4);
 }
 
-.loading__wrapper > li:nth-child(1) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(2) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(3) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(4) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(5) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(6) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(7) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(8) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(9) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(10) { background: #ffd5b8; }
-.loading__wrapper > li:nth-child(11) { background: #ffd5b8; }
-.loading_wrapper > li:nth-child(12) { background: #ffd5b8; }
+.loading__wrapper > li:nth-child(1) { background: #989898; }
+.loading__wrapper > li:nth-child(2) { background: #989898; }
+.loading__wrapper > li:nth-child(3) { background: #989898; }
+.loading__wrapper > li:nth-child(4) { background: #989898; }
+.loading__wrapper > li:nth-child(5) { background: #989898; }
+.loading__wrapper > li:nth-child(6) { background: #989898; }
+.loading__wrapper > li:nth-child(7) { background: #989898; }
+.loading__wrapper > li:nth-child(8) { background: #989898; }
+.loading__wrapper > li:nth-child(9) { background: #989898; }
+.loading__wrapper > li:nth-child(10) { background: #989898; }
+.loading__wrapper > li:nth-child(11) { background: #989898; }
+.loading_wrapper > li:nth-child(12) { background: #989898; }
 
 .loading__wrapper > li > svg {
   position: absolute;

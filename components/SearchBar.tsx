@@ -56,7 +56,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <div className="search-wrapper">
         <InputGroup>
           <InputLeftElement pointerEvents="none">
-            <FaSearch color="#f87d12" />
+            <FaSearch color="white" />
           </InputLeftElement>
           <Input
             placeholder={placeholder}
@@ -71,6 +71,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
               borderColor: "transparent",
               boxShadow: "none",
               borderRadius: "30px",
+            }}
+            sx={{
+              '::placeholder': {
+                color: 'white',
+              },
             }}
           />
           {searchTerm && (
