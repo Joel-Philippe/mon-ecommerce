@@ -212,7 +212,7 @@ const SvgBackground = () => {
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
       <ul className="loading__wrapper">
         <li>
-          <svg className="loader1" fill="#FFF" height="80" viewBox="0 0 55 80" width="55" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader1" fill="#ff80b1" height="80" viewBox="0 0 55 80" width="55" xmlns="http://www.w3.org/2000/svg">
             <g transform="matrix(1 0 0 -1 0 80)">
               <rect height="20" rx="3" width="10"></rect>
               <rect height="80" rx="3" width="10" x="15"></rect>
@@ -222,7 +222,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader2" height="45" stroke="#fff" viewBox="0 0 45 45" width="45" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader2" height="45" stroke="#ff80b1" viewBox="0 0 45 45" width="45" xmlns="http://www.w3.org/2000/svg">
             <g fillRule="evenodd" fill="none" strokeWidth="2" transform="translate(1 1)">
               <circle cx="22" cy="22" r="6" strokeOpacity="0"></circle>
               <circle cx="22" cy="22" r="6" strokeOpacity="0"></circle>
@@ -231,7 +231,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader3" fill="#fff" height="105" viewBox="0 0 105 105" width="105" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader3" fill="#ff80b1" height="105" viewBox="0 0 105 105" width="105" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12.5" cy="12.5" r="12.5" fillOpacity="1"></circle>
             <circle cx="12.5" cy="52.5" r="12.5" fillOpacity="1"></circle>
             <circle cx="52.5" cy="12.5" r="12.5" fillOpacity="1"></circle>
@@ -244,7 +244,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader4" fill="#fff" height="64" viewBox="0 0 140 64" width="140" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader4" fill="#ff80b1" height="64" viewBox="0 0 140 64" width="140" xmlns="http://www.w3.org/2000/svg">
             <path className="loader4__heart" d="M30.262 57.02L7.195 40.723c-5.84-3.976-7.56-12.06-3.842-18.063 3.715-6 11.467-7.65 17.306-3.68l4.52 3.76 2.6-5.274c3.717-6.002 11.47-7.65 17.305-3.68 5.84 3.97 7.56 12.054 3.842 18.062L34.49 56.118c-.897 1.512-2.793 1.915-4.228.9z"></path>
             <path className="loader4__heart" d="M105.512 56.12l-14.44-24.272c-3.716-6.008-1.996-14.093 3.843-18.062 5.835-3.97 13.588-2.322 17.306 3.68l2.6 5.274 4.52-3.76c5.84-3.97 13.592-2.32 17.307 3.68 3.718 6.003 1.998 14.088-3.842 18.064L109.74 57.02c-1.434 1.014-3.33.61-4.228-.9z"></path>
             <path d="M67.408 57.834l-23.01-24.98c-5.864-6.15-5.864-16.108 0-22.248 5.86-6.14 15.37-6.14 21.234 0L70 16.168l4.368-5.562c5.863-6.14 15.375-6.14 21.235 0 5.863 6.14 5.863 16.098 0 22.247l-23.007 24.98c-1.43 1.556-3.757 1.556-5.188 0z" />
@@ -258,7 +258,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader6" fill="#fff" height="30" viewBox="0 0 120 30" width="120" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader6" fill="#ff80b1" height="30" viewBox="0 0 120 30" width="120" xmlns="http://www.w3.org/2000/svg">
             <circle className="loader6__left" cx="15" cy="15" r="15"></circle>
             <circle className="loader6__center" cx="60" cy="15" r="15"></circle>
             <circle className="loader6__right" cx="105" cy="15" r="15"></circle>
@@ -267,21 +267,21 @@ const SvgBackground = () => {
         <li>
           <svg className="loader7" height="58" viewBox="0 0 58 58" width="58" xmlns="http://www.w3.org/2000/svg">
             <g fillRule="evenodd" fill="none">
-              <g strokeWidth="1.5" stroke="#FFF" transform="translate(2 1)">
-                <circle cx="42.601" cy="11.462" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="49.063" cy="27.063" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="42.601" cy="42.663" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="27" cy="49.125" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="11.399" cy="42.663" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="4.938" cy="27.063" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="11.399" cy="11.462" fillOpacity="0" fill="#fff" r="5"></circle>
-                <circle cx="27" cy="5" fillOpacity="0" fill="#fff" r="5"></circle>
+              <g strokeWidth="1.5" stroke="#ff80b1" transform="translate(2 1)">
+                <circle cx="42.601" cy="11.462" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="49.063" cy="27.063" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="42.601" cy="42.663" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="27" cy="49.125" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="11.399" cy="42.663" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="4.938" cy="27.063" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="11.399" cy="11.462" fillOpacity="0" fill="#ff80b1" r="5"></circle>
+                <circle cx="27" cy="5" fillOpacity="0" fill="#ff80b1" r="5"></circle>
               </g>
             </g>
           </svg>
         </li>
         <li>
-          <svg className="loader8" height="44" stroke="#fff" viewBox="0 0 44 44" width="44" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader8" height="44" stroke="#ff80b1" viewBox="0 0 44 44" width="44" xmlns="http://www.w3.org/2000/svg">
             <g fillRule="evenodd" fill="none" strokeWidth="2">
               <circle cx="22" cy="22" r="0"></circle>
               <circle cx="22" cy="22" r="0"></circle>
@@ -289,7 +289,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader9" width="135" height="135" viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+          <svg className="loader9" width="135" height="135" viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg" fill="#ff80b1">
             <path className="loader9__inner" d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z"></path>
             <path className="loader9__outer" d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z"></path>
           </svg>
@@ -298,21 +298,21 @@ const SvgBackground = () => {
           <svg className="loader10" height="38" viewBox="0 0 38 38" width="38" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="a" x1="8.042%" x2="65.682%" y1="0%" y2="23.865%">
-                <stop offset="0%" stopColor="#fff" stopOpacity="0" />
-                <stop offset="63.146%" stopColor="#fff" stopOpacity=".631" />
-                <stop offset="100%" stopColor="#fff" />
+                <stop offset="0%" stopColor="#ff80b1" stopOpacity="0" />
+                <stop offset="63.146%" stopColor="#ff80b1" stopOpacity=".631" />
+                <stop offset="100%" stopColor="#ff80b1" />
               </linearGradient>
             </defs>
             <g fillRule="evenodd" fill="none">
               <g transform="translate(1 1)">
                 <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" strokeWidth="2" stroke="url(#a)"></path>
-                <circle cx="36" cy="18" fill="#fff" r="1"></circle>
+                <circle cx="36" cy="18" fill="#ff80b1" r="1"></circle>
               </g>
             </g>
           </svg>
         </li>
         <li>
-          <svg className="loader11" width="135" height="140" viewBox="0 0 135 140" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+          <svg className="loader11" width="135" height="140" viewBox="0 0 135 140" xmlns="http://www.w3.org/2000/svg" fill="#ff80b1">
             <rect className="loader11__inner3" y="10" width="15" height="120" rx="6"></rect>
             <rect className="loader11__inner2" x="30" y="10" width="15" height="120" rx="6"></rect>
             <rect className="loader11__center" x="60" width="15" height="140" rx="6"></rect>
@@ -321,7 +321,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader12" height="57" stroke="#fff" viewBox="0 0 57 57" width="57" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader12" height="57" stroke="#ff80b1" viewBox="0 0 57 57" width="57" xmlns="http://www.w3.org/2000/svg">
             <g fillRule="evenodd" fill="none">
               <g strokeWidth="2" transform="translate(1 1)">
                 <circle className="loader12__path-left" cx="5" cy="50" r="5"></circle>

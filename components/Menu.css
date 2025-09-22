@@ -3,7 +3,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #989898;
+  background-color: white;
   width: 100%;
 }
 
@@ -12,12 +12,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background-color: #989898;
+  background-color: white;
 }
 
 .menu-toggle-button {
-background-color: #989898;
-  color: white;
+background-color: white;
+  color: #d27d00;
   padding: 8px 15px;
   border-radius: 5px;
   font-weight: 900;
@@ -28,8 +28,8 @@ background-color: #989898;
 }
 
 .menu-toggle-button:hover {
-  background-color: #989898;
-  color: white;
+  background-color: white;
+  color: #d27d00;
   border: 1px solid #e0e0e0;
   
 }
@@ -40,8 +40,8 @@ background-color: #989898;
 }
 
 .header-categorie-button {
-  background-color: #989898;
-  color: #ffffff;
+  background-color: white;
+  color: #d27d00;
   border: 1px solid #e0e0e0;
   font-weight: 900;
   border-radius: 5px;
@@ -81,7 +81,7 @@ background-color: #989898;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 15px;
   padding: 15px;
-  background-color: blanchedalmond;
+  background-color: white;
 }
 
 .categorie_button {
@@ -121,14 +121,14 @@ background-color: #989898;
 
 .search-container {
   padding: 15px;
-  background-color: #989898;
+  background-color: white;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
   .menu-toggle-button {
-  background-color: #989898;
-  color: #ffffff;
+  background-color: white;
+  color: #d27d00;
   border: 1px solid #e0e0e0;
   padding: 8px 15px;
   border-radius: 5px;

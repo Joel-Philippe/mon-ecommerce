@@ -115,7 +115,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ isOpen, onClo
               maxHeight: '100vh',
               borderRadius: 0,
               overflow: 'hidden',
-              background: 'blanchedalmond',
+              background: 'white',
               position: 'relative',
             }}
             className="product-modal-content"
