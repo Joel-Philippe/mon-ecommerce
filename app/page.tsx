@@ -18,6 +18,7 @@ import CustomMenuItem from '@/components/CustomMenuItem';
 import UpdateCardModal from '@/components/UpdateCardModal';
 import GlobalPrice from '@/components/globalprice';
 import { useAuth } from '@/contexts/AuthContext';
+import SvgBackground from '@/components/SvgBackground';
 import AnimatedBanner from '@/components/AnimatedBanner';
 import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
@@ -346,6 +347,7 @@ import './Cards.css';
       >
         <AnimatedBanner onEnd={handleVideoEnd} />
       </div>
+      <SvgBackground />
       
       <Menu
         cards={cards}

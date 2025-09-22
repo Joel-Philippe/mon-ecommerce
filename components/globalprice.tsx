@@ -186,7 +186,7 @@ return (
     borderTopLeftRadius="20px" 
     borderBottomLeftRadius="20px" 
     boxShadow="xl"
-    bg="blanchedalmond" 
+    bg="white" 
   >
     {/* Flèche retour */}
     <IconButton
@@ -207,14 +207,14 @@ return (
     {/* Header */}
     <DrawerHeader 
       borderBottomWidth="1px" 
-      bg="blanchedalmond" 
+      bg="whited" 
       fontWeight="bold" 
       fontSize="xl"
       display="flex" 
       alignItems="center" 
       justifyContent="center"
     >
-      🛒 Votre Panier ({totalItems})
+      🛒 ({totalItems})
     </DrawerHeader>
 
     {/* Body */}
@@ -248,7 +248,7 @@ return (
                 p={4}
                 borderRadius="lg"
                 borderWidth="1px"
-                bg="blanchedalmond" 
+                bg="whited" 
                 shadow="sm"
                 _hover={{ shadow: "md" }}
                 align="center"
@@ -298,7 +298,7 @@ return (
 
     {/* Footer */}
     {itemsWithStockInfo.length > 0 && (
-      <DrawerFooter borderTopWidth="1px" bg="blanchedalmond">
+      <DrawerFooter borderTopWidth="1px" bg="whited">
         <VStack spacing={4} w="full">
           <Flex w="full" justify="space-between" fontWeight="semibold">
             <Text>Sous-total</Text>
@@ -307,7 +307,7 @@ return (
           <Button
             colorScheme={isCartInvalid ? "red" : "white"}
             size="lg"
-            bg="blanchedalmond" 
+            bg="whited" 
             color={"#FF9800"}
             w="full"
             rounded="full"

@@ -34,7 +34,7 @@ html::-webkit-scrollbar-thumb {
   justify-content: center;
   gap: 12px;
   padding: 0 20px;
-  background: blanchedalmond;
+  background: white;
   backdrop-filter: blur(4px);
 }
 .title-product-full {

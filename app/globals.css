@@ -394,7 +394,7 @@ html::-webkit-scrollbar {
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease; /* Smoother transitions */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 10px rgb(0 0 0 / 10%); /* Subtle shadow */
     padding: 10px 5px; /* Adjusted padding */
     margin-left: 0; /* Remove fixed margin, gap handles spacing */
 }
@@ -652,7 +652,7 @@ font-weight: 400;
 }
 .chakra-ui-light{
   padding-right: 0 !important;
-  background-color: #989898;
+  background-color: white;
 }
 
 .body-slider {
