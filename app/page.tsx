@@ -414,11 +414,13 @@ import './Cards.css';
                           router.push('/login');
                           return;
                         }
+                      if (card._id) {
                         if (userFavorites.includes(card._id)) {
                           removeFavorite(card._id);
                         } else {
                           addFavorite(card._id);
                         }
+                      }
                       }}
                     >
                       <FaHeart color={userFavorites.includes(card._id) ? '#e63198' : 'white'} />
