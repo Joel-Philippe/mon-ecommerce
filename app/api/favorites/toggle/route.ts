@@ -2,8 +2,7 @@
 import { NextResponse } from 'next/server';
 import { getAuth } from 'firebase-admin/auth';
 import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
-import { initAdmin } from '@/utils/firebaseAdmin';
-import { db } from '@/components/firebaseConfig'; // Assurez-vous que ce chemin est correct
+import { db } from '@/components/firebaseConfig';
 
 export async function POST(request: Request) {
   
