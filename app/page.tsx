@@ -423,7 +423,7 @@ import './Cards.css';
                       }
                       }}
                     >
-                      <FaHeart color={userFavorites.includes(card._id) ? '#e63198' : 'white'} />
+                      <FaHeart color={card._id && userFavorites.includes(card._id) ? '#e63198' : 'white'} />
                     </div>
                     
                     <Link href={`/${card._id}`} passHref>
