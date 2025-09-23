@@ -1,106 +1,159 @@
-body.no-scroll {
-  overflow: hidden;
-}
-.panier {
-  width: 100%;
-  border: #146361;
-  padding-bottom: 5px;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+/* app/Panier.css */
+
+.panier-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.panier-title {
-  font-size: 16px;
+.panier-container h1 {
+  font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 5px;
-  color: #146361;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.panier-empty {
+  text-align: center;
+  padding: 4rem;
+  border: 2px dashed #e2e8f0;
+  border-radius: 0.5rem;
+}
+
+.panier-empty p {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.continuer-shopping {
+  background-color: #ff8f00;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.panier-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.panier-items {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .panier-item {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: white;
 }
 
-.panier-item-title {
-  font-size: 16px;
-  color: #146361;
+.panier-item-image {
+  flex-shrink: 0;
+  margin: auto;
+  width: 50px; /* Increased size */
+  height:50px; /* Increased size */
 }
 
-.panier-item-price {
-  font-size: 16px;
-  color: #146361;
-}
-
-.panier-total {
-  font-size: 15px;
-  color: #146361;
-  margin: 20px;
-}
-.panier-total-to-add {
-  color: #333;
-  padding: 3%;
-  background-color: bisque;
-  border-style: dotted ;
-  border-width: 3px;
-  border-radius: 10px;
-  margin-left: 10px;
-}
-.MuiDialogContent-root{
-  flex: 1 1 auto;
-  padding: 1px 3px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.MuiDialog-paper{
-      margin: 5px; 
-      position: relative;
-      overflow-y: auto;
-}
-.MuiDialog-paper{
-  margin: 13px;
-  position: relative;
-  overflow-y: auto;
-}
-
-
-.dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.panier-item-image img {
+  border-radius: 0.5rem;
+  object-fit: cover; /* Better framing */
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.panier-item-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.panier-item-details h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.panier-item-details p {
+  margin: 0.5rem 0;
+}
+
+.panier-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.quantity-btn {
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-  overflow: hidden;
+  cursor: pointer;
 }
 
-.dialog-content {
-  background-color: #fff4df;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
+.remove-item-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.panier-summary {
+  width: 300px;
+  flex-shrink: 0;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: #f7fafc;
+  height: fit-content;
+}
+
+.panier-summary h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-btn {
   width: 100%;
-  max-height: 90%; /* Ajustez cette valeur selon vos besoins */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow-y: auto; /* Permet le défilement vertical */
-  position: relative; /* Assurez-vous que le conteneur est positionné relativement */
-  padding-bottom: 0;
+  padding: 1rem;
+  background-color: #e63198;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-
-.fixed-footer {
-  position: sticky; /* Utilisez sticky pour que le conteneur colle au bas du contenu lors du défilement */
-  bottom: 0;
-  background-color: #fff4df; /* Assurez-vous que le fond est identique à celui du conteneur */
-  padding: 10px 0;
-  width: 100%;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optionnel: ajoute une ombre pour séparer visuellement */
+.checkout-btn:hover {
+  background-color: #e07b00;
 }
 
-.fixed-button-container {
-  text-align: center;
+@media (max-width: 768px) {
+  .panier-layout {
+    flex-direction: column-reverse;
+  }
+
+  .panier-summary {
+    width: 100%;
+  }
 }
 

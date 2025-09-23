@@ -1,26 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import Link from 'next/link';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useGlobalCart } from '@/components/GlobalCartContext';
-import GlobalPrice from '@/components/globalprice';
 
 const FixedCartButton = () => {
-  const { globalCart, loadingCart } = useGlobalCart();
+  const { globalCart } = useGlobalCart();
   const totalItemsInCart = Object.values(globalCart).reduce((total, item) => total + item.count, 0);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const handleButtonClick = () => {
-    setIsDrawerOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setIsDrawerOpen(false);
-  };
 
   return (
-    <>
-      <div className="fixed-cart-button" onClick={handleButtonClick}>
+    <Link href="/cart" passHref>
+      <div className="fixed-cart-button">
         <FaShoppingCart size={24} />
         {totalItemsInCart > 0 && (
           <span className="cart-badge">
@@ -32,8 +23,8 @@ const FixedCartButton = () => {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #ff8f00; /* Primary color from project */
-            color: white;
+            background-color: #e63199; /* Primary color from project */
+            color:  white;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -64,9 +55,7 @@ const FixedCartButton = () => {
           }
         `}</style>
       </div>
-
-      <GlobalPrice isOpen={isDrawerOpen} onClose={handleDrawerClose} />
-    </>
+    </Link>
   );
 };
 

@@ -25,6 +25,7 @@ import { useRouter } from 'next/navigation';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import './globalprice.css';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 interface GlobalPriceProps {
@@ -193,14 +194,14 @@ return (
       aria-label="Retour"
       icon={<ArrowBackIcon boxSize={5} />}
       variant="ghost"
-      colorScheme="blue"
+      colorScheme="#ff80b1"
       onClick={onClose}
       position="absolute"
       top="16px"
       left="16px"
       borderRadius="full"
       bg="white"
-      _hover={{ bg: "blue.50" }}
+      _hover={{ bg: "#ff80b1.50" }}
       shadow="md"
     />
     
@@ -213,12 +214,13 @@ return (
       display="flex" 
       alignItems="center" 
       justifyContent="center"
+      className="drawer-header"
     >
       🛒 ({totalItems})
     </DrawerHeader>
 
     {/* Body */}
-    <DrawerBody p={4} overflowX="hidden">
+    <DrawerBody p={4} overflowX="hidden" className="drawer-body">
       {loadingCart ? (
         <Flex align="center" justify="center" h="100%">
           <Text color="gray.500">Chargement...</Text>
@@ -234,7 +236,7 @@ return (
           <Text mt={2} color="gray.500" textAlign="center">
             Les articles que vous ajoutez apparaîtront ici.
           </Text>
-          <Button mt={6} colorScheme="blue" rounded="full" px={8} onClick={onClose}>
+          <Button mt={6} colorScheme="#ff80b1" rounded="full" px={8} onClick={onClose}>
             Continuer mes achats
           </Button>
         </Flex>
@@ -252,6 +254,7 @@ return (
                 shadow="sm"
                 _hover={{ shadow: "md" }}
                 align="center"
+                className="cart-item"
               >
                 <Image
                   src={item.images?.[0] || "/placeholder.png"}
@@ -260,20 +263,21 @@ return (
                   borderRadius="md"
                   objectFit="cover"
                   mr={4}
+                  className="cart-item-image"
                 />
-                <VStack align="start" spacing={1} flex={1}>
-                  <Text fontWeight="semibold" noOfLines={2}>{item.title}</Text>
+                <VStack align="start" spacing={1} flex={1} className="cart-item-details">
+                  <Text fontWeight="semibold" noOfLines={2} className="cart-item-title">{item.title}</Text>
                   {item.price_promo ? (
                     <HStack>
                       <Text as="span" textDecoration="line-through" color="gray.400" fontSize="sm">
                         {Number(item.price).toFixed(2)}€
                       </Text>
-                      <Text as="span" color="green.500" fontWeight="bold">
+                      <Text as="span" color="green.500" fontWeight="bold" className="cart-item-price">
                         {Number(item.price_promo).toFixed(2)}€
                       </Text>
                     </HStack>
                   ) : (
-                    <Text fontWeight="bold">{Number(item.price).toFixed(2)}€</Text>
+                    <Text fontWeight="bold" className="cart-item-price">{Number(item.price).toFixed(2)}€</Text>
                   )}
                   {isOutOfStock && (
                     <Text fontSize="xs" color="red.500" fontWeight="semibold">
@@ -298,7 +302,7 @@ return (
 
     {/* Footer */}
     {itemsWithStockInfo.length > 0 && (
-      <DrawerFooter borderTopWidth="1px" bg="whited">
+      <DrawerFooter borderTopWidth="1px" bg="whited" className="drawer-footer">
         <VStack spacing={4} w="full">
           <Flex w="full" justify="space-between" fontWeight="semibold">
             <Text>Sous-total</Text>
@@ -315,6 +319,7 @@ return (
             isLoading={isCheckingOut}
             loadingText="Redirection..."
             isDisabled={isCheckingOut || isCartInvalid}
+            className="checkout-button"
           >
             {isCartInvalid ? "Stock insuffisant" : "Passer la commande"}
           </Button>

@@ -97,14 +97,14 @@ export default function Signup() {
     <>
       <CustomMenuItem />
       {loading ? (
-        <Flex minHeight="50vh" align="center" justify="center" bg="blanchedalmond" px={4}>
+        <Flex minHeight="50vh" align="center" justify="center" bg="white" px={4}>
           <Text>Bienvenue !</Text>
           <Text>Votre compte a été créé avec succès.</Text>
           <Confetti />
         </Flex>
       ) : showForm ? (
-        <Flex minHeight="50vh" align="center" justify="center" bg="blanchedalmond" px={4}>
-          <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="blanchedalmond">
+        <Flex minHeight="50vh" align="center" justify="center" bg="white" px={4}>
+          <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="white">
             <Heading as="h1" size="lg" mb={6} textAlign="center" color="black">
               Inscription
             </Heading>

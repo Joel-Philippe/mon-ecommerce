@@ -90,10 +90,10 @@ const AccountPage = () => {
           max-width: 960px;
           margin: 40px auto;
           padding: 30px;
-          background-color: blanchedalmond;
+          background-color: white;
           border-radius: 16px;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          color: #333;
+          color: #e63198;
           display: flex;
           flex-direction: column;
           gap: 30px;
@@ -123,6 +123,7 @@ const AccountPage = () => {
         .nav-item {
           background-color: transparent;
           border: none;
+          width: 100%;
           padding: 12px 20px;
           border-radius: 10px;
           font-size: 1em;
@@ -136,12 +137,10 @@ const AccountPage = () => {
         }
 
         .nav-item:hover {
-          background-color: #e2e8f0;
-          color: #475569;
+          color: #695747ff;
         }
 
         .nav-item.active {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
           transform: translateY(-2px);
@@ -217,6 +216,7 @@ const AccountPage = () => {
           .nav-item {
             justify-content: center;
             padding: 10px 15px;
+            width: 100%;
           }
         }
 

@@ -53,13 +53,13 @@ export default function Login() {
         minHeight="100vh" 
         align="center" 
         justify="center" 
-        bg="blanchedalmond" 
+        bg="white" 
         px={4}
         backgroundSize="cover" // Pour que l'image couvre tout l'écran
         backgroundPosition="center" // Centrer l'image
         backgroundRepeat="no-repeat" // Pas de répétition
         >
-        <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="blanchedalmond" opacity={0.9}>
+        <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="white" opacity={0.9}>
           <Heading as="h1" size="lg" mb={6} textAlign="center" color={'black'}>
             Connexion
           </Heading>

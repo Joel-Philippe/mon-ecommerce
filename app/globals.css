@@ -1,5 +1,6 @@
 body {
   overflow: auto !important;
+  padding-bottom: 70px; /* Compensate for fixed bottom navigation */
 }
 
 @media (min-width: 769px) {
@@ -47,9 +48,6 @@ html, body {
 .no-scroll {
   overflow: hidden;
   height: 100vh;
-}
-body {
-  overflow: auto !important;
 }
 ::-webkit-scrollbar {
   display: none;
@@ -410,21 +408,13 @@ html::-webkit-scrollbar {
 }
 
 .categorie_button img {
-  height: 40px; /* Adjusted height */
-  width: 40px; /* Adjusted width */
+  height: 50px; /* Adjusted height */
+  width: 50px; /* Adjusted width */
   object-fit: contain;
-  border-radius: 50%; /* Keep circular */
-  margin-bottom: 8px; /* Adjusted margin */
 }
 
 .categorie-text {
   font-family: 'allroundgothic';
-  font-size: 11px; /* Adjusted font size */
-  white-space: normal; /* Allow text to wrap */
-  background-color: transparent; /* Remove background color */
-  padding: 0; /* Remove padding */
-  border-radius: 0; /* Remove border-radius */
-  display: block; /* Ensure it behaves as a block element */
   
 }
 .animated-title {
@@ -699,6 +689,44 @@ font-weight: 400;
   border-radius: 10px;
 }
 
-.menu-items::-webkit-scrollbar-thumb:hover {
+  .menu-items::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+.floating-favorites-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 999; /* Ensure it's above most content */
+  background-color: #ff8f00; /* Vibrant color */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Circular shape */
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: all 0.3s ease;
+}
+
+.floating-favorites-button:hover {
+  background-color: #e07b00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .floating-favorites-button {
+    width: 48px;
+    height: 48px;
+    bottom: 15px;
+    left: 15px;
+  }
+
+  .floating-favorites-button svg {
+    font-size: 20px;
+  }
 }

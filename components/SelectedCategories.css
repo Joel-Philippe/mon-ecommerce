@@ -1,0 +1,111 @@
+/* SelectedCategories.css */
+.selected-categories-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 15px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #eee;
+  min-height: 50px;
+}
+
+.selected-categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.category-chip {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.chip-image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 6px;
+  object-fit: contain;
+}
+
+.chip-label {
+  margin-right: 6px;
+}
+
+.chip-remove-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  border-radius: 50%;
+}
+
+.chip-remove-button:hover {
+  color: #000;
+  background-color: #f0f0f0;
+}
+
+.clear-all-button {
+  background: none;
+  border: none;
+  color: #ff8f00;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.clear-all-button:hover {
+  text-decoration: underline;
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 480px) {
+  .selected-categories-container {
+    padding: 5px 10px;
+    min-height: 40px;
+  }
+
+  .category-chip {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .chip-image {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+
+  .chip-label {
+    margin-right: 4px;
+  }
+
+  .chip-remove-button {
+    padding: 1px;
+  }
+
+  .clear-all-button {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}

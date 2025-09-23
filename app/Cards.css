@@ -73,6 +73,34 @@ html, body {
     transition: box-shadow 0.3s ease;
 }
 
+.favorite-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5; /* Ensure it's above other elements */
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.favorite-button:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.favorite-button svg {
+  font-size: 18px; /* Icon size */
+}
+
 /* Style pour le badge "Nouveau" */
 .nouveau-badge {
   position: absolute;
@@ -449,7 +477,7 @@ html, body {
 h4{
     font-size: 20px;
     font-weight: 900;
-    color: #319795;
+    color: #5b5958;
     margin-bottom: 20px;
 }
 
@@ -503,4 +531,17 @@ h4{
     border-radius: 5px;
     object-fit: cover;
 }
+}
+.favorite-icon {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 5;
+  cursor: pointer;
+  font-size: 22px; /* Increased size */
+  transition: all 0.2s ease;
+}
+
+.favorite-icon:hover {
+  transform: scale(1.2);
 }
