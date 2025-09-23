@@ -6,7 +6,7 @@ import { initAdmin } from '@/utils/firebaseAdmin';
 import { db } from '@/components/firebaseConfig'; // Assurez-vous que ce chemin est correct
 
 export async function POST(request: Request) {
-  await initAdmin();
+  
   const auth = getAuth();
 
   const { productId } = await request.json();
