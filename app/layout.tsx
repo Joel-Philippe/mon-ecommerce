@@ -9,6 +9,8 @@ import './style.css';
 
 import FixedCartButton from '@/components/FixedCartButton';
 import SvgBackground from '@/components/SvgBackground';
+import BottomNav from '@/components/BottomNav';
+import '@/components/BottomNav.css';
 
 export default function RootLayout({
   children,
@@ -24,7 +26,7 @@ export default function RootLayout({
             <GlobalCartProvider>
               <ChakraProvider>
                 {children}
-                <FixedCartButton />
+                <BottomNav />
               </ChakraProvider>
             </GlobalCartProvider>
           </CheckboxProvider>

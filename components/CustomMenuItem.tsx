@@ -122,6 +122,19 @@ const CustomMenuItem = ({ onCartOpen = () => {} }) => {
                   </Button>
                 </Link>
 
+                <Link href="/favorites" passHref legacyBehavior>
+                  <Button
+                   as="a" 
+                   fontFamily={'allroundgothic'}
+                   fontSize="sm"  
+                   background={"rgb(121 85 72 / 95%)"}
+                   color="white"
+                   size="sm"
+                   boxShadow={"10px 5px #0000005c"}>
+                   Mes Favoris
+                  </Button>
+                </Link>
+
                 <Button
                   onClick={onLogoutAlertOpen}
                   size="sm"
@@ -179,13 +192,13 @@ const CustomMenuItem = ({ onCartOpen = () => {} }) => {
           <VStack align="start" spacing={4} ml="2rem">
             <Flex align="center" gap="0.5rem">
               <Avatar name={user?.displayName || undefined} src={user?.photoURL || undefined} size="sm" bg="blue.500" color="#206361" />
-              <Box fontSize="sm" color="rgb(65 202 1)" fontWeight="500">
+              <Box fontSize="sm" color="white" fontWeight="500">
                 {user?.displayName}
               </Box>
             </Flex>
 
             <Link href="/account" passHref legacyBehavior>
-              <chakra.a fontSize="sm" fontWeight="bold" color="gray.600" _hover={{ textDecoration: 'underline' }}>
+              <chakra.a fontSize="sm" fontWeight="bold" color="white" _hover={{ textDecoration: 'underline' }}>
                 Mon Compte
               </chakra.a>
             </Link>

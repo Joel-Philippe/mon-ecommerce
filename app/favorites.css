@@ -1,0 +1,51 @@
+/* favorites.css */
+.favorites-page-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  min-height: 100vh;
+}
+
+.favorites-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #e63198;
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 80px; /* To account for fixed header */
+}
+
+.favorites-message {
+  text-align: center;
+  color: #666;
+  font-size: 1.1em;
+  margin-top: 50px;
+}
+
+.favorites-login-button {
+  display: block;
+  width: fit-content;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #ff8f00;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.favorites-login-button:hover {
+  background-color: #e07b00;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Re-using card styles from Cards.css */
+/* Ensure Cards.css is imported in globals.css or directly in favorites page */

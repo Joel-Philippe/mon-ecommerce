@@ -16,13 +16,14 @@ import { useRouter } from 'next/navigation';
 import { auth, db, getClientStorage } from '../components/firebaseConfig.ts';
 
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, updateDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, collection, query, where, getDocs, getDoc, setDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import Cookies from 'js-cookie';
 
 const CART_COOKIE_NAME = 'guest_cart_id';
 
 interface AuthContextType {
   user: User | null;
+  userFavorites: string[];
   signup: (email: string, password: string, displayName: string, photoFile: File | null) => Promise<void>;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
@@ -32,12 +33,15 @@ interface AuthContextType {
   reauthenticateUser: (password: string) => Promise<void>;
   acceptRequest: (request: any) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
+  addFavorite: (cardId: string) => Promise<void>;
+  removeFavorite: (cardId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userFavorites, setUserFavorites] = useState<string[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -46,6 +50,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (user) {
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const data = userDocSnap.data();
+          setUserFavorites(data?.favorites || []);
+        } else {
+          // Create user document if it doesn't exist
+          await setDoc(userDocRef, { favorites: [] }, { merge: true });
+          setUserFavorites([]);
+        }
+      } else {
+        setUserFavorites([]);
+      }
+    };
+    fetchFavorites();
+  }, [user]);
 
   const mergeGuestCart = async (firebaseUser: User) => {
     const guestCartId = Cookies.get(CART_COOKIE_NAME);
@@ -65,6 +89,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Failed to merge carts:", error);
       }
     }
+  };
+
+  const addFavorite = async (cardId: string) => {
+    if (!user) throw new Error("Utilisateur non connecté");
+    const token = await user.getIdToken();
+    await fetch('/api/favorites/toggle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ productId: cardId }),
+    });
+    setUserFavorites(prev => [...prev, cardId]);
+  };
+
+  const removeFavorite = async (cardId: string) => {
+    if (!user) throw new Error("Utilisateur non connecté");
+    const token = await user.getIdToken();
+    await fetch('/api/favorites/toggle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ productId: cardId }),
+    });
+    setUserFavorites(prev => prev.filter(id => id !== cardId));
   };
 
   const signup = async (email: string, password: string, displayName: string, photoFile: File | null) => {
@@ -198,6 +250,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={{
       user,
+      userFavorites,
       signup,
       login,
       logout,
@@ -206,7 +259,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       updateProfilePhoto,
       reauthenticateUser,
       acceptRequest,
-      deleteUserAccount
+      deleteUserAccount,
+      addFavorite,
+      removeFavorite
     }}>
       {children}
     </AuthContext.Provider>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { FaNewspaper, FaRegListAlt, FaCheck, FaSearch } from 'react-icons/fa';
+import { FaNewspaper, FaRegListAlt, FaCheck, FaSearch, FaHeart } from 'react-icons/fa';
 import { Button, Box, Text, useDisclosure, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import Image from 'next/image';
 import { InfoIcon } from '@chakra-ui/icons';
@@ -35,6 +35,7 @@ import { PlusCircle } from "lucide-react";
 import Menu from '@/components/Menu';
 import FilterButtons from "@/components/FilterButtons";
 import NoSearchResults from "@/components/NoSearchResults";
+import SelectedCategories from '@/components/SelectedCategories';
 import { Grid3X3, Sparkles } from 'lucide-react';
 import { Card } from '@/types';
 import ProductDetailsModal from '@/components/ProductDetailsModal';
@@ -63,7 +64,7 @@ import './Cards.css';
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [formCard, setFormCard] = useState<Card | null>(null);
   const [imageValues, setImageValues] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
@@ -73,16 +74,15 @@ import './Cards.css';
     setIsCarouselOpen(false);
     setCarouselImages([]); // Clear images when closing
   };
-  const auth = useAuth();
-  const user = auth?.user;
+  const { user, userFavorites, addFavorite, removeFavorite } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentCard, setCurrentCard] = useState<Card | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const categoryIconsRef = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const categoryMenuRef = useRef<HTMLDivElement | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Card | null>(null);
+  
+  
   const [buttonText, setButtonText] = useState('Ajouter au panier'); // This state might become redundant
   const { globalCart, addToCart, updateCartItemQuantity, removeCartItem, loadingCart, errorCart } = useGlobalCart(); // Updated destructuring
   const [videoEnded, setVideoEnded] = useState(false);
@@ -91,7 +91,7 @@ import './Cards.css';
   const router = useRouter();
   const [userVotes, setUserVotes] = useState<{ [cardId: string]: number }>({});
   const [products, setProducts] = useState<any[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  
   const [selectedRating, setSelectedRating] = useState(0);
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -174,7 +174,7 @@ import './Cards.css';
     const unsubscribe = onSnapshot(
       cardsCol,
       snapshot => {
-        const data = snapshot.docs.map(doc => ({ _id: doc.id, ...(doc.data() as object) } as Card));
+        const data = snapshot.docs.map(doc => ({ ...(doc.data() as object), _id: doc.id } as Card));
         setCards(data);
         setLoading(false);
       },
@@ -217,7 +217,6 @@ import './Cards.css';
 
     try {
       await addToCart(card, 1); // Pass the whole card object
-      setIsCartOpen(true); // Open the cart
     } catch (err: any) {
       console.error("Error adding to cart:", err);
       // The context now sets the error message, so we can display it elsewhere
@@ -275,6 +274,15 @@ import './Cards.css';
     setSearchTerm(term);
   };
 
+  const handleCategoryToggle = (category: string) => {
+    setActiveFilter('all'); // Reset to 'all' when toggling categories
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category) 
+        : [...prev, category]
+    );
+  };
+
   const clearSearch = () => {
     setSearchTerm('');
   };
@@ -330,8 +338,8 @@ import './Cards.css';
       )
     : cards;
 
-  const filteredByCategory = selectedCategory
-    ? filteredBySearch.filter((card) => card.categorie === selectedCategory)
+  const filteredByCategory = selectedCategories.length > 0
+    ? filteredBySearch.filter(card => card.categorie && selectedCategories.includes(card.categorie))
     : filteredBySearch;
 
   const finalFilteredCards = activeFilter === 'new'
@@ -346,23 +354,29 @@ import './Cards.css';
         style={{ display: videoEnded ? 'none' : 'block' }}
       >
         <AnimatedBanner onEnd={handleVideoEnd} />
+        <SvgBackground />
       </div>
-      <SvgBackground />
+      
       
       <Menu
         cards={cards}
-        onFilterChange={(category, filter) => {
-          setSelectedCategory(category);
-          setActiveFilter(filter);
+        selectedCategories={selectedCategories}
+        activeFilter={activeFilter}
+        onCategoryToggle={handleCategoryToggle}
+        onClearAll={() => {
+          setSelectedCategories([]);
+          setActiveFilter('all');
+        }}
+        onShowNew={() => {
+          setSelectedCategories([]);
+          setActiveFilter('new');
         }}
         onSearch={handleSearch}
         resultsCount={finalFilteredCards.length}
         searchTerm={searchTerm}
       />
       
-      
-      
-      <div className={`page-content ${isPopupOpen ? 'slide-left' : ''}`}>
+      <div className="page-content">
         {searchTerm && finalFilteredCards.length === 0 && (
           <NoSearchResults 
             searchTerm={searchTerm}
@@ -392,42 +406,58 @@ import './Cards.css';
                       </div>
                     )}
                     
-                    <div className="header_card overlap-group-2">
-                      <div className="picture_card-container">
-                        <img 
-                          className="picture_card" 
-                          src={card.images[0]} 
-                          alt={card.title.trim().toLowerCase()}
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => {
-                            setSelectedProduct(card);
-                            setIsPopupOpen(true);
-                          }}
-                        />
-                        <div className="overlay-content">
-                          <div className="title_card_1 vtt-cool-style valign-text-middle">
-                            {card.title}
-                          </div>
-                      <div className="title_card_1 vtt-cool-style valign-text-middle">
-                      {card._id && (
-                        <RatingStars
-                          productId={card._id}
-                          averageRating={calculateAverageRating(card.reviews)}
-                          userHasRated={hasUserRated(card.reviews)}
-                          onVote={() => fetchProducts()}
-                        />
-                      )}
+                    <div 
+                      className="favorite-icon" 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Empêche le clic de se propager au lien de la carte
+                        if (!user) {
+                          router.push('/login');
+                          return;
+                        }
+                        if (userFavorites.includes(card._id)) {
+                          removeFavorite(card._id);
+                        } else {
+                          addFavorite(card._id);
+                        }
+                      }}
+                    >
+                      <FaHeart color={userFavorites.includes(card._id) ? '#e63198' : 'white'} />
                     </div>
+                    
+                    <Link href={`/${card._id}`} passHref>
+                      <div style={{ cursor: 'pointer' }}>
+                        <div className="header_card overlap-group-2">
+                          <div className="picture_card-container">
+                            <img 
+                              className="picture_card" 
+                              src={card.images[0]} 
+                              alt={card.title.trim().toLowerCase()}
+                            />
+                            <div className="overlay-content">
+                              <div className="title_card_1 vtt-cool-style valign-text-middle">
+                                {card.title}
+                              </div>
+                              <div className="title_card_1 vtt-cool-style valign-text-middle">
+                                {card._id && (
+                                  <RatingStars
+                                    productId={card._id}
+                                    averageRating={calculateAverageRating(card.reviews)}
+                                    userHasRated={hasUserRated(card.reviews)}
+                                    onVote={() => fetchProducts()}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="rectangle-14">
+                          <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
+                        </div>
+                        <div className={`time_card title_card_subtitle  ${isExpired ? 'expired' : ''}`}>
+                          <Countdown endDate={new Date(card.time)} onExpired={() => { if (card._id) { handleCountdownEnd(card._id); } }} title={card.title} />
                         </div>
                       </div>
-                    </div>
-                    <div className="rectangle-14">
-                              <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
-                            </div>
-                                               <div className={`time_card title_card_subtitle  ${isExpired ? 'expired' : ''}`}>
-                            <Countdown endDate={new Date(card.time)} onExpired={() => { if (card._id) { handleCountdownEnd(card._id); } }} title={card.title} />
-
-                          </div>
+                    </Link>
                     <div className={`flex-row ${isExpired ? 'expired' : ''}`}>
                   
                       <button
@@ -445,17 +475,21 @@ import './Cards.css';
                         <div className="price_content">
                           {Number(card.price_promo) > 0 ? (
                             <>
-                              <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                <span className="double-strikethrough">{card.price}€</span>
-                              </div>
+                              {card.price && (
+                                <div className="price_card price valign-text-middle inter-normal-white-20px">
+                                  <span className="double-strikethrough">{card.price}€</span>
+                                </div>
+                              )}
                               <div className="price_card price valign-text-middle inter-normal-white-20px">
                                 <span>{card.price_promo}€</span>
                               </div>
                             </>
                           ) : (
-                            <div className="price_card price valign-text-middle inter-normal-white-20px">
-                              <span>{card.price}€</span>
-                            </div>
+                            card.price && (
+                              <div className="price_card price valign-text-middle inter-normal-white-20px">
+                                <span>{card.price}€</span>
+                              </div>
+                            )
                           )}
                         </div>
                         {isExpired
@@ -513,13 +547,9 @@ import './Cards.css';
         
       </div>
       
-      <GlobalPrice isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      
 
-      <ProductDetailsModal
-        isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
-        product={selectedProduct}
-      />
+      
     </div>
   );
 }

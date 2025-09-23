@@ -18,13 +18,14 @@
 }
 
 .mainImage {
-  width: 100%;
+  width: 80%;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  margin: 0 auto; /* Center the image */
 }
 
 .mainImage:hover {
@@ -54,8 +55,8 @@
 }
 
 .thumbnail.active {
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  border-color: #FF9800;
+  box-shadow: 0 0 0 3px rgb(255 240 0 / 25%);
 }
 
 .rightColumn {
@@ -67,7 +68,7 @@
 
 .productTitle {
   font-family: 'Silicone W00 Bold', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2rem; /* Reduced from 2.5rem */
   font-weight: bold;
   color: #212529;
 }
@@ -81,7 +82,7 @@
 .price {
   font-size: 2rem;
   font-weight: bold;
-  color: #007bff;
+  color: #040604;
 }
 
 .originalPrice {
@@ -102,17 +103,30 @@
   align-items: center;
 }
 
-.quantityInput {
-  width: 80px;
-  padding: 0.5rem;
+.quantityButton {
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #495057;
+}
+
+.quantityDisplay {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #212529;
+  min-width: 30px;
   text-align: center;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  font-size: 1.1rem;
 }
 
 .addToCartButton {
-  background-color: #007bff;
+  background-color: #e63198;
   color: white;
   font-size: 1.1rem;
   font-weight: bold;
@@ -128,7 +142,7 @@
 }
 
 .addToCartButton:hover {
-  background-color: #0056b3;
+  background-color: #9C27B0;
   transform: translateY(-2px);
 }
 
@@ -166,17 +180,101 @@
   border-top: 1px solid #dee2e6;
 }
 
+.subtitle {
+  font-size: 1.25rem;
+  color: #6c757d;
+}
+
+.stockInfo {
+  font-size: 1rem;
+  color: #495057;
+}
+
+.importantPoints,
+.caracteristiques,
+.produitsDerives {
+  margin-top: 2rem;
+}
+
+.importantPoints h3,
+.caracteristiques h3,
+.produitsDerives h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.importantPoints ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.caracteristiques table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.caracteristiques th,
+.caracteristiques td {
+  border: 1px solid #dee2e6;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.produitDerive {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #dee2e6;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.produitDerive img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.addToCartButtonDerived {
+  background-color: #4CAF50; /* Green color */
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.addToCartButtonDerived:hover {
+  background-color: #45a049;
+}
+
+.infoOptionnel,
+.localisation {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #6c757d;
+}
+
 @media (max-width: 768px) {
+  .mainImage {
+  width: 100%;
+}
   .productPageContainer {
     flex-direction: column;
     padding: 1rem;
   }
 
   .productTitle {
-    font-size: 2rem;
+    font-size: 1.7rem;
   }
 
   .price {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 }

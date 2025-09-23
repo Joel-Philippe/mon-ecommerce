@@ -1,0 +1,61 @@
+/* components/globalprice.css */
+
+.drawer-header {
+  background-color: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.drawer-body {
+  padding: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-right: 1rem;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-title {
+  font-weight: 600;
+}
+
+.cart-item-price {
+  color: #718096;
+}
+
+.drawer-footer {
+  background-color: #f7fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 1rem;
+}
+
+.checkout-button {
+  width: 100%;
+  background-color: #ff8f00;
+  color: white;
+  font-weight: 600;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.checkout-button:hover {
+  background-color: #e07b00;
+}
