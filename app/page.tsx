@@ -348,7 +348,7 @@ import './Cards.css';
 
   return (
     <div>
-      <CustomMenuItem onCartOpen={() => setIsCartOpen(true)} />
+      <CustomMenuItem />
       <div
         className={`video_animate video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
         style={{ display: videoEnded ? 'none' : 'block' }}
