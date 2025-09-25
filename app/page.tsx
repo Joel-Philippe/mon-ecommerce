@@ -135,35 +135,35 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
     }
   };
 
+  const fetchProducts = async () => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    const querySnapshot = await getDocs(collection(db, 'cards'));
+    const products = await Promise.all(
+      querySnapshot.docs.map(async (docSnap) => {
+        const data = docSnap.data();
+        const reviews = data.reviews || [];
+
+        const userHasRated = currentUser
+          ? reviews.some((r: any) => r.userId === currentUser.uid)
+          : false;
+
+        const averageRating = data.stars || 0;
+
+        return {
+          id: docSnap.id,
+          ...data,
+          averageRating,
+          userHasRated,
+        };
+      })
+    );
+
+    setProducts(products);
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const auth = getAuth();
-      const currentUser = auth.currentUser;
-
-      const querySnapshot = await getDocs(collection(db, 'cards'));
-      const products = await Promise.all(
-        querySnapshot.docs.map(async (docSnap) => {
-          const data = docSnap.data();
-          const reviews = data.reviews || [];
-
-          const userHasRated = currentUser
-            ? reviews.some((r: any) => r.userId === currentUser.uid)
-            : false;
-
-          const averageRating = data.stars || 0;
-
-          return {
-            id: docSnap.id,
-            ...data,
-            averageRating,
-            userHasRated,
-          };
-        })
-      );
-
-      setProducts(products);
-    };
-
     fetchProducts();
   }, []);
 
