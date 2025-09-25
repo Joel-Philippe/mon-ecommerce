@@ -1,17 +1,17 @@
-'use client';
-import Link, { ScrollRestorationLinkProps } from '@/components/ScrollRestorationLink'; // Import ScrollRestorationLink
+import NextLink from 'next/link'; // Import Next.js Link directly for its props
+import ScrollRestorationLink from '@/components/ScrollRestorationLink'; // Import the component itself
 import React, { ReactNode } from 'react';
 
-interface CustomLinkProps extends ScrollRestorationLinkProps {
+interface CustomLinkProps extends React.ComponentProps<typeof NextLink> { // Extend Next.js Link props
   children: ReactNode;
   className?: string;
 }
 
 const CustomLink: React.FC<CustomLinkProps> = ({ children, href, className, ...props }) => {
   return (
-    <Link href={href} className={className} {...props}>
+    <ScrollRestorationLink href={href} className={className} {...props}> // Use ScrollRestorationLink component
       {children}
-    </Link>
+    </ScrollRestorationLink>
   );
 };
 
