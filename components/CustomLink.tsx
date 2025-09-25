@@ -1,8 +1,8 @@
 'use client';
-import Link, { LinkProps } from '@/components/ScrollRestorationLink'; // Import ScrollRestorationLink
+import Link, { ScrollRestorationLinkProps } from '@/components/ScrollRestorationLink'; // Import ScrollRestorationLink
 import React, { ReactNode } from 'react';
 
-interface CustomLinkProps extends LinkProps {
+interface CustomLinkProps extends ScrollRestorationLinkProps {
   children: ReactNode;
   className?: string;
 }
