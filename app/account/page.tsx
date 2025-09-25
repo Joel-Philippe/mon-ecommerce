@@ -1,29 +1,34 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import ProfilePhotoForm from '@/components/ProfilePhotoForm';
 import DisplayNameForm from '@/components/DisplayNameForm';
 import ChangePasswordForm from '@/components/ChangePasswordForm';
-import DeleteAccountButton from '@/components/DeleteAccountButton';
+import DeleteAccountButton from '@/components/DeleteAccountForm';
 import CustomMenuItem from '@/components/CustomMenuItem';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Import the hook
 
 import { FiUser, FiLock, FiAlertCircle, FiCamera } from 'react-icons/fi'; // Import icons for tabs
 
 const AccountPage = () => {
   const auth = useAuth();
   const user = auth?.user;
-  const router = useRouter();
+  const authLoading = auth?.loading; // Assuming auth provides a loading state
+  const router = useScrollSavingRouter();
   const [activeTab, setActiveTab] = useState('profile'); // New state for active tab
 
+  useScrollRestoration(authLoading || !user, [user]); // Call without pageContentRef
+
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) { // Wait for auth loading to complete
       router.push('/login'); // Redirect to login if not authenticated
     }
-  }, [user, router]);
+  }, [user, router, authLoading]);
 
-  if (!user) {
+  if (authLoading || !user) { // Show loading while auth is loading or user is not available
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
@@ -35,7 +40,7 @@ const AccountPage = () => {
   return (
     <>
       <CustomMenuItem onCartOpen={() => {}} />
-      <div className="account-page-container">
+      <div className="account-page-container"> {/* Attach the ref */}
         <h1>Mon Compte</h1>
 
         {/* Navigation Menu */}
@@ -148,6 +153,7 @@ const AccountPage = () => {
 
         .account-section {
           border: 1px solid #e2e8f0;
+          background-color: rgb(255, 246, 241);
           border-radius: 12px;
           padding: 25px;
           transition: all 0.3s ease;

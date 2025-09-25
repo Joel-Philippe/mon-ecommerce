@@ -1,13 +1,14 @@
-'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { collection, getDocs, updateDoc, doc, onSnapshot, serverTimestamp, addDoc, deleteDoc } from 'firebase/firestore';
 import SlickSlider from "react-slick";
-import { db } from '@/components/firebaseConfig';
+import { db } '@/components/firebaseConfig';
 import AddCard from '@/components/AddCard';
 import UpdateCardModal from '@/components/UpdateCardModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, SpecialRequest } from '@/types';
+import { useScrollRestoration } '@/hooks/useScrollRestoration'; // Import the hook
 import { 
   FiLogOut, 
   FiPlus, 
@@ -40,13 +41,16 @@ const AdminPage = () => {
   const [showAddCard, setShowAddCard] = useState(false);
   const [showUpdateCard, setShowUpdateCard] = useState(false);
   const authContext = useAuth();
+
+  useScrollRestoration(loadingAdminCheck || isLoading, [cards, specialRequests]); // Call without pageContentRef
+
   if (!authContext) {
     // This case should ideally not be reached if AuthProvider is correctly wrapping the app
     // and admin access is checked. However, for TypeScript safety, we handle it.
     return null; // Or a loading component, or redirect to login
   }
   const { logout, user } = authContext;
-  const router = useRouter();
+  const router = useScrollSavingRouter();
 
   const sliderSettings = {
     dots: true,

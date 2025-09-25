@@ -41,7 +41,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
       </div>
       <div
         style={{
-          background: '#e0e0e0',
+          background: 'rgb(255, 246, 241)',
           borderRadius: '50px',
           height: '7px',
           width: '100%',

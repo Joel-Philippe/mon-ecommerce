@@ -58,7 +58,7 @@ const Menu: React.FC<MenuProps> = ({
     <div className="menu-container">
       <div className="menu-header">
         <button className="menu-toggle-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? 'Fermer' : 'Catégories'}
+          {isMenuOpen ? 'Valider' : 'Filtre'}
         </button>
         <div className="header-main-buttons">
           <button

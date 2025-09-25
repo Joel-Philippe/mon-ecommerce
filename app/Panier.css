@@ -3,7 +3,8 @@
 .panier-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  margin-bottom: 200px;
+  background-color:white ;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -18,13 +19,15 @@
 
 .panier-empty {
   text-align: center;
-  padding: 4rem;
+  padding: 2rem;
+  background-color: rgb(255, 246, 241);
   border: 2px dashed #e2e8f0;
   border-radius: 0.5rem;
 }
 
 .panier-empty p {
-  font-size: 1.25rem;
+  font-size: 1rem;
+  background-color: rgb(255, 246, 241);
   margin-bottom: 1.5rem;
 }
 

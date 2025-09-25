@@ -212,7 +212,7 @@ const SvgBackground = () => {
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
       <ul className="loading__wrapper">
         <li>
-          <svg className="loader1" fill="#ff80b1" height="80" viewBox="0 0 55 80" width="55" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader1" fill="#ecececff" height="80" viewBox="0 0 55 80" width="55" xmlns="http://www.w3.org/2000/svg">
             <g transform="matrix(1 0 0 -1 0 80)">
               <rect height="20" rx="3" width="10"></rect>
               <rect height="80" rx="3" width="10" x="15"></rect>

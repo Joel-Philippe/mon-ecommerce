@@ -26,22 +26,7 @@
     url("https://db.onlinewebfonts.com/t/980986481f221ceb339f1d489fe858b3.ttf")format("truetype"),
     url("https://db.onlinewebfonts.com/t/980986481f221ceb339f1d489fe858b3.svg#Silicone W00 Bold")format("svg");
 }
-/* ✅ Cacher la barre de défilement pour tous les navigateurs */
-html, body {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-  }
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-  }
-  
-  /* ✅ Cacher la barre de défilement pour WebKit (Chrome, Safari, Edge) */
-  html::-webkit-scrollbar {
-    display: none;
-  }
+
   
 .cards-container {
     display: flex;
