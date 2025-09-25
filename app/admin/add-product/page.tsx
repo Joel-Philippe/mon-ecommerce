@@ -3,7 +3,7 @@ import React from 'react';
 import AddCard from '@/components/AddCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import AdminMenu from '@/components/AdminMenu';
+
 
 const AddProductPage = () => {
   const auth = useAuth();
@@ -34,7 +34,7 @@ const AddProductPage = () => {
 
   return (
     <div className="admin-layout">
-      <AdminMenu />
+      
       
       <div className="admin-content">
         <AddCard />

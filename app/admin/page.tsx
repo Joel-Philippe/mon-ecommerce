@@ -3,12 +3,12 @@ import { useRouter } from 'next/navigation';
 import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { collection, getDocs, updateDoc, doc, onSnapshot, serverTimestamp, addDoc, deleteDoc } from 'firebase/firestore';
 import SlickSlider from "react-slick";
-import { db } '@/components/firebaseConfig';
+import { db } from '@/components/firebaseConfig';
 import AddCard from '@/components/AddCard';
 import UpdateCardModal from '@/components/UpdateCardModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, SpecialRequest } from '@/types';
-import { useScrollRestoration } '@/hooks/useScrollRestoration'; // Import the hook
+import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Import the hook
 import { 
   FiLogOut, 
   FiPlus, 

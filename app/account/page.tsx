@@ -7,7 +7,7 @@ import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import ProfilePhotoForm from '@/components/ProfilePhotoForm';
 import DisplayNameForm from '@/components/DisplayNameForm';
 import ChangePasswordForm from '@/components/ChangePasswordForm';
-import DeleteAccountButton from '@/components/DeleteAccountForm';
+import DeleteAccountButton from '@/components/DeleteAccountButton';
 import CustomMenuItem from '@/components/CustomMenuItem';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Import the hook
 
