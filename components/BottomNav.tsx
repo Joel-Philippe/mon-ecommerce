@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import CustomLink from '@/components/CustomLink';
 import { usePathname } from 'next/navigation';
 import { FaHome, FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,23 +15,23 @@ const BottomNav = () => {
 
   return (
     <div className="bottom-nav">
-      <Link href="/" passHref>
+      <CustomLink href="/" passHref>
         <div className={`nav-item ${pathname === '/' ? 'active' : ''}`}>
           <FaHome size={24} />
         </div>
-      </Link>
-      <Link href="/favorites" passHref>
+      </CustomLink>
+      <CustomLink href="/favorites" passHref>
         <div className={`nav-item ${pathname === '/favorites' ? 'active' : ''}`}>
           <FaHeart size={24} />
           {userFavorites.length > 0 && <span className="nav-badge favorite-badge">{userFavorites.length}</span>}
         </div>
-      </Link>
-      <Link href="/cart" passHref>
+      </CustomLink>
+      <CustomLink href="/cart" passHref>
         <div className={`nav-item ${pathname === '/cart' ? 'active' : ''}`}>
           <FaShoppingCart size={24} />
           {cartItemsCount > 0 && <span className="nav-badge cart-badge">{cartItemsCount}</span>}
         </div>
-      </Link>
+      </CustomLink>
     </div>
   );
 };

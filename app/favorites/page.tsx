@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { collection, query, where, getDocs, documentId } from 'firebase/firestore';
@@ -9,20 +9,28 @@ import CustomMenuItem from '@/components/CustomMenuItem';
 import { Card } from '@/types';
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import Link from '@/components/ScrollRestorationLink';
 import Image from 'next/image';
 import { Sparkles } from 'lucide-react';
 import '../favorites.css';
 import '../Cards.css';
 import RatingStars from '@/components/RatingStars';
 
+
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
+
+
 export default function FavoritesPage() {
   const { user, userFavorites } = useAuth();
   const { globalCart, addToCart } = useGlobalCart();
+
   const [favoriteCards, setFavoriteCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const router = useScrollSavingRouter();
+
+  useScrollRestoration(loading, [favoriteCards]); // Call without pageContentRef
 
   useEffect(() => {
     const fetchFavoriteCards = async () => {
@@ -77,6 +85,8 @@ export default function FavoritesPage() {
     return total / reviews.length;
   };
 
+
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -96,7 +106,7 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="favorites-page-container">
+    <div className="favorites-page-container"> {/* Attach ref */}
       <h1 className="favorites-title">Mes Articles Favoris</h1>
 
       {favoriteCards.length === 0 ? (
@@ -110,8 +120,8 @@ export default function FavoritesPage() {
             const isOutOfStock = available <= 0;
 
             return (
-              <Link href={`/${card._id}`} passHref legacyBehavior>
-                <div className="card-link" style={{ textDecoration: "none", color: "inherit" }} key={card._id}>
+              <Link href={`/${card._id}`} passHref legacyBehavior key={card._id}>
+                <div className="card-link" style={{ textDecoration: "none", color: "inherit" }}>
                   <div className="card overlap-group-1">
                     {card.nouveau && (
                       <div className="nouveau-badge">

@@ -5,9 +5,10 @@
   flex-direction: row;
   width: 100%;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: rgb(255, 246, 241);
   padding: 2rem;
   gap: 2rem;
+  margin-bottom: 200px;
 }
 
 .leftColumn {
@@ -18,7 +19,7 @@
 }
 
 .mainImage {
-  width: 80%;
+  width: 67%;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;

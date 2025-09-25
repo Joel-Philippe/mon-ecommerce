@@ -97,7 +97,7 @@ export default function Signup() {
     <>
       <CustomMenuItem />
       {loading ? (
-        <Flex minHeight="50vh" align="center" justify="center" bg="white" px={4}>
+        <Flex minHeight="50vh" align="center" justify="center" bg="rgb(255, 246, 241)" px={4}>
           <Text>Bienvenue !</Text>
           <Text>Votre compte a été créé avec succès.</Text>
           <Confetti />

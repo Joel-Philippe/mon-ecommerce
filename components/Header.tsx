@@ -19,7 +19,7 @@ const Header = () => {
           Time
         </Heading>
         <Box position="absolute" top="2rem" right="2rem" zIndex={1000}>
-          <Link href="/panier" passHref>
+          <Link href="/panier" passHref legacyBehavior>
             <Button as="a" variant="ghost" leftIcon={<FaShoppingCart />} isLoading={loadingCart}>
               {totalItemsInCart > 0 && (
                 <Text ml={1} fontWeight="bold">

@@ -66,11 +66,12 @@ const CustomMenuItem = ({ onCartOpen = () => {} }) => {
   }
 
   return (
-    <Box bg="#ff80b1" width="100%">
+    <Box bg="rgb(255, 246, 241)" width="100%">
       <ProgressBar />
       <Flex
         alignItems="center"
         justifyContent="space-between"
+        background={"rgb(255, 246, 241)"}
         wrap="wrap"
         paddingLeft="0px"
         paddingRight="0px"
@@ -78,7 +79,7 @@ const CustomMenuItem = ({ onCartOpen = () => {} }) => {
         color="#635e6e"
         fontSize="large"
         fontWeight="900"
-        width="95%"
+        width="100%"
         borderRadius={'10'}
         margin="auto"
       >

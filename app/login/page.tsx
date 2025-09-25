@@ -53,7 +53,7 @@ export default function Login() {
         minHeight="100vh" 
         align="center" 
         justify="center" 
-        bg="white" 
+        bg="rgb(255, 246, 241)" 
         px={4}
         backgroundSize="cover" // Pour que l'image couvre tout l'écran
         backgroundPosition="center" // Centrer l'image

@@ -1,8 +1,4 @@
-/* ✅ Cacher la barre de défilement pour tous les navigateurs */
-html, body {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
+
 @font-face {
   font-family: 'typo';
   src: url('/typo.otf') format('truetype');

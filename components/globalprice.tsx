@@ -187,7 +187,7 @@ return (
     borderTopLeftRadius="20px" 
     borderBottomLeftRadius="20px" 
     boxShadow="xl"
-    bg="white" 
+    bg="rgb(255, 246, 241)" 
   >
     {/* Flèche retour */}
     <IconButton

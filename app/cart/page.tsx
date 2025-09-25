@@ -2,20 +2,26 @@
 import React, { useState } from 'react';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import Link from 'next/link';
+import Link from '@/components/ScrollRestorationLink';
 import Image from 'next/image';
 import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { loadStripe } from '@stripe/stripe-js';
 import '../Panier.css'; // Réutiliser le style du panier
+
+
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 export default function CartPage() {
   const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem } = useGlobalCart();
+
+  useScrollRestoration(loadingCart, [globalCart]); // Call without pageContentRef
   const toast = useToast();
-  const router = useRouter();
+  const router = useScrollSavingRouter();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   if (loadingCart) {
@@ -97,7 +103,7 @@ export default function CartPage() {
   };
 
   return (
-    <div className="panier-container">
+    <div className="panier-container"> {/* Attach ref */}
       {cartItems.length === 0 ? (
         <div className="panier-empty">
           <p>Votre panier est vide.</p>

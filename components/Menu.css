@@ -3,7 +3,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: white;
+  background-color: rgb(255, 246, 241);
   width: 100%;
 }
 @font-face {
@@ -41,7 +41,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background-color: white;
+  background-color: rgb(255, 246, 241);
 }
 
 .menu-toggle-button, .header-categorie-button {
@@ -139,7 +139,7 @@
 
 .search-container {
   padding: 15px;
-  background-color: white;
+  background-color: rgb(255, 246, 241);
 }
   .header-main-buttons {
     flex-grow: 1; /* Allow the buttons to take up available space */
