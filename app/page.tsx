@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, Suspense } from 'react';
 import { FaNewspaper, FaRegListAlt, FaCheck, FaSearch, FaHeart } from 'react-icons/fa';
 import { Button, Box, Text, useDisclosure, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import Image from 'next/image';
@@ -11,7 +11,7 @@ import ImageSlider from '@/components/ImageSlider';
 import { DonutChart } from '@/components/average';
 import StockProgressBar from '@/components/StockProgressBar';
 import { calculateDonutPercentage } from '@/components/calculateDonutPercentage';
-import Link from 'next/link';
+import Link from '@/components/ScrollRestorationLink';
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useGlobalCart } from '@/components/GlobalCartContext'; // Removed GlobalCartProvider as it should wrap the whole app
 import CustomMenuItem from '@/components/CustomMenuItem';
@@ -25,7 +25,10 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from '@/components/firebaseConfig.ts';
 import './globals.css';
+// ... other imports
 import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import RatingStars from '@/components/RatingStars';
 
@@ -42,6 +45,9 @@ import ProductDetailsModal from '@/components/ProductDetailsModal';
 import './Cards.css';
 
 
+import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-introduce import
+
+
   export default function Page() {
   const [cards, setCards] = useState<Card[]>([]);
   const [expiredCards, setExpiredCards] = useState<Set<string>>(new Set());
@@ -49,6 +55,17 @@ import './Cards.css';
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(false);
+
+  const router = useScrollSavingRouter();
+  const [userVotes, setUserVotes] = useState<{ [cardId: string]: number }>({});
+  const [products, setProducts] = useState<any[]>([]);
+  
+  const [selectedRating, setSelectedRating] = useState(0);
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const pageContentRef = useRef<HTMLDivElement>(null);
+
+  useScrollRestoration();
 
   const hideForm = () => {
     setIsFormVisible(false);
@@ -64,7 +81,20 @@ import './Cards.css';
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [formCard, setFormCard] = useState<Card | null>(null);
   const [imageValues, setImageValues] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('selectedCategories');
+      return saved ? JSON.parse(saved) : [];
+    } 
+    return [];
+  });
+  const [activeFilter, setActiveFilter] = useState<'all' | 'new'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('activeFilter');
+      return saved ? (saved as 'all' | 'new') : 'all';
+    }
+    return 'all';
+  });
 
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
@@ -88,14 +118,6 @@ import './Cards.css';
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoFading, setVideoFading] = useState(false);
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
-  const router = useRouter();
-  const [userVotes, setUserVotes] = useState<{ [cardId: string]: number }>({});
-  const [products, setProducts] = useState<any[]>([]);
-  
-  const [selectedRating, setSelectedRating] = useState(0);
-  
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState<'all' | 'new'>('all');
 
 
   // cartInfo state is no longer needed as globalCart from context provides the data
@@ -113,35 +135,35 @@ import './Cards.css';
     }
   };
 
-  const fetchProducts = async () => {
-    const auth = getAuth();
-    const currentUser = auth.currentUser;
-
-    const querySnapshot = await getDocs(collection(db, 'cards'));
-    const products = await Promise.all(
-      querySnapshot.docs.map(async (docSnap) => {
-        const data = docSnap.data();
-        const reviews = data.reviews || [];
-
-        const userHasRated = currentUser
-          ? reviews.some((r: any) => r.userId === currentUser.uid)
-          : false;
-
-        const averageRating = data.stars || 0;
-
-        return {
-          id: docSnap.id,
-          ...data,
-          averageRating,
-          userHasRated,
-        };
-      })
-    );
-
-    setProducts(products);
-  };
-
   useEffect(() => {
+    const fetchProducts = async () => {
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+
+      const querySnapshot = await getDocs(collection(db, 'cards'));
+      const products = await Promise.all(
+        querySnapshot.docs.map(async (docSnap) => {
+          const data = docSnap.data();
+          const reviews = data.reviews || [];
+
+          const userHasRated = currentUser
+            ? reviews.some((r: any) => r.userId === currentUser.uid)
+            : false;
+
+          const averageRating = data.stars || 0;
+
+          return {
+            id: docSnap.id,
+            ...data,
+            averageRating,
+            userHasRated,
+          };
+        })
+      );
+
+      setProducts(products);
+    };
+
     fetchProducts();
   }, []);
 
@@ -187,6 +209,17 @@ import './Cards.css';
 
     return () => unsubscribe();
   }, []);
+
+
+
+  useEffect(() => {
+    sessionStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+    sessionStorage.setItem('activeFilter', activeFilter);
+  }, [selectedCategories, activeFilter]);
+
+
+
+
 
   useEffect(() => {
     const auth = getAuth();
@@ -301,29 +334,7 @@ import './Cards.css';
     return [mainProduct, ...derivedProducts];
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
-    };
 
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const scrollPosition = sessionStorage.getItem('scrollPosition');
-    if (scrollPosition) {
-      window.scrollTo(0, parseInt(scrollPosition, 10));
-      sessionStorage.removeItem('scrollPosition');
-    }
-  }, []);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -348,210 +359,206 @@ import './Cards.css';
 
   return (
     <div>
+      {loading && <LoadingSpinner />} {/* Render LoadingSpinner conditionally */}
       <CustomMenuItem />
       <div
         className={`video_animate video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
-        style={{ display: videoEnded ? 'none' : 'block' }}
+        style={{ opacity: videoEnded ? 0 : 1, pointerEvents: videoEnded ? 'none' : 'auto' }}
       >
-        <AnimatedBanner onEnd={handleVideoEnd} />
-        <SvgBackground />
       </div>
       
-      
-      <Menu
-        cards={cards}
-        selectedCategories={selectedCategories}
-        activeFilter={activeFilter}
-        onCategoryToggle={handleCategoryToggle}
-        onClearAll={() => {
-          setSelectedCategories([]);
-          setActiveFilter('all');
-        }}
-        onShowNew={() => {
-          setSelectedCategories([]);
-          setActiveFilter('new');
-        }}
-        onSearch={handleSearch}
-        resultsCount={finalFilteredCards.length}
-        searchTerm={searchTerm}
-      />
-      
-      <div className="page-content">
-        {searchTerm && finalFilteredCards.length === 0 && (
-          <NoSearchResults 
-            searchTerm={searchTerm}
-            onClearSearch={clearSearch}
-          />
-        )}
+      <Suspense fallback={<div>Chargement du contenu...</div>}>
+        <Menu
+          cards={cards}
+          selectedCategories={selectedCategories}
+          activeFilter={activeFilter}
+          onCategoryToggle={handleCategoryToggle}
+          onClearAll={() => {
+            setSelectedCategories([]);
+            setActiveFilter('all');
+          }}
+          onShowNew={() => {
+            setSelectedCategories([]);
+            setActiveFilter('new');
+          }}
+          onSearch={handleSearch}
+          resultsCount={finalFilteredCards.length}
+          searchTerm={searchTerm}
+        />
         
-        <div className="cards-container">
-          {finalFilteredCards.map((card, index) => {
-            const isSelected = card._id ? !!globalCart[card._id]?.count : false; // Check by _id
-            const isExpired = card._id ? expiredCards.has(card._id) : false;
-            const totalStock = Number(card.stock);
-            const usedStock = Number(card.stock_reduc);
-            const isOutOfStock = totalStock > 0 && usedStock >= totalStock;
-            const available = totalStock - usedStock;
-            const currentCount = card._id ? globalCart[card._id]?.count || 0 : 0; // Use _id
-            const isMaxReached = currentCount >= available;
+        <div className="page-content" ref={pageContentRef}>
+          {searchTerm && finalFilteredCards.length === 0 && (
+            <NoSearchResults 
+              searchTerm={searchTerm}
+              onClearSearch={clearSearch}
+            />
+          )}
+          
+          <div className="cards-container">
+            {finalFilteredCards.map((card, index) => {
+              const isSelected = card._id ? !!globalCart[card._id]?.count : false; // Check by _id
+              const isExpired = card._id ? expiredCards.has(card._id) : false;
+              const totalStock = Number(card.stock);
+              const usedStock = Number(card.stock_reduc);
+              const isOutOfStock = totalStock > 0 && usedStock >= totalStock;
+              const available = totalStock - usedStock;
+              const currentCount = card._id ? globalCart[card._id]?.count || 0 : 0; // Use _id
+              const isMaxReached = currentCount >= available;
 
-            return (
-              <div className="card-link" style={{ textDecoration: "none", color: "inherit" }} key={card._id}>
-                <div data-category={card.categorie} ref={(el) => { if (el) cardsRef.current[index] = el; }}>
-                  <div className="card overlap-group-1">
-                    {card.nouveau && (
-                      <div className="nouveau-badge">
-                        <Sparkles className="nouveau-icon" />
-                        Nouveau
+              return (
+                <div className="card-link" style={{ textDecoration: "none", color: "inherit" }} key={card._id}>
+                  <div data-category={card.categorie} ref={(el) => { if (el) cardsRef.current[index] = el; }}>
+                    <div className="card overlap-group-1">
+                      {card.nouveau && (
+                        <div className="nouveau-badge">
+                          <Sparkles className="nouveau-icon" />
+                          Nouveau
+                        </div>
+                      )}
+                      
+                      <div 
+                        className="favorite-icon" 
+                        onClick={(e) => {
+                          e.stopPropagation(); // Empêche le clic de se propager au lien de la carte
+                          if (!user) {
+                            router.push('/login');
+                            return;
+                          }
+                        if (card._id) {
+                          if (userFavorites.includes(card._id)) {
+                            removeFavorite(card._id);
+                          } else {
+                            addFavorite(card._id);
+                          }
+                        }
+                        }}
+                      >
+                        <FaHeart color={card._id && userFavorites.includes(card._id) ? '#e63198' : 'white'} />
                       </div>
-                    )}
-                    
-                    <div 
-                      className="favorite-icon" 
-                      onClick={(e) => {
-                        e.stopPropagation(); // Empêche le clic de se propager au lien de la carte
-                        if (!user) {
-                          router.push('/login');
-                          return;
-                        }
-                      if (card._id) {
-                        if (userFavorites.includes(card._id)) {
-                          removeFavorite(card._id);
-                        } else {
-                          addFavorite(card._id);
-                        }
-                      }
-                      }}
-                    >
-                      <FaHeart color={card._id && userFavorites.includes(card._id) ? '#e63198' : 'white'} />
-                    </div>
-                    
-                    <Link href={`/${card._id}`} passHref>
-                      <div style={{ cursor: 'pointer' }}>
-                        <div className="header_card overlap-group-2">
-                          <div className="picture_card-container">
-                            <img 
-                              className="picture_card" 
-                              src={card.images[0]} 
-                              alt={card.title.trim().toLowerCase()}
-                            />
-                            <div className="overlay-content">
-                              <div className="title_card_1 vtt-cool-style valign-text-middle">
-                                {card.title}
-                              </div>
-                              <div className="title_card_1 vtt-cool-style valign-text-middle">
-                                {card._id && (
-                                  <RatingStars
-                                    productId={card._id}
-                                    averageRating={calculateAverageRating(card.reviews)}
-                                    userHasRated={hasUserRated(card.reviews)}
-                                    onVote={() => fetchProducts()}
-                                  />
-                                )}
+                      
+                      <Link href={`/${card._id}`} passHref>
+                        <div style={{ cursor: 'pointer' }}>
+                          <div className="header_card overlap-group-2">
+                            <div className="picture_card-container">
+                              <img 
+                                className="picture_card" 
+                                src={card.images[0]} 
+                                alt={card.title.trim().toLowerCase()}
+                              />
+                              <div className="overlay-content">
+                                <div className="title_card_1 vtt-cool-style valign-text-middle">
+                                  {card.title}
+                                </div>
+                                <div className="title_card_1 vtt-cool-style valign-text-middle">
+                                  {card._id && (
+                                    <RatingStars
+                                      productId={card._id}
+                                      averageRating={calculateAverageRating(card.reviews)}
+                                      userHasRated={hasUserRated(card.reviews)}
+                                      onVote={() => fetchProducts()}
+                                    />
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
+                          <div className="rectangle-14">
+                            <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
+                          </div>
+                          <div className={`time_card title_card_subtitle  ${isExpired ? 'expired' : ''}`}>
+                            <Countdown endDate={new Date(card.time)} onExpired={() => { if (card._id) { handleCountdownEnd(card._id); } }} title={card.title} />
+                          </div>
                         </div>
-                        <div className="rectangle-14">
-                          <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
-                        </div>
-                        <div className={`time_card title_card_subtitle  ${isExpired ? 'expired' : ''}`}>
-                          <Countdown endDate={new Date(card.time)} onExpired={() => { if (card._id) { handleCountdownEnd(card._id); } }} title={card.title} />
-                        </div>
-                      </div>
-                    </Link>
-                    <div className={`flex-row ${isExpired ? 'expired' : ''}`}>
-                  
-                      <button
-                        className={`add-to-cart-button ${isSelected ? 'selected' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddToCart(card);
-                        }}
-                        disabled={isExpired || isOutOfStock || isMaxReached || isSelected}
-                        style={isSelected ? { cursor: 'not-allowed' } : {}}
-                      >
-                        {card._id && globalCart[card._id]?.count > 0 && ( // Check by _id
-                          <FaCheck style={{ marginRight: '8px', color: 'green'}} />
-                        )}
-                        <div className="price_content">
-                          {Number(card.price_promo) > 0 ? (
-                            <>
-                              {card.price && (
-                                <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                  <span className="double-strikethrough">{card.price}€</span>
-                                </div>
-                              )}
-                              <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                <span>{card.price_promo}€</span>
-                              </div>
-                            </>
-                          ) : (
-                            card.price && (
-                              <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                <span>{card.price}€</span>
-                              </div>
-                            )
+                      </Link>
+                      <div className={`flex-row ${isExpired ? 'expired' : ''}`}>
+                    
+                        <button
+                          className={`add-to-cart-button ${isSelected ? 'selected' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddToCart(card);
+                          }}
+                          disabled={isExpired || isOutOfStock || isMaxReached || isSelected}
+                          style={isSelected ? { cursor: 'not-allowed' } : {}}
+                        >
+                          {card._id && globalCart[card._id]?.count > 0 && ( // Check by _id
+                            <FaCheck style={{ marginRight: '8px', color: 'green'}} />
                           )}
-                        </div>
-                        {isExpired
-                          ? 'Offre expirée ❌'
-                          : isOutOfStock
-                            ? 'Stock épuisé ❌'
-                            : isMaxReached && !isSelected
-                              ? `Quantité max (${available}) atteinte`
-                              : isSelected
-                                ? 'Sélectionnée'
-                                : 'Ajouter au panier'}
-                      </button>
+                          <div className="price_content">
+                            {Number(card.price_promo) > 0 ? (
+                              <>
+                                {card.price && (
+                                  <div className="price_card price valign-text-middle inter-normal-white-20px">
+                                    <span className="double-strikethrough">{card.price}€</span>
+                                  </div>
+                                )}
+                                <div className="price_card price valign-text-middle inter-normal-white-20px">
+                                  <span>{card.price_promo}€</span>
+                                </div>
+                              </>
+                            ) : (
+                              card.price && (
+                                <div className="price_card price valign-text-middle inter-normal-white-20px">
+                                  <span>{card.price}€</span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                          {isExpired
+                            ? 'Offre expirée ❌'
+                            : isOutOfStock
+                              ? 'Stock épuisé ❌'
+                              : isMaxReached && !isSelected
+                                ? `Quantité max (${available}) atteinte`
+                                : isSelected
+                                  ? 'Sélectionnée'
+                                  : 'Ajouter au panier'}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {isFormVisible && formCard && (
-          <UpdateCardModal
-            formCard={formCard}
-            hideForm={hideForm}
-            handleInputChange={() => {}}
-            handleAddImageProduitDerive={() => {}}
-            handleRemoveProduitDerive={() => {}}
-            handleAddProduitDerive={() => {}}
-            handleAddCaracteristique={() => {}}
-            handleRemoveCaracteristique={() => {}}
-            handleAddTableauCaracteristiques={() => {}}
-            handleImageChange={() => {}}
-            updateCard={updateCard}
-            setFormCard={setFormCard}
-          />
-        )}
-        
-        {isCarouselOpen && (
-          <div className="fullscreen-overlay" onClick={closeCarousel}>
-            <div className="fullscreen-carousel">
-              {carouselImages.map((image, index) => (
-                <div key={index} className="fullscreen-carousel-item">
-                  <img
-                    src={image}
-                    alt={`Slide ${index + 1}`}
-                    className="fullscreen-carousel-image"
-                  />
-                </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        )}
 
-        
-        
-      </div>
-      
-      
+          {isFormVisible && formCard && (
+            <UpdateCardModal
+              formCard={formCard}
+              hideForm={hideForm}
+              handleInputChange={() => {}}
+              handleAddImageProduitDerive={() => {}}
+              handleRemoveProduitDerive={() => {}}
+              handleAddProduitDerive={() => {}}
+              handleAddCaracteristique={() => {}}
+              handleRemoveCaracteristique={() => {}}
+              handleAddTableauCaracteristiques={() => {}}
+              handleImageChange={() => {}}
+              updateCard={updateCard}
+              setFormCard={setFormCard}
+            />
+          )}
+          
+          {isCarouselOpen && (
+            <div className="fullscreen-overlay" onClick={closeCarousel}>
+              <div className="fullscreen-carousel">
+                {carouselImages.map((image, index) => (
+                  <div key={index} className="fullscreen-carousel-item">
+                    <img
+                      src={image}
+                      alt={`Slide ${index + 1}`}
+                      className="fullscreen-carousel-image"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-      
+          
+          
+        </div>
+      </Suspense>
     </div>
   );
 }
