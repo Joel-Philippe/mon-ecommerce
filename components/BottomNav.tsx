@@ -15,15 +15,15 @@ const BottomNav = () => {
 
   return (
     <div className="bottom-nav">
-      <CustomLink href="/" passHref>
-        <div className={`nav-item ${pathname === '/' ? 'active' : ''}`}>
-          <FaHome size={24} />
-        </div>
-      </CustomLink>
       <CustomLink href="/favorites" passHref>
         <div className={`nav-item ${pathname === '/favorites' ? 'active' : ''}`}>
           <FaHeart size={24} />
           {userFavorites.length > 0 && <span className="nav-badge favorite-badge">{userFavorites.length}</span>}
+        </div>
+      </CustomLink>
+      <CustomLink href="/" passHref>
+        <div className={`nav-item ${pathname === '/' ? 'active' : ''}`}>
+          <FaHome size={24} />
         </div>
       </CustomLink>
       <CustomLink href="/cart" passHref>
