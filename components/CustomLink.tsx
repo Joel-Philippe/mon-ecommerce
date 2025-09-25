@@ -9,7 +9,7 @@ interface CustomLinkProps extends React.ComponentProps<typeof NextLink> { // Ext
 
 const CustomLink: React.FC<CustomLinkProps> = ({ children, href, className, ...props }) => {
   return (
-    <ScrollRestorationLink href={href} className={className} {...props}> // Use ScrollRestorationLink component
+    <ScrollRestorationLink href={href} className={className} {...props}>
       {children}
     </ScrollRestorationLink>
   );
