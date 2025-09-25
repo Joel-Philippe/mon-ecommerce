@@ -13,12 +13,12 @@ export function useScrollSavingRouter() {
     console.log(`[useScrollSavingRouter] Saving scroll for ${pathname} programmatically: ${scrollYToSave}`);
   }, []);
 
-  const push = useCallback((href: string, options?: Parameters<typeof useNextRouter>['0']['push']['1']) => {
+  const push = useCallback((href: string, options?: Parameters<typeof router.push>[1]) => {
     saveScrollPosition();
     router.push(href, options);
   }, [router, saveScrollPosition]);
 
-  const replace = useCallback((href: string, options?: Parameters<typeof useNextRouter>['0']['replace']['1']) => {
+  const replace = useCallback((href: string, options?: Parameters<typeof router.replace>[1]) => {
     saveScrollPosition();
     router.replace(href, options);
   }, [router, saveScrollPosition]);
