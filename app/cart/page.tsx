@@ -19,7 +19,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 export default function CartPage() {
   const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem } = useGlobalCart();
 
-  useScrollRestoration(loadingCart, [globalCart]); // Call without pageContentRef
+  useScrollRestoration(); // Call without pageContentRef
   const toast = useToast();
   const router = useScrollSavingRouter();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -106,7 +106,7 @@ export default function CartPage() {
     <div className="panier-container"> {/* Attach ref */}
       {cartItems.length === 0 ? (
         <div className="panier-empty">
-          <p>Votre panier est vide.</p>
+          <p>Ton panier est vide...</p>
           <Link href="/" className="continuer-shopping">
             Continuer mes achats
           </Link>
