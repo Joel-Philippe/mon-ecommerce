@@ -23,6 +23,7 @@ const CART_COOKIE_NAME = 'guest_cart_id';
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
   userFavorites: string[];
   signup: (email: string, password: string, displayName: string, photoFile: File | null) => Promise<void>;
   login: (email: string, password: string) => Promise<any>;
@@ -41,12 +42,14 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const [userFavorites, setUserFavorites] = useState<string[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user ? user : null);
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -250,6 +253,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider value={{
       user,
+      loading,
       userFavorites,
       signup,
       login,
