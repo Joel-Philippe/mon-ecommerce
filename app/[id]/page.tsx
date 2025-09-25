@@ -17,7 +17,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   const [quantity, setQuantity] = useState(1);
   const cartContext = useContext(GlobalCartContext);
 
-  useScrollRestoration(loading, [product]); // Call without pageContentRef
+  useScrollRestoration(); // Call without pageContentRef
 
   useEffect(() => {
     const fetchProduct = async () => {

@@ -43,7 +43,7 @@ const AdminPage = () => {
   const [showUpdateCard, setShowUpdateCard] = useState(false);
   const authContext = useAuth();
 
-  useScrollRestoration(loadingAdminCheck || isLoading, [cards, specialRequests]); // Call without pageContentRef
+  useScrollRestoration(); // Call without pageContentRef
 
   if (!authContext) {
     // This case should ideally not be reached if AuthProvider is correctly wrapping the app
