@@ -20,7 +20,7 @@ const AccountPage = () => {
   const router = useScrollSavingRouter();
   const [activeTab, setActiveTab] = useState('profile'); // New state for active tab
 
-  useScrollRestoration(authLoading || !user, [user]); // Call without pageContentRef
+  useScrollRestoration(); // Call without pageContentRef
 
   useEffect(() => {
     if (!authLoading && !user) { // Wait for auth loading to complete
