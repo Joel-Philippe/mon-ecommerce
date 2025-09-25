@@ -30,7 +30,7 @@ export default function FavoritesPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useScrollSavingRouter();
 
-  useScrollRestoration(loading, [favoriteCards]); // Call without pageContentRef
+  useScrollRestoration(); // Call without pageContentRef
 
   useEffect(() => {
     const fetchFavoriteCards = async () => {
