@@ -18,6 +18,7 @@
 .favorites-message {
   text-align: center;
   color: #666;
+  background-color: white;
   font-size: 1.1em;
   margin-top: 50px;
 }
