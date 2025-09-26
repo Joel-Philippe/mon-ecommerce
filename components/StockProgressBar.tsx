@@ -37,13 +37,13 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
         color: percentage < 30 ? '#cc0000' : 'rgb(72 134 0)',
         fontWeight: 500,
       }}>
-        {isAnimated ? `${percentage}%` : '0%'} Disponible
+        {isAnimated ? `${percentage}%` : '0%'} STOCK
       </div>
       <div
         style={{
           background: 'rgb(255, 246, 241)',
           borderRadius: '50px',
-          height: '7px',
+          height: '10px',
           width: '100%',
           overflow: 'hidden',
           boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',

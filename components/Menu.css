@@ -70,6 +70,7 @@
 .header-categorie-button.selected {
   background-color: #ff8f00;
   color: white;
+  font-size: medium;
   border-color: #ff8f00;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
