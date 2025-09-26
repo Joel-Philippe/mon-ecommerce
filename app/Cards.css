@@ -250,7 +250,7 @@
     font-family: 'allroundgothic';
     font-weight: 700;
     font-size: medium;
-    color: #216d24;
+    color: #000000;
     margin-left: 0;
 }
 .initial_price{
@@ -483,7 +483,7 @@ h4{
 @media (max-width: 1050px) {
       .title_card_1 {
     font-family: 'allroundgothic';
-    font-size: small;
+    font-size: larger;
   }
     .card {
         margin-left: auto;
