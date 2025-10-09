@@ -24,42 +24,74 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
   const percentage = calculateStockRemainingPercentage(stock, stock_reduc);
 
   const getGradient = () => {
-    if (percentage >= 60) return '#8BC34A';
-    if (percentage <= 50) return 'linear-gradient(90deg,rgb(188, 0, 0),rgb(246, 0, 0))';
-    return 'linear-gradient(90deg,rgb(255, 174, 0),rgb(246, 139, 0))';
+    if (percentage >= 60) return 'rgb(109, 252, 243)';
+    if (percentage <= 50) return 'rgb(109, 252, 243)';
+    return 'rgb(109, 252, 243)';
   };
 
   return (
-    <div ref={inViewRef} >
-            <div style={{
-        fontSize: '0.85rem',
-        textAlign: 'left',
-        color: percentage < 30 ? '#cc0000' : 'rgb(72 134 0)',
-        fontWeight: 500,
-      }}>
-        {isAnimated ? `${percentage}%` : '0%'} STOCK
-      </div>
+    <div ref={inViewRef} style={{ position: 'relative', width: '100%', height: '12px' }}>
+      {/* Background bar */}
       <div
         style={{
-          background: 'rgb(255, 246, 241)',
+          background: 'rgba(255, 255, 255, 0.3)',
           borderRadius: '50px',
-          height: '10px',
+          height: '100%',
           width: '100%',
           overflow: 'hidden',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
+          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
+          position: 'absolute',
+          top: 0,
+          left: 0,
         }}
       >
-        <div
-          style={{
-            width: isAnimated ? `${percentage}%` : '0%',
-            height: '100%',
-            background: getGradient(),
-            transition: 'width 1s ease-out',
-            borderRadius: '50px',
-          }}
-        />
       </div>
 
+      {/* Filled portion of the bar */}
+      <div
+        style={{
+          width: isAnimated ? `${percentage}%` : '0%',
+          height: '100%',
+          background: getGradient(),
+          transition: 'width 1s ease-out',
+          borderRadius: '50px',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          overflow: 'hidden', // Hide the part of the text that overflows
+        }}
+      >
+        {/* Contrasting text visible only on the filled part */}
+        <span style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          textAlign: 'center',
+          lineHeight: '12px', // Match the height
+          color: 'black', // Contrasting color
+          fontSize: '0.6rem',
+          fontWeight: '900',
+          letterSpacing: '0.5px',
+        }}>
+          {percentage}% STOCK
+        </span>
+      </div>
+
+      {/* Background text (always visible) */}
+      <span style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        textAlign: 'center',
+        lineHeight: '12px', // Match the height
+        color: 'rgba(255, 255, 255, 0.8)', // Base text color
+        fontSize: '0.6rem',
+        fontWeight: '900',
+        letterSpacing: '0.5px',
+        zIndex: -1, // Place it behind the filled bar
+      }}>
+        {percentage}% STOCK
+      </span>
     </div>
   );
 };

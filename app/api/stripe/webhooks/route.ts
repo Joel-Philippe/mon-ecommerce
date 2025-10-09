@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/utils/stripe';
-import { db } from '@/utils/firebaseAdmin'; // Using admin SDK for server-side operations
+import { admin } from '@/utils/firebaseAdmin'; // Using admin SDK for server-side operations
+const db = admin.firestore();
 import Stripe from 'stripe';
 
 // This is your Stripe CLI webhook secret for testing.

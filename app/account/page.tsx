@@ -8,7 +8,6 @@ import ProfilePhotoForm from '@/components/ProfilePhotoForm';
 import DisplayNameForm from '@/components/DisplayNameForm';
 import ChangePasswordForm from '@/components/ChangePasswordForm';
 import DeleteAccountButton from '@/components/DeleteAccountButton';
-import CustomMenuItem from '@/components/CustomMenuItem';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Import the hook
 
 import { FiUser, FiLock, FiAlertCircle, FiCamera } from 'react-icons/fi'; // Import icons for tabs
@@ -39,7 +38,6 @@ const AccountPage = () => {
 
   return (
     <>
-      <CustomMenuItem onCartOpen={() => {}} />
       <div className="account-page-container"> {/* Attach the ref */}
         <h1>Mon Compte</h1>
 
@@ -146,7 +144,6 @@ const AccountPage = () => {
         }
 
         .nav-item.active {
-          color: white;
           box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
           transform: translateY(-2px);
         }

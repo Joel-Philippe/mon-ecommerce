@@ -15,7 +15,7 @@
     transition: max-height 0.8s ease-in-out, opacity 0.6s ease-in-out;
     overflow: hidden;
     z-index: 9999;
-    max-height: 500px;
+    max-height: 700px;
     opacity: 1;
   }
   
@@ -29,7 +29,7 @@
   .animated-video{
     height: auto;
     width: 100%;
-    margin-top: -180px;
+    margin-top: -100px;
   }
   .video_animate{
     justify-content: center;
@@ -83,7 +83,7 @@
     }
     .animated-video {
         height: 80%;
-        margin-top: 0;
+        margin-top: 63px;
     }
     .video_animate {
         justify-content: center;

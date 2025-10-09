@@ -1,12 +1,12 @@
 'use client';
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 
 const BulkGeneratorPage: React.FC = () => {
   const auth = useAuth();
   const user = auth?.user;
-  const router = useRouter();
+  const router = useScrollSavingRouter();
 
   // Suppression de la vérification d'authentification pour permettre l'accès à tous
 

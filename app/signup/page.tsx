@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import {
   Box,
   Flex,
@@ -21,10 +21,13 @@ import {
   ModalHeader,
   ModalBody,
   Text,
+  VStack,
+  HStack,
+  Divider,
 } from '@chakra-ui/react';
-import CustomMenuItem from '@/components/CustomMenuItem';
 import NextLink from 'next/link';
 import Confetti from 'react-confetti';
+import { FaGoogle } from 'react-icons/fa';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -36,14 +39,13 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
+  const router = useScrollSavingRouter();
   const authContext = useAuth();
+
   if (!authContext) {
-    // This case should ideally not be reached if AuthProvider is correctly wrapping the app.
-    // For TypeScript safety, we handle it.
-    return null; // Or a loading component, or redirect to login
+    return null;
   }
-  const { signup } = authContext;
+  const { signup, signInWithGoogle } = authContext;
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,7 +69,7 @@ export default function Signup() {
       }, 3000);
     } catch (error: unknown) {
       setLoading(false);
-      console.error('Firebase signup error:', error); // <-- log complet
+      console.error('Firebase signup error:', error);
       if (typeof error === 'object' && error !== null && 'code' in error) {
         const firebaseError = error as { code: string };
         switch (firebaseError.code) {
@@ -90,12 +92,20 @@ export default function Signup() {
         setError('Une erreur inattendue est survenue. Veuillez réessayer.');
       }
     }
+  };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      router.push('/');
+    } catch (error) {
+      setError('Erreur lors de la connexion avec Google.');
+      console.error(error);
+    }
   };
 
   return (
     <>
-      <CustomMenuItem />
       {loading ? (
         <Flex minHeight="50vh" align="center" justify="center" bg="rgb(255, 246, 241)" px={4}>
           <Text>Bienvenue !</Text>
@@ -104,10 +114,30 @@ export default function Signup() {
         </Flex>
       ) : showForm ? (
         <Flex minHeight="50vh" align="center" justify="center" bg="white" px={4}>
-          <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="white">
+          <Box width={{ base: 'full', md: 'md' }} p={2} borderWidth={0} borderRadius={8} bg="white">
             <Heading as="h1" size="lg" mb={6} textAlign="center" color="black">
               Inscription
             </Heading>
+
+            <VStack spacing={4} mb={6}>
+              <Button
+                w="full"
+                colorScheme="red"
+                leftIcon={<FaGoogle />}
+                onClick={handleGoogleSignIn}
+              >
+                S'inscrire avec Google
+              </Button>
+            </VStack>
+
+            <HStack w="full" mb={6}>
+              <Divider />
+              <Text color="gray.500" whiteSpace="nowrap">
+                ou
+              </Text>
+              <Divider />
+            </HStack>
+
             <form onSubmit={handleSignup}>
               <FormControl id="email" isRequired mb={4}>
                 <FormLabel>Email</FormLabel>
@@ -222,7 +252,7 @@ export default function Signup() {
             <Flex justifyContent="space-between">
               <NextLink href="/login" passHref legacyBehavior>
                 <ChakraLink colorScheme="teal" variant="link">
-                  Se connecter
+                  Déjà un compte? Se connecter
                 </ChakraLink>
               </NextLink>
             </Flex>

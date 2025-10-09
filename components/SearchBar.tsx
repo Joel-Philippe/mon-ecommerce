@@ -9,7 +9,9 @@ import { FaSearch } from 'react-icons/fa';
 import { X } from 'lucide-react';
 
 interface SearchBarProps {
-  onSearch: (searchTerm: string) => void;
+  searchTerm: string; // Current search term from parent
+  onSearchChange: (searchTerm: string) => void; // Called on every input change
+  onSearchSubmit: (searchTerm: string) => void; // Called on search submission
   placeholder?: string;
   className?: string;
   resultsCount?: number;
@@ -17,26 +19,31 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
-  onSearch,
+  searchTerm,
+  onSearchChange,
+  onSearchSubmit,
   placeholder = "Rechercher un article...",
   className = "",
   resultsCount = 0,
   showResultsCount = true
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  // Fonction pour gérer la recherche
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+  // Fonction pour gérer la recherche (appelée à chaque changement d'input)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(e.target.value);
+  };
+
+  // Fonction pour soumettre la recherche (appelée à l'appui sur Entrée)
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearchSubmit(searchTerm);
   };
 
   // Fonction pour effacer la recherche
   const clearSearch = () => {
-    setSearchTerm('');
-    onSearch('');
+    onSearchChange(''); // Clear input
+    onSearchSubmit(''); // Clear search results
   };
 
   // Gérer la touche Escape pour effacer
@@ -49,10 +56,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [searchTerm]);
+  }, [searchTerm, clearSearch]);
 
   return (
-    <div className={`search-bar-container ${className}`}>
+    <form onSubmit={handleSubmit} className={`search-bar-container ${className}`}>
       <div className="search-wrapper">
         <InputGroup>
           <InputLeftElement pointerEvents="none">
@@ -61,7 +68,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <Input
             placeholder={placeholder}
             value={searchTerm}
-            onChange={handleSearch}
+            onChange={handleInputChange}
             onFocus={() => setIsSearchFocused(true)}
             onBlur={() => setIsSearchFocused(false)}
             className={`search-input ${isSearchFocused ? 'focused' : ''}`}
@@ -83,6 +90,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
               className="clear-search-button" 
               onClick={clearSearch}
               aria-label="Effacer la recherche"
+              type="button" // Prevent form submission
             >
               <X size={16} />
             </button>
@@ -94,12 +102,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
       <style>{`
         .search-bar-container {
-          position: sticky;
+          position: relative; /* Changed from sticky */
           z-index: 2;
           transition: all 0.3s ease;
           width: 100%;
           border: none ;
-          padding-top: 5px;
+          padding-top: 0px; /* Removed padding-top */
         }
 
         .search-wrapper {
@@ -166,11 +174,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         /* Responsive */
         @media (max-width: 768px) {
           .search-bar-container {
-            top: 80px;
+            top: auto; /* Reset top for mobile */
           }
         }
       `}</style>
-    </div>
+    </form>
   );
 };
 

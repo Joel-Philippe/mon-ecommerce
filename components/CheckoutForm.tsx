@@ -8,12 +8,12 @@ import {
 import { useState } from 'react';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 
 export default function CheckoutForm({ clientSecret }: { clientSecret: string }) {
   const stripe = useStripe();
   const elements = useElements();
-  const router = useRouter();
+  const router = useScrollSavingRouter();
   const { clearCart } = useGlobalCart();
   const { user } = useAuth() || {};
 

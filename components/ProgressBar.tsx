@@ -36,7 +36,7 @@ const ProgressBar: React.FC = () => {
         style={{
           height: '100%',
           width: `${scroll * 100}%`,
-          background: 'linear-gradient(90deg,rgb(255, 255, 255),rgb(253, 105, 0),rgb(253, 105, 0))',
+          background: 'rgb(255, 152, 0)',
           borderRadius: '0 12px 12px 0',
           transition: 'width 0.2s ease-out',
         }}

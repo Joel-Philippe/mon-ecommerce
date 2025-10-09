@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import ScrollRestorationLink from '@/components/ScrollRestorationLink';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 
@@ -10,7 +10,7 @@ const FixedCartButton = () => {
   const totalItemsInCart = Object.values(globalCart).reduce((total, item) => total + item.count, 0);
 
   return (
-    <Link href="/cart" passHref>
+    <ScrollRestorationLink href="/cart" passHref>
       <div className="fixed-cart-button">
         <FaShoppingCart size={24} />
         {totalItemsInCart > 0 && (
@@ -55,7 +55,7 @@ const FixedCartButton = () => {
           }
         `}</style>
       </div>
-    </Link>
+    </ScrollRestorationLink>
   );
 };
 

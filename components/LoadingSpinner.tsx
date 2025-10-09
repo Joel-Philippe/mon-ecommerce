@@ -12,7 +12,7 @@ const LoadingSpinner = () => {
       height="100%"
       justifyContent="center"
       alignItems="center"
-      background="white"
+      background="rgb(255, 246, 241)"
       zIndex="1000"
     >
       <Box textAlign="center">

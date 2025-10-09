@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import {
   Box,
   Flex,
@@ -13,61 +13,93 @@ import {
   AlertIcon,
   Heading,
   Checkbox,
-  Link as ChakraLink
+  Link as ChakraLink,
+  VStack,
+  HStack,
+  Divider,
+  Text
 } from '@chakra-ui/react';
-import CustomMenuItem from '@/components/CustomMenuItem';
 import NextLink from 'next/link';
+import { FaGoogle } from 'react-icons/fa';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const router = useScrollSavingRouter();
   const authContext = useAuth();
+
   if (!authContext) {
-    // This case should ideally not be reached if AuthProvider is correctly wrapping the app.
-    // For TypeScript safety, we handle it.
-    return null; // Or a loading component, or redirect to login
+    return null;
   }
-  const { login } = authContext;
+  const { login, signInWithGoogle } = authContext;
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await login(username, password);
       if (username === 'philippejoel.wolff@gmail.com') {
-        router.push('/admin'); // Redirige vers la page d'administration
+        router.push('/admin');
       } else {
-        router.push('/'); // Redirige vers la page d'accueil
+        router.push('/');
       }
     } catch (error) {
       setError('Identifiant ou mot de passe erroné');
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      router.push('/');
+    } catch (error) {
+      setError('Erreur lors de la connexion avec Google.');
+      console.error(error);
+    }
+  };
+
   return (
     <>
-      <CustomMenuItem />
       <Flex
         minHeight="100vh" 
         align="center" 
         justify="center" 
         bg="rgb(255, 246, 241)" 
         px={4}
-        backgroundSize="cover" // Pour que l'image couvre tout l'écran
-        backgroundPosition="center" // Centrer l'image
-        backgroundRepeat="no-repeat" // Pas de répétition
+        backgroundSize="cover"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
         >
         <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="white" opacity={0.9}>
           <Heading as="h1" size="lg" mb={6} textAlign="center" color={'black'}>
             Connexion
           </Heading>
+          
+          <VStack spacing={4}>
+            <Button
+              w="full"
+              colorScheme="red"
+              leftIcon={<FaGoogle />}
+              onClick={handleGoogleSignIn}
+            >
+              Continuer avec Google
+            </Button>
+
+            <HStack w="full">
+              <Divider />
+              <Text color="gray.500" whiteSpace="nowrap">
+                ou
+              </Text>
+              <Divider />
+            </HStack>
+          </VStack>
+
           <form onSubmit={handleLogin}>
-            <FormControl id="username" isRequired mb={4}>
+            <FormControl id="username" isRequired mb={4} mt={4}>
               <Input
                 type="text"
-                placeholder="Identifiant"
+                placeholder="Identifiant (email)"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 sx={{
@@ -133,7 +165,7 @@ export default function Login() {
           </form>
           <Flex fontSize={"13px"} justifyContent="space-between">
             <NextLink href="/signup" passHref legacyBehavior>
-              <ChakraLink colorScheme="teal" variant="link">
+              <ChakraLink colorScheme="#FF9800" variant="link">
                 Créer un compte
               </ChakraLink>
             </NextLink>

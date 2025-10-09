@@ -209,7 +209,7 @@ const SvgBackground = () => {
   }, []);
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1, overflow: 'hidden' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}>
       <ul className="loading__wrapper">
         <li>
           <svg className="loader1" fill="rgb(255, 246, 241" height="80" viewBox="0 0 55 80" width="55" xmlns="http://www.w3.org/2000/svg">
@@ -231,7 +231,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader3" fill="#dfeb9bff" height="105" viewBox="0 0 105 105" width="105" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader3" fill="#d2a43982" height="105" viewBox="0 0 105 105" width="105" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12.5" cy="12.5" r="12.5" fillOpacity="1"></circle>
             <circle cx="12.5" cy="52.5" r="12.5" fillOpacity="1"></circle>
             <circle cx="52.5" cy="12.5" r="12.5" fillOpacity="1"></circle>
@@ -251,7 +251,7 @@ const SvgBackground = () => {
           </svg>
         </li>
         <li>
-          <svg className="loader6" fill="#ebe0e4ff" height="30" viewBox="0 0 120 30" width="120" xmlns="http://www.w3.org/2000/svg">
+          <svg className="loader6" fill="#ceb2bc62" height="30" viewBox="0 0 120 30" width="120" xmlns="http://www.w3.org/2000/svg">
             <circle className="loader6__left" cx="15" cy="15" r="15"></circle>
             <circle className="loader6__center" cx="60" cy="15" r="15"></circle>
             <circle className="loader6__right" cx="105" cy="15" r="15"></circle>

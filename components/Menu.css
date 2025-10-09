@@ -1,6 +1,6 @@
 /* Menu.css */
 .menu-container {
-  position: sticky;
+  position: fixed; /* Changed from sticky to fixed */
   top: 0;
   z-index: 100;
   background-color: rgb(255, 246, 241);
@@ -41,12 +41,20 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background-color: rgb(255, 246, 241);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  gap: 10px;
+  background: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
 }
-
+.menu-content.open {
+  max-height: none; /* Remove max-height */
+  overflow-y: visible; /* Make overflow visible for testing */
+  display: block; /* Explicitly set display to block */
+  z-index: 9999; /* Very high z-index for testing */
+}
 .menu-toggle-button, .header-categorie-button {
-  background-color: #fff;
-  color: #FF9800;
+  background-color: #ffffff45;
+  color: #FF6F00;
   border: 1px solid #ddd;
   padding: 10px 20px;
   border-radius: 50px; /* Rounded shape */
@@ -56,7 +64,7 @@
   font-family: 'allroundgothic';
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  display: block;
+  display: flex; /* Changed to flex to align icon and text */
   align-items: center;
   gap: 8px;
 }
@@ -67,11 +75,17 @@
   border-color: #ccc;
 }
 
+.menu-toggle-button.validate-button-active {
+  background-color: rgb(251, 191, 36); /* Desired color */
+  color: white; /* Ensure text is visible */
+  border-color: rgb(251, 191, 36);
+  box-shadow: 0 2px 5px rgba(251, 191, 36, 0.3);
+}
+
 .header-categorie-button.selected {
-  background-color: #ff8f00;
-  color: white;
-  font-size: medium;
-  border-color: #ff8f00;
+  background-color: rgb(109, 252, 243);
+  color: #000000;
+  font-size: x-small;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -80,20 +94,17 @@
   overflow: hidden;
   transition: max-height 0.4s ease-in-out;
   background-color: #fff;
+  display: none; /* Explicitly hide by default */
 }
 
-.menu-content.open {
-  max-height: 100vh; /* Adjust as needed */
-  overflow-y: auto;
-}
+/* Removed .search-bar-in-menu as it's no longer needed */
 
 .category-selection-message {
   text-align: center;
   padding: 10px 15px;
   font-size: 0.9rem;
   color: #666;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #eee;
+  background: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
 }
 
 .categories-container {
@@ -101,7 +112,7 @@
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 15px;
   padding: 15px;
-  background-color: white;
+  background: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
 }
 
 .categorie_button {
@@ -114,6 +125,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px #ffcc8075;
 }
 
 .categorie_button:hover {
@@ -148,9 +161,38 @@
     display: flex;
     gap: 10px;
   }
+
+.menu-header.search-active {
+  justify-content: space-between;
+  gap: 0; /* Remove gap when search is active */
+}
+
+.search-component.full-width-search {
+  flex-grow: 1; /* Make search bar take full width */
+  margin-right: 10px; /* Space before close button */
+}
+
+.search-icon-button, .close-search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF6F00;
+  transition: color 0.2s ease;
+}
+
+.search-icon-button:hover, .close-search-button:hover {
+  color: #000;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
-
+.menu-toggle-button, .header-categorie-button{
+ font-size: x-small; 
+}
   .menu-header {
   flex-wrap: nowrap;
   justify-content: revert;
@@ -163,10 +205,13 @@
     gap: 10px;
   }
 
-  .menu-content.open {
-    max-height: calc(100vh - 163px); /* Full height minus header */
-    overflow-y: auto;
-  }
+.menu-content.open {
+  max-height: none; /* Remove max-height */
+  height: 550px; /* Fixed height for testing */;
+  overflow-y: visible; /* Make overflow visible for testing */
+  display: block; /* Explicitly set display to block */
+  z-index: 9999; /* Very high z-index for testing */
+}
 
   .categories-container {
     grid-template-columns: repeat(3, 1fr);

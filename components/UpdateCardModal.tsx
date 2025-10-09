@@ -67,6 +67,8 @@ const UpdateCardModal = ({
   const [previewMode, setPreviewMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [isNewCategory, setIsNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   useEffect(() => {
     if (formCard) {
@@ -82,7 +84,7 @@ const UpdateCardModal = ({
       if (field === 'time' && typeof value === 'string') {
         // Convert YYYY-MM-DD string to Date object
         newValue = new Date(value);
-      }
+      } 
       setFormCard({ ...formCard, [field]: newValue });
       // Clear validation error when user starts typing
       if (validationErrors[field]) {
@@ -163,6 +165,7 @@ const UpdateCardModal = ({
       // Préparer les données pour Firebase
       const cardData = { 
         ...formCard, 
+        time: formCard.time instanceof Date ? formCard.time.toISOString() : formCard.time,
         produits_derives: produitsDerives, 
         caracteristiques: caracteristiquesTableaux,
         images: images.filter(image => image.trim()),
@@ -416,8 +419,16 @@ const UpdateCardModal = ({
                     </label>
                     <select
                       className={`form-select ${validationErrors.categorie ? 'error' : ''}`}
-                      value={formCard.categorie || ''}
-                      onChange={(e) => handleInputChangeLocal('categorie', e.target.value)}
+                      value={isNewCategory ? 'new-category-option' : (formCard.categorie || '')}
+                      onChange={(e) => {
+                        if (e.target.value === 'new-category-option') {
+                          setIsNewCategory(true);
+                          setNewCategoryName('');
+                        } else {
+                          setIsNewCategory(false);
+                          handleInputChangeLocal('categorie', e.target.value);
+                        }
+                      }}
                     >
                       <option value="">Sélectionner une catégorie</option>
                       <option value="Mode Femme">Mode Femme</option>
@@ -425,8 +436,22 @@ const UpdateCardModal = ({
                       <option value="Accessoires">Accessoires</option>
                       <option value="Maison">Maison</option>
                       <option value="Beauté">Beauté</option>
+                      <option value="new-category-option">Créer une nouvelle catégorie</option>
                     </select>
-                    {validationErrors.categorie && (
+                    {validationErrors.categorie && !isNewCategory && (
+                      <span className="error-message">{validationErrors.categorie}</span>
+                    )}
+                    {isNewCategory && (
+                      <input
+                        type="text"
+                        className={`form-input ${validationErrors.categorie ? 'error' : ''}`}
+                        placeholder="Nom de la nouvelle catégorie"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        onBlur={() => handleInputChangeLocal('categorie', newCategoryName)}
+                      />
+                    )}
+                    {validationErrors.categorie && isNewCategory && (
                       <span className="error-message">{validationErrors.categorie}</span>
                     )}
                   </div>
@@ -1286,8 +1311,8 @@ const UpdateCardModal = ({
         }
 
         .nav-item.active {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
+          background: #9E9E9E;
+          color: black;
         }
 
         .nav-item.error {

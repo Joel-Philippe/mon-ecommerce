@@ -78,6 +78,8 @@ const AddCard = ({ card: cardProp, setCard: setCardProp, handleCreateCard, isOpe
   const [previewMode, setPreviewMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [isNewCategory, setIsNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   useEffect(() => {
     if (cardProp) {
@@ -180,6 +182,7 @@ const AddCard = ({ card: cardProp, setCard: setCardProp, handleCreateCard, isOpe
       // Préparer les données pour Firebase
       const cardData = { 
         ...card, 
+        time: card.time instanceof Date ? card.time.toISOString() : card.time,
         produits_derives: produitsDerives, 
         caracteristiques: caracteristiquesTableaux,
         images: images.filter(image => image.trim()),
@@ -432,8 +435,16 @@ const AddCard = ({ card: cardProp, setCard: setCardProp, handleCreateCard, isOpe
                     </label>
                     <select
                       className={`form-select ${validationErrors.categorie ? 'error' : ''}`}
-                      value={card.categorie || ''}
-                      onChange={(e) => handleInputChange('categorie', e.target.value)}
+                      value={isNewCategory ? 'new-category-option' : (card.categorie || '')}
+                      onChange={(e) => {
+                        if (e.target.value === 'new-category-option') {
+                          setIsNewCategory(true);
+                          setNewCategoryName('');
+                        } else {
+                          setIsNewCategory(false);
+                          handleInputChange('categorie', e.target.value);
+                        }
+                      }}
                     >
                       <option value="">Sélectionner une catégorie</option>
                       <option value="Mode Femme">Mode Femme</option>
@@ -441,8 +452,22 @@ const AddCard = ({ card: cardProp, setCard: setCardProp, handleCreateCard, isOpe
                       <option value="Accessoires">Accessoires</option>
                       <option value="Maison">Maison</option>
                       <option value="Beauté">Beauté</option>
+                      <option value="new-category-option">Créer une nouvelle catégorie</option>
                     </select>
-                    {validationErrors.categorie && (
+                    {validationErrors.categorie && !isNewCategory && (
+                      <span className="error-message">{validationErrors.categorie}</span>
+                    )}
+                    {isNewCategory && (
+                      <input
+                        type="text"
+                        className={`form-input ${validationErrors.categorie ? 'error' : ''}`}
+                        placeholder="Nom de la nouvelle catégorie"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        onBlur={() => handleInputChange('categorie', newCategoryName)}
+                      />
+                    )}
+                    {validationErrors.categorie && isNewCategory && (
                       <span className="error-message">{validationErrors.categorie}</span>
                     )}
                   </div>

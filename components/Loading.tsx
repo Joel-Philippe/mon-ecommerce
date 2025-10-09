@@ -7,7 +7,7 @@ const Loading = () => {
         thickness='8px'
         speed='0.30s'
         emptyColor='rgb(115 255 0)'
-        color='rgb(115 255 0)'
+        color='rgb(109, 252, 243)'
         size='xl'
         mt="2rem"
         />

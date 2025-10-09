@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    webpack: (config) => {
+        config.experiments = { ...config.experiments, asyncWebAssembly: true };
+        config.module.rules.push({
+            test: /\.wasm$/,
+            type: "webassembly/async",
+        });
+        return config;
+    },
     env: {
       NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
       NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,

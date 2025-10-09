@@ -9,7 +9,7 @@
 .favorites-title {
   font-size: 1.5em;
   font-weight: bold;
-  color: #e63198;
+  color: black;
   text-align: center;
   margin-bottom: 30px;
   margin-top: 80px; /* To account for fixed header */
@@ -17,10 +17,12 @@
 
 .favorites-message {
   text-align: center;
-  color: #666;
-  background-color: white;
+  color:black;
+  background-color: rgb(109, 252, 243);
   font-size: 1.1em;
   margin-top: 50px;
+  border-radius: 5px;
+  padding: 5px;;
 }
 
 .favorites-login-button {
@@ -41,6 +43,7 @@
 }
 
 .cards-container {
+  margin-top: 200px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

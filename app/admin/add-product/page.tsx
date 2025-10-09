@@ -2,13 +2,13 @@
 import React from 'react';
 import AddCard from '@/components/AddCard';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 
 
 const AddProductPage = () => {
   const auth = useAuth();
   const user = auth?.user;
-  const router = useRouter();
+  const router = useScrollSavingRouter();
 
   // Vérifier si l'utilisateur est connecté et est administrateur
   React.useEffect(() => {
