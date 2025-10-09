@@ -42,13 +42,7 @@
   background-color: #e07b00;
 }
 
-.cards-container {
-  margin-top: 200px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
+
 
 /* Re-using card styles from Cards.css */
 /* Ensure Cards.css is imported in globals.css or directly in favorites page */
