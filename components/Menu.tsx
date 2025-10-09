@@ -120,29 +120,35 @@ const Menu: React.FC<MenuProps> = ({
           </>
         ) : (
           <> {/* Normal menu buttons when not active */}
-            <button className={`menu-toggle-button ${isMenuOpen ? 'validate-button-active' : ''}`} onClick={() => {
+            <button className={`menu-toggle-button ${isMenuOpen ? 'validate-button-active' : ''} ${isMenuOpen && selectedCategories.length > 0 ? 'highlight-validate' : ''}`} onClick={() => {
               setIsMenuOpen(!isMenuOpen);
               console.log('[Menu] Toggling isMenuOpen to:', !isMenuOpen); // Log toggle action
             }}>
               {isMenuOpen ? 'Valider' : <><Filter className="button-icon" />Filtre</>}
             </button>
-            <div className="header-main-buttons">
-              <button
-              >
-                <span className={`header-categorie-button ${activeFilter === 'all' && selectedCategories.length === 0 ? 'selected' : ''}`}
-                onClick={handleClearAll}>Tout</span>
-              </button>
-              <button
-              >
-                <span
-                className={`header-categorie-button ${activeFilter === 'new' ? 'selected' : ''}`}
-                onClick={handleShowNew}
-                ><Sparkles className="button-icon" />Nouveau</span>
-              </button>
-            </div>
-            <button className="menu-toggle-button search-icon-button" onClick={() => setIsSearchActive(true)} aria-label="Rechercher">
-              <Search className="button-icon" />
-            </button>
+            {/* Hide other buttons when validate is highlighted */}
+            {!(isMenuOpen && selectedCategories.length > 0) && (
+              <>
+                <div className="header-main-buttons">
+                  <button>
+                    <span className={`header-categorie-button ${activeFilter === 'all' && selectedCategories.length === 0 ? 'selected' : ''}`}
+                    onClick={handleClearAll}>Tout</span>
+                  </button>
+                  <button>
+                    <span
+                    className={`header-categorie-button ${activeFilter === 'new' ? 'selected' : ''}`}
+                    onClick={handleShowNew}
+                    ><Sparkles className="button-icon" />Nouveau</span>
+                  </button>
+                </div>
+                <button className="menu-toggle-button search-icon-button" onClick={() => {
+                  setIsSearchActive(true);
+                  setIsMenuOpen(false); // Close filter menu when search is activated
+                }} aria-label="Rechercher">
+                  <Search className="button-icon" />
+                </button>
+              </>
+            )}
             <BurgerMenu />
           </>
         )}

@@ -82,6 +82,18 @@
   box-shadow: 0 2px 5px rgba(251, 191, 36, 0.3);
 }
 
+.highlight-validate {
+  background-color: #ff9800; /* A strong orange */
+  color: white !important; /* Use important to override other color rules */
+  flex-grow: 1; /* Take up available space */
+  justify-content: center; /* Center the text */
+  transform: scale(1.02);
+  font-size: large !important;
+  padding: 15px 20px;
+  border: none !important;
+}
+
+
 .header-categorie-button.selected {
   background-color: rgb(109, 252, 243);
   color: #000000;
