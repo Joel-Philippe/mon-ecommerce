@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
 import { BsCartX } from 'react-icons/bs';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -36,7 +36,7 @@ interface GlobalPriceProps {
 const GlobalPrice: React.FC<GlobalPriceProps> = ({ isOpen, onClose }) => {
   const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem } = useGlobalCart();
   const toast = useToast();
-  const router = useRouter();
+  const router = useScrollSavingRouter();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const itemsWithStockInfo = Object.values(globalCart).map(item => ({

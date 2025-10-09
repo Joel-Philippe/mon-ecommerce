@@ -1,412 +1,182 @@
 'use client';
-import React, { useState } from "react";
-import { useSwipeable } from "react-swipeable";
+import React, { useState, useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Navigation, Thumbs, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperClass } from 'swiper';
+// import { Maximize, Minimize, X } from 'lucide-react'; // Temporarily remove icons
 
-interface ModernSliderProps {
+interface ImageSliderProps {
   images: string[];
-  title: string;
-  onImageClick?: () => void; // Nouvelle prop pour gérer le clic sur l'image
 }
 
-const ModernSlider: React.FC<ModernSliderProps> = ({ images, title, onImageClick }) => {
-  const [index, setIndex] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false); // Re-add state
 
-  const next = () => setIndex((i) => (i + 1) % images.length);
-  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
-
-  const handlers = useSwipeable({
-    onSwipedLeft: () => next(),
-    onSwipedRight: () => prev(),
-    
-    trackMouse: true,
-  });
-
-  // Fonction pour gérer le clic sur l'image
-  const handleImageClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (onImageClick) {
-      onImageClick(); // Ouvre les détails du produit
-    } else {
-      setIsFullscreen(true); // Fallback vers le mode plein écran si pas de callback
-    }
+  const toggleFullscreen = () => { // Re-add function
+    setIsFullscreen(!isFullscreen);
   };
 
-  // Fonction pour ouvrir le mode plein écran (via double-clic ou bouton séparé)
-  const handleFullscreenOpen = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsFullscreen(true);
-  };
+  // Close fullscreen on Escape key // Re-add effect
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen]);
+
+  if (!images || images.length === 0) {
+    return <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>Aucune image disponible</div>;
+  }
 
   return (
-    <>
-      <div className="slider-wrapper" {...handlers}>
-        <div className="slider-glass">
-          <div className="image-container">
-            <img
-              src={images[index]}
-              alt={`Image ${index}`}
-              className="slider-image"
-              onClick={handleImageClick}
-            />
-            
-            {/* Bouton pour ouvrir en plein écran */}
-            <button 
-              className="fullscreen-button"
-              onClick={handleFullscreenOpen}
-              title="Voir en plein écran"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-              </svg>
-            </button>
-
-
-          </div>
-
-          <div className="slider-title">{title}</div>
-        </div>
-
-        <div className="dots">
-          {images.map((_, i) => (
-            <span
-              key={i}
-              className={`dot ${i === index ? "active" : ""}`}
-              onClick={() => setIndex(i)}
-            />
-          ))}
-        </div>
-      </div>
-
+    <div className={`product-image-slider-container ${isFullscreen ? 'fullscreen-active' : ''}`}> {/* Add fullscreen class */}
       {isFullscreen && (
-        <div
-          className="fullscreen-overlay"
-          {...handlers}
-          onClick={() => setIsFullscreen(false)}
-        >
-          <img
-            src={images[index]}
-            alt={`Fullscreen ${index}`}
-            className="fullscreen-image"
-          />
-          <button
-            className="nav-button left"
-            onClick={(e) => {
-              e.stopPropagation();
-              prev();
-            }}
-          >
-            ‹
-          </button>
-          <button
-            className="nav-button right"
-            onClick={(e) => {
-              e.stopPropagation();
-              next();
-            }}
-          >
-            ›
-          </button>
-          <button
-            className="close-button"
-            onClick={() => setIsFullscreen(false)}
-          >
-            ✕
-          </button>
-        </div>
+        <button className="fullscreen-close-button" onClick={toggleFullscreen} aria-label="Fermer le mode plein écran">
+          X
+        </button>
       )}
+      {/* Fullscreen toggle button */}
+      <button className="fullscreen-toggle-button" onClick={toggleFullscreen} aria-label="Basculer en plein écran">
+        {isFullscreen ? '-' : '+'}
+      </button>
 
-      <style>{`
-        .slider-wrapper {
+      {/* Main Slider */}
+      <Swiper
+        style={{
+          '--swiper-navigation-color': '#fff',
+          '--swiper-pagination-color': '#fff',
+        } as React.CSSProperties}
+        loop={true}
+        spaceBetween={10}
+        navigation={true}
+        pagination={{
+          clickable: true,
+        }}
+        thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+        modules={[FreeMode, Navigation, Thumbs, Pagination]}
+        className="mySwiper2"
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index} onClick={toggleFullscreen}> {/* Make slides clickable */}
+            <img src={image} alt={`Product image ${index + 1}`} loading="lazy" style={{ width: '100%', objectFit: 'contain' }} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Thumbnail Slider */}
+      <Swiper
+        onSwiper={setThumbsSwiper}
+        loop={true}
+        spaceBetween={10}
+        slidesPerView={4}
+        freeMode={true}
+        watchSlidesProgress={true}
+        modules={[FreeMode, Navigation, Thumbs]}
+        className="mySwiper"
+        style={{ marginTop: '10px' }}
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index}>
+            <img src={image} alt={`Thumbnail ${index + 1}`} style={{ width: '100%', objectFit: 'cover', cursor: 'pointer', borderRadius: '5px' }} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <style jsx global>{`
+        .product-image-slider-container {
           width: 100%;
-          height: 27vh;
-          max-height: 250px;
-          min-height: 180px;
-          margin: auto;
+          max-width: 600px; /* Adjust as needed */
+          margin: 0 auto;
+          position: relative; /* Needed for fullscreen positioning */
+        }
+
+        .product-image-slider-container.fullscreen-active {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: rgba(0, 0, 0, 0.9);
+          z-index: 9999;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
         }
 
-        .slider-glass {
-          position: relative;
-          width: 95%;
-          max-width: 700px;
-          margin-top: 10px;
-          border-radius: 6px;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          backdrop-filter: blur(12px);
-          background: rgba(255, 255, 255, 0.15);
+        .product-image-slider-container.fullscreen-active .mySwiper2 {
+          width: 90%;
+          height: 80%;
         }
 
-        .image-container {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .product-image-slider-container.fullscreen-active .mySwiper {
+          width: 90%;
+          margin-top: 20px;
         }
 
-        .slider-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          cursor: pointer;
-          border-radius: 12px 12px 0px 0px;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .slider-image:hover {
-          transform: scale(1.02);
-          filter: brightness(1.1);
-        }
-
-        .fullscreen-button {
+        .fullscreen-toggle-button {
           position: absolute;
-          top: 12px;
-          right: 12px;
-          background: rgba(0, 0, 0, 0.6);
+          top: 10px;
+          right: 10px;
+          background-color: rgba(0, 0, 0, 0.5);
           color: white;
           border: none;
-          border-radius: 6px;
+          border-radius: 5px;
           padding: 8px;
           cursor: pointer;
-          opacity: 0;
-          transition: all 0.3s ease;
-          z-index: 2;
+          z-index: 1000;
           display: flex;
           align-items: center;
           justify-content: center;
         }
 
-        .image-container:hover .fullscreen-button {
-          opacity: 1;
-        }
-
-        .fullscreen-button:hover {
-          background: rgba(0, 0, 0, 0.8);
-          transform: scale(1.1);
-        }
-
-        .click-indicator {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background: rgba(0, 0, 0, 0.7);
-          color: white;
-          padding: 12px 16px;
-          border-radius: 25px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          opacity: 0;
-          transition: all 0.3s ease;
-          pointer-events: none;
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .image-container:hover .click-indicator {
-          opacity: 1;
-          transform: translate(-50%, -50%) scale(1.05);
-        }
-
-        .click-indicator svg {
-          animation: pulse 2s infinite;
-        }
-
-        .slider-title {
-          position: absolute;
-          font-family: 'allroundgothic';
-          top: 80%;
-          right: 30px;
-          font-size: 0.9rem;
-          color: rgb(0, 0, 0);
-          background-color: white;
-          font-weight: 500;
-          padding: 3px 8px;
-          border-radius: 6px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          transition: all 0.3s ease;
-        }
-
-        .slider-title:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .dots {
-          margin-top: 6px;
-          display: flex;
-          justify-content: center;
-          gap: 6px;
-        }
-
-        .dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #F57C00;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .dot:hover {
-          transform: scale(1.2);
-          background: #E65100;
-        }
-
-        .dot.active {
-          background: #333;
-          transform: scale(1.1);
-        }
-
-        .fullscreen-overlay {
-          position: fixed;
-          inset: 0;
-          background-color: rgba(0, 0, 0, 0.95);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 99999;
-          backdrop-filter: blur(20px);
-        }
-
-        .fullscreen-image {
-          max-width: 90vw;
-          max-height: 90vh;
-          object-fit: contain;
-          border-radius: 12px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-button {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          background: rgba(255, 255, 255, 0.9);
-          border: none;
-          border-radius: 50%;
-          width: 48px;
-          height: 48px;
-          font-size: 1.8rem;
-          color: #333;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
-        }
-
-        .nav-button:hover {
-          background: white;
-          transform: translateY(-50%) scale(1.1);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-button.left {
-          left: 20px;
-        }
-
-        .nav-button.right {
-          right: 20px;
-        }
-
-        .close-button {
-          position: absolute;
+        .fullscreen-close-button {
           top: 20px;
           right: 20px;
-          background: rgba(255, 255, 255, 0.9);
+          background-color: rgba(0, 0, 0, 0.7);
+          color: white;
           border: none;
           border-radius: 50%;
           width: 40px;
           height: 40px;
-          font-size: 1.2rem;
-          color: #333;
-          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
+          cursor: pointer;
+          z-index: 10000;
+          font-size: 1.5rem;
         }
 
-        .close-button:hover {
-          background: white;
-          transform: scale(1.1);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        .swiper-slide img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: contain; /* Ensure entire image is visible */
         }
 
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.7;
-            transform: scale(1.05);
-          }
+        .swiper-button-next, .swiper-button-prev {
+          color: #FFEB3B !important; /* Custom navigation color */
         }
 
-        @media (max-width: 480px) {
-          .slider-wrapper {
-            height: 28vh;
-          }
+        .swiper-pagination-bullet-active {
+          background-color: #FFEB3B !important; /* Custom pagination color */
+        }
 
-          .slider-title {
-            font-size: 0.7rem;
-            right: 10px;
-          }
+        .mySwiper .swiper-slide {
+          opacity: 0.4;
+        }
 
-          .nav-button {
-            width: 36px;
-            height: 36px;
-            font-size: 1.4rem;
-          }
-
-          .close-button {
-            width: 32px;
-            height: 32px;
-            font-size: 1rem;
-          }
-
-          .fullscreen-button {
-            padding: 6px;
-          }
-
-          .click-indicator {
-            padding: 8px 12px;
-            font-size: 12px;
-          }
-
-          .nav-button.left {
-            left: 10px;
-          }
-
-          .nav-button.right {
-            right: 10px;
-          }
-
-          .close-button {
-            top: 10px;
-            right: 10px;
-          }
+        .mySwiper .swiper-slide-thumb-active {
+          opacity: 1;
         }
       `}</style>
-    </>
+    </div>
   );
 };
 
-export default ModernSlider;
+export default ImageSlider;
+

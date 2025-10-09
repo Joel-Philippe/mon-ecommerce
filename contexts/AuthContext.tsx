@@ -11,12 +11,14 @@ import {
   updateProfile,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
+import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { auth, db, getClientStorage } from '../components/firebaseConfig.ts';
 
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, updateDoc, deleteDoc, collection, query, where, getDocs, getDoc, setDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, collection, query, where, getDocs, getDoc, setDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
 import Cookies from 'js-cookie';
 
 const CART_COOKIE_NAME = 'guest_cart_id';
@@ -34,8 +36,8 @@ interface AuthContextType {
   reauthenticateUser: (password: string) => Promise<void>;
   acceptRequest: (request: any) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
-  addFavorite: (cardId: string) => Promise<void>;
-  removeFavorite: (cardId: string) => Promise<void>;
+  toggleFavorite: (cardId: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -44,7 +46,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [userFavorites, setUserFavorites] = useState<string[]>([]);
-  const router = useRouter();
+  const router = useScrollSavingRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -55,23 +57,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const fetchFavorites = async () => {
-      if (user) {
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          setUserFavorites(data?.favorites || []);
-        } else {
-          // Create user document if it doesn't exist
-          await setDoc(userDocRef, { favorites: [] }, { merge: true });
-          setUserFavorites([]);
-        }
+    if (!user) {
+      setUserFavorites([]);
+      return () => {}; // Return a no-op cleanup function
+    }
+
+    const userDocRef = doc(db, 'users', user.uid);
+    console.log("AuthContext: Before onSnapshot - user:", user, "db:", db, "userDocRef:", userDocRef);
+    const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setUserFavorites(data?.favorites || []);
       } else {
+        // Create user document if it doesn't exist
+        setDoc(userDocRef, { favorites: [] }, { merge: true });
         setUserFavorites([]);
       }
-    };
-    fetchFavorites();
+    }, (error) => {
+      console.error("Error listening to user favorites:", error);
+    });
+
+    return () => unsubscribe();
   }, [user]);
 
   const mergeGuestCart = async (firebaseUser: User) => {
@@ -94,22 +100,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const addFavorite = async (cardId: string) => {
+  const toggleFavorite = async (cardId: string): Promise<void> => {
     if (!user) throw new Error("Utilisateur non connecté");
-    const token = await user.getIdToken();
-    await fetch('/api/favorites/toggle', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ productId: cardId }),
-    });
-    setUserFavorites(prev => [...prev, cardId]);
-  };
 
-  const removeFavorite = async (cardId: string) => {
-    if (!user) throw new Error("Utilisateur non connecté");
     const token = await user.getIdToken();
     await fetch('/api/favorites/toggle', {
       method: 'POST',
@@ -119,7 +112,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       },
       body: JSON.stringify({ productId: cardId }),
     });
-    setUserFavorites(prev => prev.filter(id => id !== cardId));
+
+
   };
 
   const signup = async (email: string, password: string, displayName: string, photoFile: File | null) => {
@@ -146,7 +140,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error('Error signing up:', error);
-      throw new Error('Erreur lors de la création du compte.');
+      throw error; // Re-throw the original error
     }
   };
 
@@ -250,6 +244,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const userCredential = await signInWithPopup(auth, provider);
+      await mergeGuestCart(userCredential.user);
+      // Ensure user document exists
+      const userDocRef = doc(db, "users", userCredential.user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (!userDocSnap.exists()) {
+        await setDoc(userDocRef, { 
+          email: userCredential.user.email,
+          displayName: userCredential.user.displayName,
+          favorites: [] 
+        }, { merge: true });
+      }
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -264,8 +279,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       reauthenticateUser,
       acceptRequest,
       deleteUserAccount,
-      addFavorite,
-      removeFavorite
+      toggleFavorite,
+      signInWithGoogle
     }}>
       {children}
     </AuthContext.Provider>

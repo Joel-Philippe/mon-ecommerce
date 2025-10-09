@@ -6,9 +6,10 @@ interface CountdownProps {
   endDate: Date | string;
   onExpired: (title: string) => void;
   title: string;
+  color?: string; // New optional color prop
 }
 
-const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title }) => {
+const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color }) => {
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
@@ -52,27 +53,29 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title }) => {
   }, []);
 
   // 🎨 Couleur du texte selon le countdown + taille écran
-  let textColor = '#000';
+  let textColor = color || '#000'; // Use prop color if provided
 
-  if (isSmallScreen) {
-    if (countdown.days > 10) {
-      textColor = 'rgb(55 102 1)';
-    } else if (countdown.days <= 10 && countdown.days > 5) {
-      textColor = 'rgb(145 123 0)';
-    } else if (countdown.days <= 5 && countdown.days > 2) {
-      textColor = '#897a11';
-    } else if (countdown.days <= 2) {
-      textColor = '#8D6E63';
-    }
-  } else {
-    if (countdown.days > 10) {
-      textColor = '#447b05ff';
-    } else if (countdown.days <= 10 && countdown.days > 5) {
-      textColor = 'rgb(145 123 0)';
-    } else if (countdown.days <= 5 && countdown.days > 2) {
-      textColor = 'orange';
-    } else if (countdown.days <= 2) {
-      textColor = '#8D6E63';
+  if (!color) { // Only apply dynamic color if no prop color is provided
+    if (isSmallScreen) {
+      if (countdown.days > 10) {
+        textColor = 'white';
+      } else if (countdown.days <= 10 && countdown.days > 5) {
+        textColor = 'white';
+      } else if (countdown.days <= 5 && countdown.days > 2) {
+        textColor = 'white';
+      } else if (countdown.days <= 2) {
+        textColor = 'white';
+      }
+    } else {
+      if (countdown.days > 10) {
+        textColor = 'white';
+      } else if (countdown.days <= 10 && countdown.days > 5) {
+        textColor = 'white';
+      } else if (countdown.days <= 5 && countdown.days > 2) {
+        textColor = 'white';
+      } else if (countdown.days <= 2) {
+        textColor = 'white';
+      }
     }
   }
 

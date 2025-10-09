@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Box, Flex, FormControl, Input, Button, Alert, AlertIcon, Heading, Link as ChakraLink } from '@chakra-ui/react';
-import CustomMenuItem from '@/components/CustomMenuItem';
 import NextLink from 'next/link';
 
 export default function ForgotPassword() {
@@ -28,7 +27,6 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <CustomMenuItem />
       <Flex minHeight="50vh" top="0" align="center" justify="center" bg="white" px={4}>
         <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="white">
           <Heading as="h1" size="lg" mb={6} textAlign="center" color={'black'}>

@@ -1,45 +1,48 @@
-
 import { NextRequest } from 'next/server';
-import { cookies } from 'next/headers';
-import { verifyFirebaseToken } from './verifyFirebaseToken';
 import { v4 as uuidv4 } from 'uuid';
 
 const CART_COOKIE_NAME = 'guest_cart_id';
 
-/**
- * Retrieves the cart ID for the current user.
- * If the user is authenticated, it returns their Firebase UID.
- * If the user is a guest, it retrieves or creates a guest cart ID from cookies.
- * @param req The NextRequest object.
- * @returns The user's cart ID (either UID or guest ID).
- */
-export async function getCartId(req: NextRequest): Promise<string | null> {
-  const authorization = req.headers.get('Authorization');
-  if (authorization?.startsWith('Bearer ')) {
-    const token = authorization.split('Bearer ')[1];
-    const decodedToken = await verifyFirebaseToken(token);
-    if (decodedToken) {
-      return decodedToken.uid; // User is authenticated, use UID as cart ID
+export async function getCartId(req?: NextRequest): Promise<string | null> {
+  // Server-side call (from Route Handler)
+  if (req) {
+    const authorization = req.headers.get('Authorization');
+    if (authorization?.startsWith('Bearer ')) {
+      const token = authorization.split('Bearer ')[1];
+      const { verifyFirebaseToken } = await import('./server-only-verifyFirebaseToken');
+      const decodedToken = await verifyFirebaseToken(token);
+      if (decodedToken) {
+        return decodedToken.uid; // User is authenticated, use UID as cart ID
+      }
+    }
+
+    // If not authenticated, try to get from cookies (server-side)
+    const { cookies } = await import('next/headers');
+    return cookies().get(CART_COOKIE_NAME)?.value || null;
+  } else {
+    // Client-side call (from Client Component)
+    // Make an API call to get the cart ID from the server
+    try {
+      const response = await fetch('/api/cart/get-id');
+      if (response.ok) {
+        const data = await response.json();
+        return data.cartId || null;
+      } else {
+        console.error("Failed to fetch cart ID from API");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching cart ID from API:", error);
+      return null;
     }
   }
-
-  // User is not authenticated, use or create a guest cart ID
-  let cartId = cookies().get(CART_COOKIE_NAME)?.value;
-  if (!cartId) {
-    cartId = uuidv4();
-    // Note: Setting cookies here might not be reliable in all edge cases.
-    // It's better to set it in the response if a new one is created.
-    // For now, we'll assume this works for simplicity, but we'll handle setting it in the response from the route.
-  }
-  return cartId;
 }
 
-/**
- * Ensures a guest cart ID is set in the cookies if one doesn't exist.
- * This should be called in the response path of an API route.
- * @param existingCartId The cart ID that was used for the operation.
- */
-export function ensureGuestCartCookie(existingCartId: string | null) {
+export function ensureGuestCartCookie(existingCartId: string | null, res?: any) {
+  // This function is primarily for server-side usage in Route Handlers
+  // If called from client, it won't do anything as cookies() is server-only
+  if (res) {
+    const { cookies } = require('next/headers');
     const cookieStore = cookies();
     if (!cookieStore.get(CART_COOKIE_NAME)?.value && existingCartId) {
         cookieStore.set(CART_COOKIE_NAME, existingCartId, {
@@ -49,4 +52,5 @@ export function ensureGuestCartCookie(existingCartId: string | null) {
             sameSite: 'lax'
         });
     }
+  }
 }

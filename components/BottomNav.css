@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px; /* Increased height */
+  height: 45px; /* Increased height */
   background-color: rgb(255, 246, 241);
   display: flex;
   justify-content: space-around;
@@ -18,11 +18,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center; /* Center content vertically */
-  color: black;
+  color: #FF6F00;
   background: white;
   text-decoration: none;
-  width: 60px; /* Circle size */
-  height: 60px; /* Circle size */
+  width: 50px; /* Circle size */
+  height: 50px; /* Circle size */
   border-radius: 50%;
   padding: 5px;
   transition: transform 0.2s ease;
@@ -32,10 +32,10 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 24px;
-  height: 24px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 12px;
   font-weight: bold;
   display: flex;
@@ -44,12 +44,11 @@
 }
 
 .favorite-badge {
-  background-color: #e63199;
+  background-color: #00f2ff;
 }
-
 .cart-badge {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #00ccff;
+  color: #000000;
 }
 
 .nav-item:hover {
@@ -57,11 +56,27 @@
 }
 
 .nav-item span {
-  font-size: 10px; /* Adjusted font size */
+  font-size: 0; /* Adjusted font size */
   margin-top: 2px; /* Space between icon and text */
 }
 
 .nav-item.active {
-  background: #fb9901;
-  color: #ffffff;
+    background: #FF6F00;
+    color: #ffffff;
+}
+
+@keyframes jiggle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+.jiggle-animation {
+  animation: jiggle 0.5s ease-in-out;
 }

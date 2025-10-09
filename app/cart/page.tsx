@@ -5,6 +5,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import Link from '@/components/ScrollRestorationLink';
 import Image from 'next/image';
 import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
+import { AiOutlineLoading } from 'react-icons/ai';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
@@ -17,20 +18,35 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 export default function CartPage() {
-  const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem } = useGlobalCart();
+  const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem, clearCartError } = useGlobalCart();
 
   useScrollRestoration(); // Call without pageContentRef
   const toast = useToast();
   const router = useScrollSavingRouter();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
+  const showErrorToast = () => {
+    toast({
+      title: 'Erreur de panier',
+      description: errorCart,
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    });
+    clearCartError();
+  };
+
+
+
+  if (errorCart) {
+    showErrorToast();
+  }
+
   if (loadingCart) {
     return <LoadingSpinner />;
   }
 
-  if (errorCart) {
-    return <div>Erreur: {errorCart}</div>;
-  }
+
 
   const cartItems = Object.values(globalCart);
 
@@ -77,7 +93,12 @@ export default function CartPage() {
       const { sessionId, message, error } = await response.json();
 
       if (!response.ok) {
-        throw new Error(error || message || 'Failed to create checkout session.');
+        const errorData = await response.json();
+        if (errorData.error && errorData.error.includes('Stock insuffisant')) {
+          throw new Error(errorData.error);
+        } else {
+          throw new Error(errorData.message || 'Failed to create checkout session.');
+        }
       }
 
       const stripe = await stripePromise;
@@ -117,9 +138,11 @@ export default function CartPage() {
           <div className="panier-items">
             {cartItems.map(item => (
               <div key={item._id} className="panier-item">
-                <div className="panier-item-image">
-                  <Image src={item.images[0]} alt={item.title} width={150} height={150} />
-                </div>
+                <Link href={`/${item._id}`} passHref legacyBehavior>
+                  <div className="panier-item-image">
+                    <Image src={item.images[0]} alt={item.title} width={150} height={150} />
+                  </div>
+                </Link>
                 <div className="panier-item-details">
                   <h2>{item.title}</h2>
                   <p>{(item.price_promo || item.price) && `Prix: ${item.price_promo || item.price}€`}</p>
@@ -138,7 +161,7 @@ export default function CartPage() {
           <div className="panier-summary">
             <h2>Total: {total.toFixed(2)}€</h2>
             <button className="checkout-btn" onClick={handleCheckout} disabled={isCheckingOut}>
-              {isCheckingOut ? 'Redirection...' : 'Passer la commande'}
+              {isCheckingOut ? <AiOutlineLoading className="loading-spinner" /> : 'Passer la commande'}
             </button>
           </div>
         </div>

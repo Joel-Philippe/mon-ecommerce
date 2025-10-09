@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, Heading, Text } from '@chakra-ui/react';
-import CustomMenuItem from '@/components/CustomMenuItem';
 import Confetti from 'react-confetti';
 
 const ConsumersPage = () => {
@@ -22,7 +21,6 @@ const ConsumersPage = () => {
 
   return (
     <>
-      <CustomMenuItem onCartOpen={() => {}} />
       <Box textAlign={"center"} p={8} bg="white" minHeight="100vh">
         {showConfetti && <Confetti />}
         <Heading textColor={"black"} as="h1" size="xl" mb={6}>

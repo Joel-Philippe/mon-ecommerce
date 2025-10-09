@@ -1,10 +1,13 @@
 'use client';
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/components/firebaseConfig';
 import { GlobalCartContext } from '@/components/GlobalCartContext';
 import CommentSection from '@/components/CommentSection';
+import Countdown from '@/components/Countdown';
+import ImageSlider from '@/components/ImageSlider'; // Import the new ImageSlider
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 import styles from './ProductPage.module.css';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
@@ -13,35 +16,38 @@ import { Card } from '@/types';
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const [product, setProduct] = useState<Card | null>(null);
   const [loading, setLoading] = useState(true);
-  const [mainImage, setMainImage] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const cartContext = useContext(GlobalCartContext);
+  const [isExpired, setIsExpired] = useState(false);
+  const { globalCart, addToCart } = useContext(GlobalCartContext)!;
 
-  useScrollRestoration(); // Call without pageContentRef
+  useScrollRestoration();
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true);
-      if (params.id) {
-        const docRef = doc(db, 'cards', params.id as string);
-        const docSnap = await getDoc(docRef);
+    if (!params.id) return;
 
-        if (docSnap.exists()) {
-          const productData = { id: docSnap.id, ...docSnap.data() } as unknown as Card;
-          setProduct(productData);
-          if (productData.images && productData.images.length > 0) {
-            setMainImage(productData.images[0]);
-          }
-        }
+    setLoading(true);
+    const docRef = doc(db, 'cards', params.id as string);
+
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const productData = { _id: docSnap.id, ...docSnap.data() } as unknown as Card;
+        setProduct(productData);
+      } else {
+        setProduct(null);
       }
       setLoading(false);
-    };
+    }, (error) => {
+      console.error("Error fetching real-time product:", error);
+      setLoading(false);
+    });
 
-    fetchProduct();
+    return () => unsubscribe();
   }, [params.id]);
 
+  const isInCart = product && product._id && globalCart && globalCart[product._id];
+
   if (loading) {
-    return <div>Chargement...</div>; // Or a loading spinner component
+    return <div>Chargement...</div>;
   }
 
   if (!product) {
@@ -49,27 +55,22 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   }
 
   const handleAddToCart = () => {
-    if (product && cartContext) {
-      cartContext.addToCart(product, quantity);
-      // Optionally, show a confirmation message
+    if (product) {
+      addToCart(product, quantity);
     }
   };
 
   return (
-    <div className={styles.productPageContainer}>
+    <motion.div
+      className={styles.productPageContainer}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className={styles.leftColumn}>
-        {mainImage && <img src={mainImage} alt={product.title} className={styles.mainImage} />}
-        <div className={styles.thumbnailContainer}>
-          {product.images?.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`${product.title} thumbnail ${index + 1}`}
-              className={`${styles.thumbnail} ${mainImage === image ? styles.active : ''}`}
-              onClick={() => setMainImage(image)}
-            />
-          ))}
-        </div>
+        {product.images && product.images.length > 0 && (
+          <ImageSlider images={product.images} />
+        )}
       </div>
 
       <div className={styles.rightColumn}>
@@ -77,8 +78,18 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         {product.subtitle && <h2 className={styles.subtitle}>{product.subtitle}</h2>}
         
         <div className={styles.priceContainer}>
-          {product.price_promo && <span className={styles.price}>{product.price_promo}€</span>}
-          {product.price && <span className={styles.originalPrice}>{product.price}€</span>}
+          {product.price_promo && Number(product.price_promo) > 0 ? (
+            <>
+              <span className={styles.price}>{product.price_promo}€</span>
+              <span className={styles.originalPrice}>{product.price}€</span>
+            </>
+          ) : (
+            <span className={styles.price}>{product.price}€</span>
+          )}
+        </div>
+
+        <div className={styles.countdownContainer}>
+          <Countdown endDate={new Date(product.time)} onExpired={() => setIsExpired(true)} title="" color="#28a745" />
         </div>
 
         <div className={styles.stockInfo}>
@@ -101,18 +112,24 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         )}
         <p className={styles.description}>{product.description}</p>
 
-        <div className={styles.cartActions}>
-          <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className={styles.quantityButton}><FaMinus /></button>
-          <span className={styles.quantityDisplay}>{quantity}</span>
-          <button onClick={() => setQuantity(prev => prev + 1)} className={styles.quantityButton}><FaPlus /></button>
-          <button 
-            className={styles.addToCartButton} 
-            onClick={handleAddToCart}
-            disabled={!cartContext}
-          >
-            Ajouter au panier
-          </button>
-        </div>
+        {product.stock - product.stock_reduc > 0 && !isExpired ? (
+          <div className={styles.cartActions}>
+            <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className={styles.quantityButton}><FaMinus /></button>
+            <span className={styles.quantityDisplay}>{quantity}</span>
+            <button onClick={() => setQuantity(prev => (product && prev < product.stock - product.stock_reduc) ? prev + 1 : prev)} className={styles.quantityButton}><FaPlus /></button>
+            <button 
+              className={`${styles.addToCartButton} ${isInCart ? styles.inCart : ''}`}
+              onClick={handleAddToCart}
+              disabled={isExpired || !!isInCart}
+            >
+              {isInCart ? 'Déjà dans le panier' : 'Ajouter au panier'}
+            </button>
+          </div>
+        ) : (
+          <div className={styles.unavailableMessage}>
+            Ce produit n'est plus disponible.
+          </div>
+        )}
 
         {product.point_important_un && (
           <div className={styles.importantPoints}>
@@ -155,7 +172,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

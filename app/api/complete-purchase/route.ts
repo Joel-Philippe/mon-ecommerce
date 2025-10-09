@@ -10,17 +10,16 @@ export async function POST(req: Request) {
   const { email, items, displayName, photoURL } = await req.json();
 
   try {
-    // Enregistrement des détails de l'achat dans Firestore
-    const docRef = await addDoc(collection(db, 'userCarts'), {
+    const docRef = await addDoc(collection(db, 'orders'), {
       userEmail: email,
-      userDisplayName: displayName || "Anonyme", // Valeur par défaut si displayName est undefined
-      userPhotoURL: photoURL || "",             // Valeur par défaut vide si photoURL est undefined
+      userDisplayName: displayName || "Anonyme",
+      userPhotoURL: photoURL || "",
       items,
       purchaseDate: serverTimestamp(),
       timestamp: serverTimestamp(),
+      status: 'paid',
     });
 
-    // Envoi de l'email de confirmation
     const transporter = nodemailer.createTransport({
       service: 'hotmail',
       auth: {

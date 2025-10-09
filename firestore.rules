@@ -32,6 +32,12 @@ service cloud.firestore {
       allow update, delete: if false; // Orders are immutable
     }
 
+    // User rules:
+    // Authenticated users can read/write their own document.
+    match /users/{userId} {
+      allow read, write: if request.auth.uid != null && request.auth.uid == userId;
+    }
+
     // Default rule: deny all other access
     match /{document=**} {
       allow read, write: if false;

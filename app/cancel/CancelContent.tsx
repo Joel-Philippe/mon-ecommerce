@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Box, Text, Button, VStack, Alert, AlertIcon, Spinner } from '@chakra-ui/react';
-import Link from 'next/link';
+import ScrollRestorationLink from '@/components/ScrollRestorationLink';
 
 export default function CancelContent() {
   const router = useRouter();
@@ -104,17 +104,17 @@ export default function CancelContent() {
           </VStack>
 
           <VStack spacing={3} w="full">
-            <Link href="/" passHref>
+            <ScrollRestorationLink href="/" passHref>
               <Button colorScheme="blue" size="lg" w="full">
                 Retourner à la boutique
               </Button>
-            </Link>
+            </ScrollRestorationLink>
             
-            <Link href="/panier" passHref>
+            <ScrollRestorationLink href="/panier" passHref>
               <Button variant="outline" size="lg" w="full">
                 Voir mon panier
               </Button>
-            </Link>
+            </ScrollRestorationLink>
           </VStack>
         </VStack>
       </Box>

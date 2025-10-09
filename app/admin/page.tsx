@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { collection, getDocs, updateDoc, doc, onSnapshot, serverTimestamp, addDoc, deleteDoc } from 'firebase/firestore';
 import SlickSlider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { db } from '@/components/firebaseConfig';
 import AddCard from '@/components/AddCard';
 import UpdateCardModal from '@/components/UpdateCardModal';
@@ -169,6 +171,8 @@ const AdminPage = () => {
         }
         newCaracteristiques[index] = { ...newCaracteristiques[index], [field]: value };
         updatedCard.caracteristiques = newCaracteristiques;
+      } else if (name === 'time') { // Handle date input
+        updatedCard.time = new Date(value); // Assign Date object directly
       }
       else {
         // Direct assignment for top-level properties
@@ -692,7 +696,7 @@ const AdminPage = () => {
         )}
 
         {showAddCard && (
-          <div className="modal-overlay" onClick={() => setShowAddCard(false)}>
+          <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setShowAddCard(false); }}>
             <div className="modal-content large" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
                 <h3>Ajouter un produit</h3>
@@ -708,13 +712,14 @@ const AdminPage = () => {
         )}
 
         {showUpdateCard && (
-          <div className="modal-overlay" onClick={() => setShowUpdateCard(false)}>
+          <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) setShowUpdateCard(false); }}>
             <div className="modal-content large" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header">
                 <h3>Modifier le produit</h3>
               </div>
               <div className="modal-body">
                 <UpdateCardModal
+                  key={selectedCard?._id || 'new'} // Add a stable key
                   formCard={selectedCard}
                   hideForm={() => setShowUpdateCard(false)}
                   handleInputChange={handleInputChange}

@@ -151,7 +151,7 @@
   color: #e05601  !important; /* Fond noir */
 }
 .cartButton.activeCart:hover {
-  color: rgb(255, 17, 0) !important; /* Texte blanc */
+  color: rgb(89, 255, 0) !important; /* Texte blanc */
 }
 
 /* ✅ Icône du panier */

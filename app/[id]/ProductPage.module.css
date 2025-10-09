@@ -5,7 +5,6 @@
   flex-direction: row;
   width: 100%;
   min-height: 100vh;
-  background-color: rgb(255, 246, 241);
   padding: 2rem;
   gap: 2rem;
   margin-bottom: 200px;
@@ -62,16 +61,26 @@
 
 .rightColumn {
   flex: 1;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+  border-radius: 20px;
+  background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%);
 }
 
 .productTitle {
-  font-family: 'Silicone W00 Bold', sans-serif;
-  font-size: 2rem; /* Reduced from 2.5rem */
+  font-size: 1.3rem; /* Reduced from 2.5rem */
   font-weight: bold;
   color: #212529;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%); /* Match parent background */
+  padding: 1rem;
+  z-index: 10;
+  border-bottom: 1px solid #dee2e6; /* Add a subtle border */
+  margin: -1rem; /* Counteract the padding of the parent */
+  margin-bottom: 1rem;
 }
 
 .priceContainer {
@@ -84,6 +93,21 @@
   font-size: 2rem;
   font-weight: bold;
   color: #040604;
+}
+
+.countdownContainer {
+  margin-top: 1rem;
+}
+
+.unavailableMessage {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .originalPrice {
@@ -272,7 +296,7 @@
   }
 
   .productTitle {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
   }
 
   .price {

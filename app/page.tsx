@@ -14,7 +14,7 @@ import { calculateDonutPercentage } from '@/components/calculateDonutPercentage'
 import Link from '@/components/ScrollRestorationLink';
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useGlobalCart } from '@/components/GlobalCartContext'; // Removed GlobalCartProvider as it should wrap the whole app
-import CustomMenuItem from '@/components/CustomMenuItem';
+
 import UpdateCardModal from '@/components/UpdateCardModal';
 import GlobalPrice from '@/components/globalprice';
 import { useAuth } from '@/contexts/AuthContext';
@@ -42,11 +42,17 @@ import SelectedCategories from '@/components/SelectedCategories';
 import { Grid3X3, Sparkles } from 'lucide-react';
 import { Card } from '@/types';
 import ProductDetailsModal from '@/components/ProductDetailsModal';
+import NewCard from '@/components/NewCard';
 import './Cards.css';
 
 
 import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-introduce import
 
+// Helper function for case-insensitive and accent-insensitive search
+const normalizeString = (str: string | undefined | null) => {
+  if (!str) return '';
+  return str.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+};
 
   export default function Page() {
   const [cards, setCards] = useState<Card[]>([]);
@@ -65,7 +71,7 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
   const [searchTerm, setSearchTerm] = useState('');
   const pageContentRef = useRef<HTMLDivElement>(null);
 
-  useScrollRestoration();
+  useScrollRestoration(undefined, cards);
 
   const hideForm = () => {
     setIsFormVisible(false);
@@ -81,20 +87,29 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [formCard, setFormCard] = useState<Card | null>(null);
   const [imageValues, setImageValues] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = sessionStorage.getItem('selectedCategories');
-      return saved ? JSON.parse(saved) : [];
-    } 
-    return [];
-  });
-  const [activeFilter, setActiveFilter] = useState<'all' | 'new'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = sessionStorage.getItem('activeFilter');
-      return saved ? (saved as 'all' | 'new') : 'all';
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'new'>('all');
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    const savedCategories = sessionStorage.getItem('selectedCategories');
+    if (savedCategories) {
+      setSelectedCategories(JSON.parse(savedCategories));
     }
-    return 'all';
-  });
+    const savedFilter = sessionStorage.getItem('activeFilter');
+    if (savedFilter) {
+      setActiveFilter(savedFilter as 'all' | 'new');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      sessionStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+      sessionStorage.setItem('activeFilter', activeFilter);
+    }
+  }, [selectedCategories, activeFilter]);
 
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
@@ -104,7 +119,7 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
     setIsCarouselOpen(false);
     setCarouselImages([]); // Clear images when closing
   };
-  const { user, userFavorites, addFavorite, removeFavorite } = useAuth();
+  const { user, userFavorites, toggleFavorite } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentCard, setCurrentCard] = useState<Card | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -212,10 +227,7 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
 
 
 
-  useEffect(() => {
-    sessionStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
-    sessionStorage.setItem('activeFilter', activeFilter);
-  }, [selectedCategories, activeFilter]);
+
 
 
 
@@ -342,10 +354,14 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
 
   const filteredBySearch = searchTerm
     ? cards.filter(
-        (card) =>
-          card.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          card.subtitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          card.categorie?.toLowerCase().includes(searchTerm.toLowerCase())
+        (card) => {
+          const normalizedSearchTerm = normalizeString(searchTerm);
+          return (
+            normalizeString(card.title).includes(normalizedSearchTerm) ||
+            normalizeString(card.subtitle).includes(normalizedSearchTerm) ||
+            normalizeString(card.categorie).includes(normalizedSearchTerm)
+          );
+        }
       )
     : cards;
 
@@ -360,33 +376,36 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
   return (
     <div>
       {loading && <LoadingSpinner />} {/* Render LoadingSpinner conditionally */}
-      <CustomMenuItem />
       <div
         className={`video_animate video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
         style={{ opacity: videoEnded ? 0 : 1, pointerEvents: videoEnded ? 'none' : 'auto' }}
       >
       </div>
+            <div
+        className={`video_animate video_animate-wrapper video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
+      >
+        <AnimatedBanner onEnd={handleVideoEnd} />
+      </div>
       
       <Suspense fallback={<div>Chargement du contenu...</div>}>
-        <Menu
-          cards={cards}
-          selectedCategories={selectedCategories}
-          activeFilter={activeFilter}
-          onCategoryToggle={handleCategoryToggle}
-          onClearAll={() => {
-            setSelectedCategories([]);
-            setActiveFilter('all');
-          }}
-          onShowNew={() => {
-            setSelectedCategories([]);
-            setActiveFilter('new');
-          }}
-          onSearch={handleSearch}
-          resultsCount={finalFilteredCards.length}
-          searchTerm={searchTerm}
-        />
-        
-        <div className="page-content" ref={pageContentRef}>
+        <div className="page-content" ref={pageContentRef}> {/* Moved Menu inside here */}
+          <Menu
+            cards={cards}
+            selectedCategories={selectedCategories}
+            activeFilter={activeFilter}
+            onCategoryToggle={handleCategoryToggle}
+            onClearAll={() => {
+              setSelectedCategories([]);
+              setActiveFilter('all');
+            }}
+            onShowNew={() => {
+              setSelectedCategories([]);
+              setActiveFilter('new');
+            }}
+            onSearch={handleSearch}
+            resultsCount={finalFilteredCards.length}
+            searchTerm={searchTerm}
+          />
           {searchTerm && finalFilteredCards.length === 0 && (
             <NoSearchResults 
               searchTerm={searchTerm}
@@ -396,128 +415,47 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-intro
           
           <div className="cards-container">
             {finalFilteredCards.map((card, index) => {
-              const isSelected = card._id ? !!globalCart[card._id]?.count : false; // Check by _id
+              const isSelected = card._id ? !!globalCart[card._id]?.count : false;
               const isExpired = card._id ? expiredCards.has(card._id) : false;
               const totalStock = Number(card.stock);
               const usedStock = Number(card.stock_reduc);
               const isOutOfStock = totalStock > 0 && usedStock >= totalStock;
               const available = totalStock - usedStock;
-              const currentCount = card._id ? globalCart[card._id]?.count || 0 : 0; // Use _id
+              const currentCount = card._id ? globalCart[card._id]?.count || 0 : 0;
               const isMaxReached = currentCount >= available;
+              const averageRating = calculateAverageRating(card.reviews);
+              const userHasRated = hasUserRated(card.reviews);
+              const isFavorite = card._id ? userFavorites.includes(card._id) : false;
+
+              const handleFavoriteToggle = async (cardId: string) => {
+                if (!user) {
+                  router.push('/login');
+                  return;
+                }
+                try {
+                  await toggleFavorite(cardId);
+                } catch (error) {
+                  console.error("Error toggling favorite:", error);
+                }
+              };
 
               return (
-                <div className="card-link" style={{ textDecoration: "none", color: "inherit" }} key={card._id}>
-                  <div data-category={card.categorie} ref={(el) => { if (el) cardsRef.current[index] = el; }}>
-                    <div className="card overlap-group-1">
-                      {card.nouveau && (
-                        <div className="nouveau-badge">
-                          <Sparkles className="nouveau-icon" />
-                          Nouveau
-                        </div>
-                      )}
-                      
-                      <div 
-                        className="favorite-icon" 
-                        onClick={(e) => {
-                          e.stopPropagation(); // Empêche le clic de se propager au lien de la carte
-                          if (!user) {
-                            router.push('/login');
-                            return;
-                          }
-                        if (card._id) {
-                          if (userFavorites.includes(card._id)) {
-                            removeFavorite(card._id);
-                          } else {
-                            addFavorite(card._id);
-                          }
-                        }
-                        }}
-                      >
-                        <FaHeart color={card._id && userFavorites.includes(card._id) ? '#e63198' : 'white'} />
-                      </div>
-                      
-                      <Link href={`/${card._id}`} passHref>
-                        <div style={{ cursor: 'pointer' }}>
-                          <div className="header_card overlap-group-2">
-                            <div className="picture_card-container">
-                              <img 
-                                className="picture_card" 
-                                src={card.images[0]} 
-                                alt={card.title.trim().toLowerCase()}
-                              />
-                              <div className="overlay-content">
-                                <div className="title_card_1 vtt-cool-style valign-text-middle">
-                                  {card.title}
-                                </div>
-                                <div className="title_card_1 vtt-cool-style valign-text-middle">
-                                  {card._id && (
-                                    <RatingStars
-                                      productId={card._id}
-                                      averageRating={calculateAverageRating(card.reviews)}
-                                      userHasRated={hasUserRated(card.reviews)}
-                                      onVote={() => fetchProducts()}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="rectangle-14">
-                            <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
-                          </div>
-                          <div className={`time_card title_card_subtitle  ${isExpired ? 'expired' : ''}`}>
-                            <Countdown endDate={new Date(card.time)} onExpired={() => { if (card._id) { handleCountdownEnd(card._id); } }} title={card.title} />
-                          </div>
-                        </div>
-                      </Link>
-                      <div className={`flex-row ${isExpired ? 'expired' : ''}`}>
-                    
-                        <button
-                          className={`add-to-cart-button ${isSelected ? 'selected' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddToCart(card);
-                          }}
-                          disabled={isExpired || isOutOfStock || isMaxReached || isSelected}
-                          style={isSelected ? { cursor: 'not-allowed' } : {}}
-                        >
-                          {card._id && globalCart[card._id]?.count > 0 && ( // Check by _id
-                            <FaCheck style={{ marginRight: '8px', color: 'green'}} />
-                          )}
-                          <div className="price_content">
-                            {Number(card.price_promo) > 0 ? (
-                              <>
-                                {card.price && (
-                                  <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                    <span className="double-strikethrough">{card.price}€</span>
-                                  </div>
-                                )}
-                                <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                  <span>{card.price_promo}€</span>
-                                </div>
-                              </>
-                            ) : (
-                              card.price && (
-                                <div className="price_card price valign-text-middle inter-normal-white-20px">
-                                  <span>{card.price}€</span>
-                                </div>
-                              )
-                            )}
-                          </div>
-                          {isExpired
-                            ? 'Offre expirée ❌'
-                            : isOutOfStock
-                              ? 'Stock épuisé ❌'
-                              : isMaxReached && !isSelected
-                                ? `Quantité max (${available}) atteinte`
-                                : isSelected
-                                  ? 'Sélectionnée'
-                                  : 'Ajouter au panier'}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <NewCard
+                  key={card._id}
+                  card={card}
+                  isFavorite={isFavorite}
+                  isSelected={isSelected}
+                  isExpired={isExpired}
+                  isOutOfStock={isOutOfStock}
+                  isMaxReached={isMaxReached}
+                  currentCount={currentCount}
+                  averageRating={averageRating}
+                  userHasRated={userHasRated}
+                  onAddToCart={handleAddToCart}
+                  onFavoriteToggle={handleFavoriteToggle}
+                  onCountdownEnd={handleCountdownEnd}
+                  fetchProducts={fetchProducts}
+                />
               );
             })}
           </div>

@@ -1,13 +1,8 @@
 
 import { NextResponse } from 'next/server';
-import { getAuth } from 'firebase-admin/auth';
-import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
-import { db } from '@/components/firebaseConfig';
+import { admin } from '@/utils/firebaseAdmin';
 
 export async function POST(request: Request) {
-  
-  const auth = getAuth();
-
   const { productId } = await request.json();
 
   if (!productId) {
@@ -21,29 +16,30 @@ export async function POST(request: Request) {
   }
 
   try {
-    const decodedToken = await auth.verifyIdToken(idToken);
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
     const userId = decodedToken.uid;
+    const firestore = admin.firestore();
 
-    const userRef = doc(db, 'users', userId);
-    const userSnap = await getDoc(userRef);
+    const userRef = firestore.collection('users').doc(userId);
+    const userSnap = await userRef.get();
 
-    if (!userSnap.exists()) {
+    if (!userSnap.exists) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const userData = userSnap.data();
+    const userData = userSnap.data()!;
     const currentFavorites = userData.favorites || [];
 
     if (currentFavorites.includes(productId)) {
       // Remove from favorites
-      await updateDoc(userRef, {
-        favorites: arrayRemove(productId)
+      await userRef.update({
+        favorites: admin.firestore.FieldValue.arrayRemove(productId)
       });
       return NextResponse.json({ message: 'Removed from favorites' });
     } else {
       // Add to favorites
-      await updateDoc(userRef, {
-        favorites: arrayUnion(productId)
+      await userRef.update({
+        favorites: admin.firestore.FieldValue.arrayUnion(productId)
       });
       return NextResponse.json({ message: 'Added to favorites' });
     }
