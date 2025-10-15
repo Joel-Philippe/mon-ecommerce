@@ -1,0 +1,51 @@
+.container {
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.error {
+  color: red;
+}
+
+.ordersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.orderCard {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.cardHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.orderDate {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.cardBody {
+  margin-top: 1rem;
+}
+
+.itemsTitle {
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.cardFooter {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}

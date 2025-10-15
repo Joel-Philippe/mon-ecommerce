@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 import ProfilePhotoForm from '@/components/ProfilePhotoForm';
 import DisplayNameForm from '@/components/DisplayNameForm';
 import ChangePasswordForm from '@/components/ChangePasswordForm';
