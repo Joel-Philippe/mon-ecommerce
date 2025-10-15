@@ -1,10 +1,6 @@
 
-'use client';
-
-import { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import styles from './Orders.module.css';
+// Dummy comment to force a file change
+import { useAuth } from '@/contexts/AuthContext';
 
 // Définition du type pour une commande
 interface Order {
@@ -20,23 +16,35 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loadingAdminCheck, setLoadingAdminCheck] = useState(true);
 
-  const { user, isAdmin, loading: authLoading } = useContext(AuthContext);
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Si l'authentification est en cours, on attend
-    if (authLoading) {
-      return;
-    }
+    if (authLoading) return;
 
-    // Si l'utilisateur n'est pas admin, on le redirige
-    if (!isAdmin) {
-      router.push('/login'); // Ou vers une page 'accès refusé'
-      return;
-    }
+    const checkAdminAccess = async () => {
+      if (user) {
+        const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL;
+        if (user.email === adminEmail) {
+          setIsAdmin(true);
+        } else {
+          router.push('/');
+        }
+      } else {
+        router.push('/');
+      }
+      setLoadingAdminCheck(false);
+    };
 
-    // Si l'utilisateur est admin, on charge les commandes
+    checkAdminAccess();
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+
     const fetchOrders = async () => {
       try {
         const token = await user?.getIdToken();
@@ -65,46 +73,8 @@ export default function OrdersPage() {
     };
 
     fetchOrders();
-  }, [user, isAdmin, authLoading, router]);
+  }, [isAdmin, user]);
 
-  if (authLoading || loading) {
+  if (authLoading || loadingAdminCheck || loading) {
     return <div className={styles.container}><p>Loading...</p></div>;
   }
-
-  if (error) {
-    return <div className={`${styles.container} ${styles.error}`}><p>Error: {error}</p></div>;
-  }
-
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Toutes les commandes</h1>
-      {orders.length === 0 ? (
-        <p>Aucune commande trouvée.</p>
-      ) : (
-        <div className={styles.ordersGrid}>
-          {orders.map(order => (
-            <div key={order.id} className={styles.orderCard}>
-              <div className={styles.cardHeader}>
-                <h2>Commande de {order.displayName}</h2>
-                <p className={styles.orderDate}>Le {new Date(order.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
-              </div>
-              <div className={styles.cardBody}>
-                <p><strong>Email:</strong> {order.customer_email}</p>
-                <p><strong>Montant Total:</strong> {order.totalPaid.toFixed(2)} €</p>
-                <h4 className={styles.itemsTitle}>Articles :</h4>
-                <ul>
-                  {order.items.map((item, index) => (
-                    <li key={index}>{item.count} x {item.title}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className={styles.cardFooter}>
-                <p>ID Commande: {order.id}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}

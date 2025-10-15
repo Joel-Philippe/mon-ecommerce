@@ -21,6 +21,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, updateDoc, deleteDoc, collection, query, where, getDocs, getDoc, setDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
 import Cookies from 'js-cookie';
 
+// Dummy comment to force a file change
 const CART_COOKIE_NAME = 'guest_cart_id';
 
 interface AuthContextType {
