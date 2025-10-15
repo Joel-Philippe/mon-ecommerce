@@ -5,7 +5,7 @@ import { CheckboxProvider } from '@/contexts/CheckboxContext';
 import { GlobalCartProvider } from '@/components/GlobalCartContext';
 import { SearchProvider } from '@/contexts/SearchContext';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import './globals.css';
 import './video-banner.css';
 import './style.css';
@@ -31,7 +31,9 @@ export default function RootLayout({
             <GlobalCartProvider>
               <SearchProvider>
                 <ChakraProvider>
-                  {children}
+                  <Suspense fallback={<div>Chargement...</div>}>
+                    {children}
+                  </Suspense>
                   <BottomNav />
                 </ChakraProvider>
               </SearchProvider>
