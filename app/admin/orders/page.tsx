@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import styles from './OrdersPage.module.css';
 
 // Définition du type pour une commande
 interface Order {
