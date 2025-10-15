@@ -395,6 +395,28 @@ const AdminPage = () => {
     }
   };
 
+  const handleValidateRequest = async (request: SpecialRequest) => {
+    try {
+      // Implement logic to update the request status in Firebase
+      const requestRef = doc(db, 'specialRequests', request.id);
+      await updateDoc(requestRef, {
+        status: 'accepted', // Or any other status you want to set
+        updatedAt: serverTimestamp()
+      });
+      
+      // Update local state to reflect the change
+      setSpecialRequests(prevRequests => 
+        prevRequests.map(req => 
+          req.id === request.id ? { ...req, status: 'accepted' } : req
+        )
+      );
+      alert('Demande validée avec succès !');
+    } catch (error) {
+      console.error('Erreur lors de la validation de la demande:', error);
+      alert('Erreur lors de la validation de la demande.');
+    }
+  };
+
   // Filtrer les cartes
   const filteredCards = cards.filter(card => {
     const matchesSearch = card.title?.toLowerCase().includes(searchTerm.toLowerCase());
