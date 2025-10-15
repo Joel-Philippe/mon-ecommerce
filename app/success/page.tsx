@@ -1,4 +1,6 @@
 'use client';
+import { useEffect } from 'react';
+import { useGlobalCart } from '@/components/GlobalCartContext';
 // pages/success.tsx
 import { Box, Heading, Text, Button, Image, VStack } from "@chakra-ui/react";
 import Link from "next/link";
@@ -9,6 +11,13 @@ import { motion } from "framer-motion";
 const MotionHeading = motion(Heading);
 
 const SuccessPage = () => {
+  const { clearCart } = useGlobalCart();
+
+  useEffect(() => {
+    console.log("Success page loaded, clearing cart...");
+    clearCart();
+  }, [clearCart]);
+
   return (
     <Box
       minH="100vh"

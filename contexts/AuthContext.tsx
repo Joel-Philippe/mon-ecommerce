@@ -14,7 +14,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import { useRouter } from 'next/navigation';
 import { auth, db, getClientStorage } from '../components/firebaseConfig.ts';
 
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -27,6 +27,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   userFavorites: string[];
+  purchasedProductIds: string[]; // New state for purchased product IDs
   signup: (email: string, password: string, displayName: string, photoFile: File | null) => Promise<void>;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
@@ -46,7 +47,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [userFavorites, setUserFavorites] = useState<string[]>([]);
-  const router = useScrollSavingRouter();
+  const [purchasedProductIds, setPurchasedProductIds] = useState<string[]>([]); // New state
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -55,6 +57,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
     return () => unsubscribe();
   }, []);
+
+  // Effect to fetch user's purchased products
+  useEffect(() => {
+    if (!user) {
+      setPurchasedProductIds([]);
+      return;
+    }
+
+    const fetchOrders = async () => {
+      try {
+        const ordersQuery = query(collection(db, 'orders'), where('userId', '==', user.uid));
+        const querySnapshot = await getDocs(ordersQuery);
+        const productIds = new Set<string>();
+        querySnapshot.forEach(doc => {
+          const order = doc.data();
+          order.items?.forEach((item: any) => {
+            if (item.productId) {
+              productIds.add(item.productId);
+            }
+          });
+        });
+        setPurchasedProductIds(Array.from(productIds));
+      } catch (error) {
+        console.error("Error fetching user orders:", error);
+      }
+    };
+
+    fetchOrders();
+
+    // Optional: Set up a listener for real-time updates if needed
+    // const unsubscribe = onSnapshot(ordersQuery, ...);
+    // return () => unsubscribe();
+
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -104,7 +140,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!user) throw new Error("Utilisateur non connecté");
 
     const token = await user.getIdToken();
-    await fetch('/api/favorites/toggle', {
+    const response = await fetch('/api/favorites/toggle', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +149,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       body: JSON.stringify({ productId: cardId }),
     });
 
-
+    if (!response.ok) {
+      try {
+        const errorData = await response.json();
+        // Log the actual error from the backend for debugging, as it seems to be incorrect
+        console.error("Unexpected error from /api/favorites/toggle:", errorData);
+        // Throw a generic error to the UI to avoid showing confusing messages
+        throw new Error('Une erreur est survenue lors de la mise à jour des favoris.');
+      } catch (e) {
+        throw new Error('Une erreur est survenue lors de la mise à jour des favoris.');
+      }
+    }
   };
 
   const signup = async (email: string, password: string, displayName: string, photoFile: File | null) => {
@@ -270,6 +316,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user,
       loading,
       userFavorites,
+      purchasedProductIds, // Expose the new state
       signup,
       login,
       logout,

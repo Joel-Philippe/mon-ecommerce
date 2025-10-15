@@ -24,18 +24,18 @@
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4);
 }
 
-.loading__wrapper > li:nth-child(1) { background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(2) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(3) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(4) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(5) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(6) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(7) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(8) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(9) {  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(10) { background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading__wrapper > li:nth-child(11) { background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
-.loading_wrapper > li:nth-child(12) { background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%); }
+.loading__wrapper > li:nth-child(1) { background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(2) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(3) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(4) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(5) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(6) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(7) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(8) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(9) {  background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(10) { background: linear-gradient(to right, white 0%, white 100%); }
+.loading__wrapper > li:nth-child(11) { background: linear-gradient(to right, white 0%, white 100%); }
+.loading_wrapper > li:nth-child(12) { background: linear-gradient(to right, white 0%, white 100%); }
 
 .loading__wrapper > li > svg {
   position: absolute;

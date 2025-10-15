@@ -27,7 +27,8 @@ import { db } from '@/components/firebaseConfig.ts';
 import './globals.css';
 // ... other imports
 import { useRouter } from 'next/navigation';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import { useSearchParams } from 'next/navigation';
+import { useSearch } from '@/contexts/SearchContext'; // Import the global search context
 
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import RatingStars from '@/components/RatingStars';
@@ -46,7 +47,9 @@ import NewCard from '@/components/NewCard';
 import './Cards.css';
 
 
-import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Re-introduce import
+
+
+import { useDebounce } from '@/hooks/useDebounce';
 
 // Helper function for case-insensitive and accent-insensitive search
 const normalizeString = (str: string | undefined | null) => {
@@ -62,16 +65,65 @@ const normalizeString = (str: string | undefined | null) => {
   const [loading, setLoading] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const router = useScrollSavingRouter();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { searchTerm, setSearchTerm } = useSearch(); // Use global search state
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [userVotes, setUserVotes] = useState<{ [cardId: string]: number }>({});
   const [products, setProducts] = useState<any[]>([]);
   
   const [selectedRating, setSelectedRating] = useState(0);
   
-  const [searchTerm, setSearchTerm] = useState('');
   const pageContentRef = useRef<HTMLDivElement>(null);
 
-  useScrollRestoration(undefined, cards);
+  useEffect(() => {
+    // Only restore scroll if there are cards and a saved position exists
+    if (cards.length > 0) {
+      const savedScrollPos = sessionStorage.getItem(`scrollPos_/`);
+      if (savedScrollPos) {
+        console.log(`[Page] Restoring scroll to ${savedScrollPos} now that cards are loaded.`);
+        window.scrollTo(0, parseInt(savedScrollPos, 10));
+        sessionStorage.removeItem(`scrollPos_/`); // Clean up after restoring
+      }
+    }
+  }, [cards]); // Depend on `cards` to ensure content is loaded
+
+  useEffect(() => {
+    const urlSearchTerm = searchParams.get('search');
+    if (urlSearchTerm && urlSearchTerm !== searchTerm) {
+      setSearchTerm(urlSearchTerm);
+    }
+  }, [searchParams, searchTerm, setSearchTerm]);
+
+  // Effect to update URL when global searchTerm changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (searchTerm) {
+      params.set('search', searchTerm);
+    }
+    else {
+      params.delete('search');
+    }
+    // Only update the URL if we are on the homepage
+    if (router.pathname === '/') {
+      router.replace(`/?${params.toString()}`);
+    }
+  }, [searchTerm, router]);
+
+  const handleCategoryToggle = (category: string) => {
+    setActiveFilter('all'); // Reset to 'all' when toggling categories
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category) 
+        : [...prev, category]
+    );
+  };
+
+
+
+
+
+
 
   const hideForm = () => {
     setIsFormVisible(false);
@@ -119,7 +171,7 @@ const normalizeString = (str: string | undefined | null) => {
     setIsCarouselOpen(false);
     setCarouselImages([]); // Clear images when closing
   };
-  const { user, userFavorites, toggleFavorite } = useAuth();
+  const { user, userFavorites, toggleFavorite, purchasedProductIds } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentCard, setCurrentCard] = useState<Card | null>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -315,22 +367,7 @@ const normalizeString = (str: string | undefined | null) => {
     }
   };
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-  };
 
-  const handleCategoryToggle = (category: string) => {
-    setActiveFilter('all'); // Reset to 'all' when toggling categories
-    setSelectedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(c => c !== category) 
-        : [...prev, category]
-    );
-  };
-
-  const clearSearch = () => {
-    setSearchTerm('');
-  };
 
 
 
@@ -352,10 +389,10 @@ const normalizeString = (str: string | undefined | null) => {
     return <div>Error: {error}</div>;
   }
 
-  const filteredBySearch = searchTerm
+  const filteredBySearch = debouncedSearchTerm
     ? cards.filter(
         (card) => {
-          const normalizedSearchTerm = normalizeString(searchTerm);
+          const normalizedSearchTerm = normalizeString(debouncedSearchTerm);
           return (
             normalizeString(card.title).includes(normalizedSearchTerm) ||
             normalizeString(card.subtitle).includes(normalizedSearchTerm) ||
@@ -402,14 +439,12 @@ const normalizeString = (str: string | undefined | null) => {
               setSelectedCategories([]);
               setActiveFilter('new');
             }}
-            onSearch={handleSearch}
             resultsCount={finalFilteredCards.length}
-            searchTerm={searchTerm}
           />
           {searchTerm && finalFilteredCards.length === 0 && (
             <NoSearchResults 
               searchTerm={searchTerm}
-              onClearSearch={clearSearch}
+              onClearSearch={() => setSearchTerm('')} // Use context setter
             />
           )}
           
@@ -426,6 +461,7 @@ const normalizeString = (str: string | undefined | null) => {
               const averageRating = calculateAverageRating(card.reviews);
               const userHasRated = hasUserRated(card.reviews);
               const isFavorite = card._id ? userFavorites.includes(card._id) : false;
+              const hasBeenPurchased = card._id ? purchasedProductIds.includes(card._id) : false;
 
               const handleFavoriteToggle = async (cardId: string) => {
                 if (!user) {
@@ -451,6 +487,7 @@ const normalizeString = (str: string | undefined | null) => {
                   currentCount={currentCount}
                   averageRating={averageRating}
                   userHasRated={userHasRated}
+                  hasBeenPurchased={hasBeenPurchased} // Pass the new prop
                   onAddToCart={handleAddToCart}
                   onFavoriteToggle={handleFavoriteToggle}
                   onCountdownEnd={handleCountdownEnd}

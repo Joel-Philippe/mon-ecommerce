@@ -23,6 +23,7 @@ export interface OrderData {
   };
   items: OrderItem[];
   paymentIntentId: string;
+  totalPaid: number;
   userId?: string;
 }
 
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
         deliveryInfo, 
         items, 
         paymentIntentId, 
+        totalPaid, // Add totalPaid
         userId 
     } = await req.json() as OrderData;
 
@@ -47,6 +49,7 @@ export async function POST(req: NextRequest) {
       deliveryInfo,
       items,
       paymentIntentId,
+      totalPaid, // Add totalPaid
       status: 'paid', // Add an initial status
       createdAt: serverTimestamp(),
     };

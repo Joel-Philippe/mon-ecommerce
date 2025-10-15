@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import { useRouter } from 'next/navigation';
 import {
   Box,
   Flex,
@@ -27,7 +27,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useScrollSavingRouter();
+  const router = useRouter();
   const authContext = useAuth();
 
   if (!authContext) {

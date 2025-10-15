@@ -20,19 +20,17 @@
 .panier-empty {
   text-align: center;
   padding: 2rem;
-  background-color: rgb(255, 246, 241);
   border: 2px dashed #e2e8f0;
   border-radius: 0.5rem;
 }
 
 .panier-empty p {
   font-size: 1rem;
-  background-color: rgb(255, 246, 241);
   margin-bottom: 1.5rem;
 }
 
 .continuer-shopping {
-  background-color: #ff8f00;
+  background: linear-gradient(to right, #e6d4ba 0%, #f87c00 100%);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -99,7 +97,6 @@
 }
 
 .quantity-btn {
-  background-color: #f7fafc;
   border: 1px solid #e2e8f0;
   border-radius: 50%;
   width: 30px;

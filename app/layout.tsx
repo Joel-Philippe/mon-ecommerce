@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CheckboxProvider } from '@/contexts/CheckboxContext';
 import { GlobalCartProvider } from '@/components/GlobalCartContext';
-import { useScrollRestoration } from '@/hooks/useScrollRestoration';
+import { SearchProvider } from '@/contexts/SearchContext';
 
 import React from 'react';
 import './globals.css';
@@ -20,7 +20,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useScrollRestoration();
   
   return (
     <html lang="fr">
@@ -30,10 +29,12 @@ export default function RootLayout({
         <AuthProvider>
           <CheckboxProvider>
             <GlobalCartProvider>
+              <SearchProvider>
                 <ChakraProvider>
                   {children}
                   <BottomNav />
                 </ChakraProvider>
+              </SearchProvider>
             </GlobalCartProvider>
           </CheckboxProvider>
         </AuthProvider>

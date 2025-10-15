@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import BurgerMenu from './BurgerMenu';
 import { Sparkles, Filter, Search, X } from 'lucide-react';
 import { Card } from '@/types';
+import { useSearch } from '@/contexts/SearchContext';
 
 interface MenuProps {
   cards: Card[];
@@ -14,9 +15,7 @@ interface MenuProps {
   onCategoryToggle: (category: string) => void;
   onClearAll: () => void;
   onShowNew: () => void;
-  onSearch: (term: string) => void;
   resultsCount: number;
-  searchTerm: string;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -26,33 +25,11 @@ const Menu: React.FC<MenuProps> = ({
   onCategoryToggle,
   onClearAll,
   onShowNew,
-  onSearch,
   resultsCount,
-  searchTerm
 }) => {
+  const { searchTerm, setSearchTerm } = useSearch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false); // New state for search bar
-  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm); // Internal state for search input
-
-  // Debounce effect for live search
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      // Only trigger search if the term has actually changed from the external prop
-      // and if the search bar is active (to prevent initial empty search)
-      if (currentSearchTerm !== searchTerm) {
-        onSearch(currentSearchTerm);
-      }
-    }, 300); // 300ms debounce delay
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [currentSearchTerm, onSearch, searchTerm]);
-
-  useEffect(() => {
-    // Sync external searchTerm prop with internal state
-    setCurrentSearchTerm(searchTerm);
-  }, [searchTerm]);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -72,25 +49,14 @@ const Menu: React.FC<MenuProps> = ({
     onCategoryToggle(category);
   };
 
-  const handleSearchChange = (term: string) => {
-    setCurrentSearchTerm(term);
-  };
-
-  const handleSearchSubmit = () => {
-    // This function is now only responsible for closing the search bar
-    setIsSearchActive(false);
-  };
-
   const handleClearAll = () => {
     onClearAll();
-    onSearch(''); // Clear search term when clearing filters
-    setCurrentSearchTerm(''); // Clear internal search term
+    setSearchTerm('');
   };
 
   const handleShowNew = () => {
     onShowNew();
-    onSearch(''); // Clear search term when showing new items
-    setCurrentSearchTerm(''); // Clear internal search term
+    setSearchTerm('');
   };
 
   const categories = [...new Set(cards.map(card => card.categorie).filter(Boolean))] as string[];
@@ -103,17 +69,14 @@ const Menu: React.FC<MenuProps> = ({
         {isSearchActive ? (
           <> {/* Full search bar when active */}
             <SearchBar
-              onSearchSubmit={handleSearchSubmit} // Renamed prop
-              onSearchChange={handleSearchChange}
-              searchTerm={currentSearchTerm}
-              resultsCount={resultsCount}
-              showResultsCount={currentSearchTerm.length > 0}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              placeholder="Rechercher un article..."
               className="search-component full-width-search"
             />
             <button className="menu-toggle-button close-search-button" onClick={() => {
               setIsSearchActive(false);
-              setCurrentSearchTerm(''); // Clear internal search term on close
-              onSearch(''); // Also clear external search term
+              setSearchTerm('');
             }} aria-label="Fermer la recherche">
               <X className="button-icon" />
             </button>

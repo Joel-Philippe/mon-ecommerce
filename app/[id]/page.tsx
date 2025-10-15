@@ -9,7 +9,7 @@ import ImageSlider from '@/components/ImageSlider'; // Import the new ImageSlide
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import styles from './ProductPage.module.css';
-import { useScrollRestoration } from '@/hooks/useScrollRestoration';
+
 
 import { Card } from '@/types';
 
@@ -20,7 +20,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   const [isExpired, setIsExpired] = useState(false);
   const { globalCart, addToCart } = useContext(GlobalCartContext)!;
 
-  useScrollRestoration();
+
 
   useEffect(() => {
     if (!params.id) return;
@@ -127,7 +127,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
           </div>
         ) : (
           <div className={styles.unavailableMessage}>
-            Ce produit n'est plus disponible.
+            Cette offre n'est plus disponible.
           </div>
         )}
 
