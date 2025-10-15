@@ -180,6 +180,7 @@ export default function FavoritesPage() {
                 onFavoriteToggle={handleFavoriteToggle}
                 onCountdownEnd={handleCountdownEnd}
                 fetchProducts={fetchFavoriteCards} // Re-fetch favorites after rating
+                hasBeenPurchased={false}
               />
             );
           })}
