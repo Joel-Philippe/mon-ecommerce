@@ -78,3 +78,45 @@ export default function OrdersPage() {
   if (authLoading || loadingAdminCheck || loading) {
     return <div className={styles.container}><p>Loading...</p></div>;
   }
+
+  if (!isAdmin) {
+    return null; // Or redirect to an access denied page
+  }
+
+  if (error) {
+    return <div className={`${styles.container} ${styles.error}`}><p>Error: {error}</p></div>;
+  }
+
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>Toutes les commandes</h1>
+      {orders.length === 0 ? (
+        <p>Aucune commande trouvée.</p>
+      ) : (
+        <div className={styles.ordersGrid}>
+          {orders.map(order => (
+            <div key={order.id} className={styles.orderCard}>
+              <div className={styles.cardHeader}>
+                <h2>Commande de {order.displayName}</h2>
+                <p className={styles.orderDate}>Le {new Date(order.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+              </div>
+              <div className={styles.cardBody}>
+                <p><strong>Email:</strong> {order.customer_email}</p>
+                <p><strong>Montant Total:</strong> {(order.totalPaid || 0).toFixed(2)} €</p>
+                <h4 className={styles.itemsTitle}>Articles :</h4>
+                <ul>
+                  {order.items.map((item, index) => (
+                    <li key={index}>{item.count} x {item.title}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className={styles.cardFooter}>
+                <p>ID Commande: {order.id}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
