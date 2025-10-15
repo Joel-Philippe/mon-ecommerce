@@ -35,6 +35,7 @@ interface Order {
   totalPaid: number;
   createdAt: string;
   items: Array<{ title: string; count: number; price: number }>;
+  status: string;
 }
 
 const AdminPage = () => {
