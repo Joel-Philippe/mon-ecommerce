@@ -3,6 +3,7 @@
 .productPageContainer {
   display: flex;
   flex-direction: row;
+  color: #eb4f1f;
   width: 100%;
   min-height: 100vh;
   padding: 2rem;
@@ -72,7 +73,7 @@
 .productTitle {
   font-size: 1.3rem; /* Reduced from 2.5rem */
   font-weight: bold;
-  color: #212529;
+  color: #FF9800;
   position: sticky;
   top: 0;
   background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%); /* Match parent background */
@@ -92,7 +93,7 @@
 .price {
   font-size: 2rem;
   font-weight: bold;
-  color: #040604;
+  color: #8BC34A;
 }
 
 .countdownContainer {
@@ -112,7 +113,7 @@
 
 .originalPrice {
   font-size: 1.25rem;
-  color: #6c757d;
+  color: #00BCD4;
   text-decoration: line-through;
 }
 
@@ -191,7 +192,7 @@
 
 .proposantName {
   font-weight: bold;
-  color: #343a40;
+  color: #00BCD4;
 }
 
 .proposantOrigine {
@@ -219,6 +220,7 @@
 .caracteristiques,
 .produitsDerives {
   margin-top: 2rem;
+  color:#492e3e;
 }
 
 .importantPoints h3,
@@ -227,6 +229,7 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  color:#eb4f1f;
 }
 
 .importantPoints ul {

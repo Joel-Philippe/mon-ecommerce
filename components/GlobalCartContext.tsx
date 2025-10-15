@@ -213,6 +213,9 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
   }, []);
 
   const clearCart = useCallback(async () => {
+    // Optimistic UI update: clear the cart locally immediately.
+    setGlobalCart({});
+    
     setLoadingCart(true);
     setErrorCart(null);
     try {
@@ -221,12 +224,16 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
       });
       if (!response.ok) {
         const errorData = await response.json();
+        // If the API call fails, we might need to revert the optimistic update.
+        // For now, we just log the error and show it.
+        console.error("Failed to clear cart on the server:", errorData.message);
         throw new Error(errorData.message || 'Failed to clear cart');
       }
-      // No need to call fetchCart here, onSnapshot will handle the update
+      // The onSnapshot listener should eventually confirm this empty state from the backend.
     } catch (err: any) {
       console.error("Error clearing cart:", err);
       setErrorCart(err.message || "Failed to clear cart.");
+      // Here you might want to re-fetch the cart to revert the optimistic update
     } finally {
       setLoadingCart(false);
     }

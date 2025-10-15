@@ -3,12 +3,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import { useRouter } from 'next/navigation';
 import ProfilePhotoForm from '@/components/ProfilePhotoForm';
 import DisplayNameForm from '@/components/DisplayNameForm';
 import ChangePasswordForm from '@/components/ChangePasswordForm';
 import DeleteAccountButton from '@/components/DeleteAccountButton';
-import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Import the hook
+
 
 import { FiUser, FiLock, FiAlertCircle, FiCamera } from 'react-icons/fi'; // Import icons for tabs
 
@@ -16,10 +16,10 @@ const AccountPage = () => {
   const auth = useAuth();
   const user = auth?.user;
   const authLoading = auth?.loading; // Assuming auth provides a loading state
-  const router = useScrollSavingRouter();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('profile'); // New state for active tab
 
-  useScrollRestoration(); // Call without pageContentRef
+
 
   useEffect(() => {
     if (!authLoading && !user) { // Wait for auth loading to complete

@@ -8,12 +8,12 @@ import {
 import { useState } from 'react';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import { useRouter } from 'next/navigation';
 
 export default function CheckoutForm({ clientSecret }: { clientSecret: string }) {
   const stripe = useStripe();
   const elements = useElements();
-  const router = useScrollSavingRouter();
+  const router = useRouter();
   const { clearCart } = useGlobalCart();
   const { user } = useAuth() || {};
 
@@ -51,6 +51,7 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
         const orderData = {
           ...pendingOrder,
           paymentIntentId: paymentIntent.id,
+          totalPaid: paymentIntent.amount / 100, // Amount in cents, convert to currency unit
           userId: user?.uid, // Attach user ID if available
           customer_email: user?.email || pendingOrder.deliveryInfo.email,
           displayName: user?.displayName || `${pendingOrder.deliveryInfo.firstName} ${pendingOrder.deliveryInfo.lastName}`

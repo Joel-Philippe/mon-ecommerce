@@ -9,7 +9,7 @@
 .favorites-title {
   font-size: 1.5em;
   font-weight: bold;
-  color: black;
+  color: #e63198;
   text-align: center;
   margin-bottom: 30px;
   margin-top: 80px; /* To account for fixed header */

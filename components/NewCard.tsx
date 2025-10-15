@@ -23,6 +23,7 @@ interface NewCardProps {
   currentCount: number;
   averageRating: number;
   userHasRated: boolean;
+  hasBeenPurchased: boolean; // New prop
   onAddToCart: (card: Card) => Promise<void>;
   onFavoriteToggle: (cardId: string) => Promise<void>;
   onCountdownEnd: (cardId: string) => void;
@@ -38,6 +39,7 @@ const NewCard: React.FC<NewCardProps> = ({
   isMaxReached,
   averageRating,
   userHasRated,
+  hasBeenPurchased, // Destructure the new prop
   onAddToCart,
   onFavoriteToggle,
   onCountdownEnd,
@@ -85,7 +87,7 @@ const NewCard: React.FC<NewCardProps> = ({
   return (
     <ScrollRestorationLink href={`/${card._id}`} passHref>
       <motion.div
-        className={`new-card ${isExpired || isOutOfStock ? 'disabled' : ''}`}
+        className={`new-card`}
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -93,7 +95,13 @@ const NewCard: React.FC<NewCardProps> = ({
       >
         <div className="new-card-image-container">
           <img src={card.images[0]} alt={card.title} className="new-card-image" />
-          {card.nouveau && (
+          {hasBeenPurchased && (
+            <div className="new-card-purchased-badge">
+              <FaCheck size={12} />
+              <span>Déjà commandé</span>
+            </div>
+          )}
+          {card.nouveau && !hasBeenPurchased && ( // Only show new if not already purchased
             <div className="new-card-badge">
               <Sparkles size={14} />
               <span>Nouveau</span>
@@ -157,13 +165,15 @@ const NewCard: React.FC<NewCardProps> = ({
                 <span>{card.price}€</span>
               )}
             </div>
-            <button
-              className={`new-card-add-button ${isSelected ? 'selected' : ''} ${isCartAnimating ? 'add-to-cart-animation' : ''}`}
-              onClick={handleAddToCartClick}
-              disabled={isExpired || isOutOfStock || isMaxReached || isSelected || isCartLoading}
-            >
-              {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : 'Ajouter')}
-            </button>
+            {!(isExpired || isOutOfStock) && (
+              <button
+                className={`new-card-add-button ${isSelected ? 'selected' : ''} ${isCartAnimating ? 'add-to-cart-animation' : ''}`}
+                onClick={handleAddToCartClick}
+                disabled={isMaxReached || isSelected || isCartLoading}
+              >
+                {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : 'Ajouter')}
+              </button>
+            )}
           </div>
                   </div>
                 </motion.div>

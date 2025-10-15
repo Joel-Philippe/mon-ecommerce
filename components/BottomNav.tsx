@@ -5,12 +5,14 @@ import { usePathname } from 'next/navigation';
 import { FaHome, FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGlobalCart } from '@/components/GlobalCartContext';
+import { useSearch } from '@/contexts/SearchContext'; // Import useSearch
 import './BottomNav.css';
 
 const BottomNav = () => {
   const { userFavorites } = useAuth();
   const { globalCart } = useGlobalCart();
   const pathname = usePathname();
+  const { searchTerm } = useSearch(); // Get searchTerm from global context
 
   console.log('userFavorites:', userFavorites, 'length:', userFavorites.length);
 
@@ -65,7 +67,7 @@ const BottomNav = () => {
           {userFavorites.length > 0 && <span className="nav-badge favorite-badge">{userFavorites.length}</span>}
         </div>
       </CustomLink>
-      <CustomLink href="/" passHref>
+      <CustomLink href={searchTerm ? `/?search=${searchTerm}` : '/'} passHref>
         <div className={`nav-item ${pathname === '/' ? 'active' : ''}`}>
           <FaHome size={24} />
         </div>

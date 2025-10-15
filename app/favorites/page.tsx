@@ -9,7 +9,7 @@ import NewCard from '@/components/NewCard'; // Import NewCard
 import { Card } from '@/types';
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+
 import Link from '@/components/ScrollRestorationLink';
 import Image from 'next/image';
 import { Sparkles } from 'lucide-react';
@@ -18,7 +18,7 @@ import '../Cards.css';
 import RatingStars from '@/components/RatingStars';
 
 
-import { useScrollRestoration } from '@/hooks/useScrollRestoration';
+
 
 
 export default function FavoritesPage() {
@@ -29,9 +29,9 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expiredCards, setExpiredCards] = useState<Set<string>>(new Set()); // New state for expired cards
-  const router = useScrollSavingRouter();
+  const router = useRouter();
 
-  useScrollRestoration(); // Call without pageContentRef
+
 
   // Helper function to fetch favorite cards
   const fetchFavoriteCards = async () => {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
+import { useRouter } from 'next/navigation';
 import {
   Box,
   Flex,
@@ -39,7 +39,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useScrollSavingRouter();
+  const router = useRouter();
   const authContext = useAuth();
 
   if (!authContext) {

@@ -37,6 +37,8 @@ interface AddCardProps {
   onClose?: () => void;
 }
 
+import '../app/ModernForm.css';
+
 const AddCard = ({ card: cardProp, setCard: setCardProp, handleCreateCard, isOpen, onClose }: AddCardProps) => {
   const initialCard: Card = cardProp || {
     categorie: '',
@@ -1112,7 +1114,10 @@ const AddCard = ({ card: cardProp, setCard: setCardProp, handleCreateCard, isOpe
           flex-direction: column;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-
+        .section-header h2{
+        font-size: amall;
+        font-weight: 700;
+        }
         .modern-form-header {
           background: white;
           border-bottom: 1px solid #e2e8f0;

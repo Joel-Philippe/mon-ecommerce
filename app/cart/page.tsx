@@ -8,21 +8,21 @@ import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { loadStripe } from '@stripe/stripe-js';
+
 import '../Panier.css'; // Réutiliser le style du panier
 
 
-import { useScrollRestoration } from '@/hooks/useScrollRestoration';
+
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 export default function CartPage() {
   const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem, clearCartError } = useGlobalCart();
 
-  useScrollRestoration(); // Call without pageContentRef
+
   const toast = useToast();
-  const router = useScrollSavingRouter();
+  const router = useRouter();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const showErrorToast = () => {

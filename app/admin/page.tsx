@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useScrollSavingRouter } from '@/hooks/useScrollSavingRouter';
 import { collection, getDocs, updateDoc, doc, onSnapshot, serverTimestamp, addDoc, deleteDoc } from 'firebase/firestore';
 import SlickSlider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -11,7 +10,7 @@ import AddCard from '@/components/AddCard';
 import UpdateCardModal from '@/components/UpdateCardModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, SpecialRequest } from '@/types';
-import { useScrollRestoration } from '@/hooks/useScrollRestoration'; // Import the hook
+
 import { 
   FiLogOut, 
   FiPlus, 
@@ -29,10 +28,20 @@ import {
   FiRefreshCw
 } from 'react-icons/fi';
 
+interface Order {
+  id: string;
+  customer_email: string;
+  displayName: string;
+  totalPaid: number;
+  createdAt: string;
+  items: Array<{ title: string; count: number; price: number }>;
+}
+
 const AdminPage = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [specialRequests, setSpecialRequests] = useState<SpecialRequest[]>([]);
-  const [showSpecialRequests, setShowSpecialRequests] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [currentView, setCurrentView] = useState('products'); // 'products', 'requests', or 'orders'
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
@@ -45,7 +54,7 @@ const AdminPage = () => {
   const [showUpdateCard, setShowUpdateCard] = useState(false);
   const authContext = useAuth();
 
-  useScrollRestoration(); // Call without pageContentRef
+
 
   if (!authContext) {
     // This case should ideally not be reached if AuthProvider is correctly wrapping the app
@@ -53,7 +62,7 @@ const AdminPage = () => {
     return null; // Or a loading component, or redirect to login
   }
   const { logout, user } = authContext;
-  const router = useScrollSavingRouter();
+  const router = useRouter();
 
   const sliderSettings = {
     dots: true,
@@ -129,6 +138,38 @@ const AdminPage = () => {
     };
     fetchSpecialRequests();
   }, [isAdmin]);
+
+  // Fetch orders
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const fetchOrders = async () => {
+      try {
+        const token = await user?.getIdToken();
+        if (!token) {
+          throw new Error('Authentication token not available.');
+        }
+
+        const response = await fetch('/api/admin/orders', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch orders');
+        }
+
+        const data: Order[] = await response.json();
+        setOrders(data);
+      } catch (err: any) {
+        setError(err.message);
+      }
+    };
+
+    fetchOrders();
+  }, [isAdmin, user]);
 
   const handleLogout = async () => {
     try {
@@ -321,29 +362,36 @@ const AdminPage = () => {
     }
   };
 
-  const handleValidateRequest = async (request: SpecialRequest) => {
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
     try {
-      const requestRef = doc(db, 'specialRequests', request.id);
-      await updateDoc(requestRef, { status: 'accepted' });
+      const token = await user?.getIdToken();
+      if (!token) {
+        throw new Error('Authentication token not available.');
+      }
 
-      await fetch('/api/sendEmail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: request.senderEmail,
-          subject: 'Votre demande spéciale a été acceptée',
-          message: `Votre demande spéciale pour ${request.selectedProducts.map(p => p.title).join(', ')} a été acceptée.`,
-        }),
-      });
+      const response = await fetch(`/api/admin/orders/${orderId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
 
-      setSpecialRequests((prevRequests) =>
-        prevRequests.map((r) => (r.id === request.id ? { ...r, status: 'accepted' } : r))
+      if (!response.ok) {
+        throw new Error('Failed to update order status');
+      }
+
+      // Update the local state to reflect the change immediately
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.id === orderId ? { ...order, status: newStatus } : order
+        )
       );
-      alert('Demande validée et email envoyé avec succès !');
     } catch (error) {
-      console.error('Erreur lors de la validation de la demande spéciale :', error);
+      console.error('Error updating order status:', error);
+      alert('Erreur lors de la mise à jour du statut de la commande.');
     }
   };
 
@@ -421,7 +469,7 @@ const AdminPage = () => {
               <p>Produits</p>
             </div>
           </div>
-          
+
           <div className="stat-card">
             <div className="stat-icon requests">
               <FiClipboard />
@@ -431,17 +479,17 @@ const AdminPage = () => {
               <p>Demandes</p>
             </div>
           </div>
-          
+
           <div className="stat-card">
-            <div className="stat-icon categories">
-              <FiFilter />
+            <div className="stat-icon orders">
+              <FiUsers />
             </div>
             <div className="stat-content">
-              <h3>{categories.length}</h3>
-              <p>Catégories</p>
+              <h3>{orders.length}</h3>
+              <p>Commandes</p>
             </div>
           </div>
-          
+
           <div className="stat-card">
             <div className="stat-icon growth">
               <FiTrendingUp />
@@ -457,20 +505,44 @@ const AdminPage = () => {
         <div className="admin-action-bar">
           <div className="action-bar-left">
             <button 
-              className={`tab-button ${!showSpecialRequests ? 'active' : ''}`}
-              onClick={() => setShowSpecialRequests(false)}
+              className={`tab-button ${currentView === 'products' ? 'active' : ''}`}
+              onClick={() => setCurrentView('products')}
             >
               <FiShoppingBag />
               <span>Produits</span>
             </button>
             
             <button 
-              className={`tab-button ${showSpecialRequests ? 'active' : ''}`}
-              onClick={() => setShowSpecialRequests(true)}
+              className={`tab-button ${currentView === 'requests' ? 'active' : ''}`}
+              onClick={() => setCurrentView('requests')}
             >
               <FiClipboard />
               <span>Demandes spéciales</span>
             </button>
+
+            <button 
+              className={`tab-button ${currentView === 'orders' ? 'active' : ''}`}
+              onClick={() => setCurrentView('orders')}
+            >
+              <FiUsers />
+              <span>Commandes</span>
+            </button>
+          </div>
+
+          <div className="mobile-view-selector">
+            <select value={currentView} onChange={(e) => setCurrentView(e.target.value)}>
+              <option value="products">Produits</option>
+              <option value="requests">Demandes</option>
+              <option value="orders">Commandes</option>
+            </select>
+          </div>
+
+          <div className="mobile-view-selector">
+            <select value={currentView} onChange={(e) => setCurrentView(e.target.value)}>
+              <option value="products">Produits</option>
+              <option value="requests">Demandes</option>
+              <option value="orders">Commandes</option>
+            </select>
           </div>
           
           <div className="action-bar-right">
@@ -497,75 +569,7 @@ const AdminPage = () => {
 
         {/* Content */}
         <div className="admin-content">
-          {showSpecialRequests ? (
-            <div className="special-requests-section">
-              <div className="section-header">
-                <h2>Demandes spéciales</h2>
-                <p>Gérez les demandes clients</p>
-              </div>
-              
-              {isLoading ? (
-                <div className="loading-grid">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="loading-card"></div>
-                  ))}
-                </div>
-              ) : specialRequests.length === 0 ? (
-                <div className="empty-state">
-                  <div className="empty-icon">
-                    <FiClipboard />
-                  </div>
-                  <h3>Aucune demande spéciale</h3>
-                  <p>Les nouvelles demandes apparaîtront ici</p>
-                </div>
-              ) : (
-                <div className="requests-grid">
-                  {specialRequests.map((request) => (
-                    <div key={request.id} className="request-card">
-                      <div className="request-header">
-                        <div className="request-status">
-                          <span className={`status-badge ${request.status || 'pending'}`}>
-                            {request.status === 'accepted' ? 'Acceptée' : 'En attente'}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="request-content">
-                        <div className="request-user">
-                          <img src={request.senderPhoto || 'https://via.placeholder.com/40'} alt="User" />
-                          <div>
-                            <h4>{request.senderDisplayName}</h4>
-                            <p>{request.senderEmail}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="request-seller">
-                          <img src={request.sellerPhoto || 'https://via.placeholder.com/32'} alt="Seller" />
-                          <span>Vendeur: {request.sellerName}</span>
-                        </div>
-                        
-                        <div className="request-products">
-                          <h5>Produits demandés:</h5>
-                          <p>{request.selectedProducts.map((p) => p.title).join(', ')}</p>
-                        </div>
-                      </div>
-                      
-                      {request.status !== 'accepted' && (
-                        <div className="request-actions">
-                          <button 
-                            className="validate-button"
-                            onClick={() => handleValidateRequest(request)}
-                          >
-                            Valider la demande
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
+          {currentView === 'products' && (
             <div className="products-section">
               <div className="section-header">
                 <h2>Gestion des produits</h2>
@@ -660,6 +664,144 @@ const AdminPage = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {currentView === 'requests' && (
+            <div className="special-requests-section">
+              <div className="section-header">
+                <h2>Demandes spéciales</h2>
+                <p>Gérez les demandes clients</p>
+              </div>
+              
+              {isLoading ? (
+                <div className="loading-grid">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="loading-card"></div>
+                  ))}
+                </div>
+              ) : specialRequests.length === 0 ? (
+                <div className="empty-state">
+                  <div className="empty-icon">
+                    <FiClipboard />
+                  </div>
+                  <h3>Aucune demande spéciale</h3>
+                  <p>Les nouvelles demandes apparaîtront ici</p>
+                </div>
+              ) : (
+                <div className="requests-grid">
+                  {specialRequests.map((request) => (
+                    <div key={request.id} className="request-card">
+                      <div className="request-header">
+                        <div className="request-status">
+                          <span className={`status-badge ${request.status || 'pending'}`}>
+                            {request.status === 'accepted' ? 'Acceptée' : 'En attente'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="request-content">
+                        <div className="request-user">
+                          <img src={request.senderPhoto || 'https://via.placeholder.com/40'} alt="User" />
+                          <div>
+                            <h4>{request.senderDisplayName}</h4>
+                            <p>{request.senderEmail}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="request-seller">
+                          <img src={request.sellerPhoto || 'https://via.placeholder.com/32'} alt="Seller" />
+                          <span>Vendeur: {request.sellerName}</span>
+                        </div>
+                        
+                        <div className="request-products">
+                          <h5>Produits demandés:</h5>
+                          <p>{request.selectedProducts.map((p) => p.title).join(', ')}</p>
+                        </div>
+                      </div>
+                      
+                      {request.status !== 'accepted' && (
+                        <div className="request-actions">
+                          <button 
+                            className="validate-button"
+                            onClick={() => handleValidateRequest(request)}
+                          >
+                            Valider la demande
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentView === 'orders' && (
+            <div className="orders-section">
+              <div className="section-header">
+                <h2>Toutes les commandes</h2>
+                <p>Gérez les commandes des clients</p>
+              </div>
+              {isLoading ? (
+                <div className="loading-grid">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="loading-card"></div>
+                  ))}
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="empty-state">
+                  <div className="empty-icon">
+                    <FiUsers />
+                  </div>
+                  <h3>Aucune commande</h3>
+                  <p>Les nouvelles commandes apparaîtront ici</p>
+                </div>
+              ) : (
+                <div className="orders-table-container">
+                  <table className="orders-table">
+                    <thead>
+                      <tr>
+                        <th>Client</th>
+                        <th>Email</th>
+                        <th>Montant</th>
+                        <th>Date</th>
+                        <th>Articles</th>
+                        <th>Statut</th>
+                        <th>ID Commande</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orders.map(order => (
+                        <tr key={order.id}>
+                          <td data-label="Client">{order.displayName}</td>
+                          <td data-label="Email">{order.customer_email}</td>
+                          <td data-label="Montant">{(order.totalPaid || 0).toFixed(2)} €</td>
+                          <td data-label="Date">{new Date(order.createdAt).toLocaleDateString('fr-FR')}</td>
+                          <td data-label="Articles">
+                            <ul>
+                              {order.items.map((item, index) => (
+                                <li key={index}>{item.count} x {item.title}</li>
+                              ))}
+                            </ul>
+                          </td>
+                          <td data-label="Statut">
+                            <select
+                              value={order.status || 'paid'}
+                              onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                              className={`status-select status-badge ${order.status || 'paid'}`}>
+                              <option value="paid">Payée</option>
+                              <option value="shipped">Expédiée</option>
+                              <option value="delivered">Livrable</option>
+                            </select>
+                          </td>
+                          <td data-label="ID Commande">{order.id}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -1534,8 +1676,117 @@ const AdminPage = () => {
           background: #dc2626;
         }
 
+        .stat-icon.orders {
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .orders-table-container {
+          background: white;
+          border-radius: 16px;
+          padding: 24px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+          border: 1px solid #e2e8f0;
+          overflow-x: auto; /* For responsiveness */
+        }
+
+        .orders-table {
+          width: 100%;
+          border-collapse: collapse;
+          min-width: 600px; /* Ensure table has a minimum width */
+        }
+
+        .orders-table th, .orders-table td {
+          padding: 16px;
+          text-align: left;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .orders-table th {
+          font-size: 12px;
+          font-weight: 600;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-color: #f8fafc;
+        }
+
+        .orders-table td {
+          font-size: 14px;
+          color: #1e293b;
+        }
+
+        .orders-table tbody tr:nth-child(even) {
+          background-color: #f8fafc;
+        }
+
+        .orders-table tbody tr:hover {
+          background-color: #f1f5f9;
+        }
+
+        .orders-table ul {
+          padding-left: 20px;
+          margin: 0;
+        }
+
+        .orders-table li {
+          margin-bottom: 4px;
+        }
+
+        .status-select {
+          border: none;
+          background: transparent;
+          font-weight: 500;
+          padding: 4px 8px;
+          border-radius: 9999px;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          cursor: pointer;
+        }
+
+        .status-badge.paid {
+          background-color: #dcfce7;
+          color: #166534;
+        }
+
+        .status-badge.shipped {
+          background-color: #dbeafe;
+          color: #1e40af;
+        }
+
+        .status-badge.delivered {
+          background-color: #e5e7eb;
+          color: #1f2937;
+        }
+
+        .mobile-view-selector {
+          display: none; /* Hidden by default */
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+          .action-bar-left {
+            display: none; /* Hide tabs on mobile */
+          }
+
+          .mobile-view-selector {
+            display: block;
+            width: 100%;
+            margin-bottom: 16px;
+          }
+
+          .mobile-view-selector select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+          }
+
           .admin-header-content {
             flex-direction: column;
             height: auto;
@@ -1555,7 +1806,6 @@ const AdminPage = () => {
             padding: 0 16px 16px;
           }
 
-          .action-bar-left, 
           .action-bar-right {
             justify-content: center;
           }
@@ -1578,9 +1828,57 @@ const AdminPage = () => {
             grid-template-columns: 1fr;
           }
 
-          .modal-content {
-            margin: 20px;
-            max-height: calc(100vh - 40px);
+          .orders-table-container {
+            overflow-x: hidden;
+          }
+
+          .orders-table {
+            display: block;
+            width: 100%;
+            min-width: 0;
+          }
+
+          .orders-table thead {
+            display: none; /* Hide table header on mobile */
+          }
+
+          .orders-table tbody, .orders-table tr, .orders-table td {
+            display: block;
+            width: 100%;
+          }
+
+          .orders-table tr {
+            margin-bottom: 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          }
+
+          .orders-table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+          }
+
+          .orders-table td:last-child {
+            border-bottom: none;
+          }
+
+          .orders-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #64748b;
+            margin-right: 16px;
+          }
+
+          .modal-content.large {
+            max-width: 100vw;
+            height: 100vh;
+            margin: 0;
+            border-radius: 0;
           }
         }
       `}
