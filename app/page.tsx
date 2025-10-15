@@ -26,7 +26,7 @@ import { getAuth } from "firebase/auth";
 import { db } from '@/components/firebaseConfig.ts';
 import './globals.css';
 // ... other imports
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useSearch } from '@/contexts/SearchContext'; // Import the global search context
 
@@ -66,6 +66,7 @@ const normalizeString = (str: string | undefined | null) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { searchTerm, setSearchTerm } = useSearch(); // Use global search state
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -105,10 +106,10 @@ const normalizeString = (str: string | undefined | null) => {
       params.delete('search');
     }
     // Only update the URL if we are on the homepage
-    if (router.pathname === '/') {
+    if (pathname === '/') {
       router.replace(`/?${params.toString()}`);
     }
-  }, [searchTerm, router]);
+  }, [searchTerm, pathname, router]);
 
   const handleCategoryToggle = (category: string) => {
     setActiveFilter('all'); // Reset to 'all' when toggling categories
