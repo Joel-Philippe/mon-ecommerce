@@ -27,6 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('Input changed:', e.target.value);
     setSearchTerm(e.target.value);
   };
 
@@ -85,7 +86,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
           value={searchTerm}
           onChange={handleInputChange}
           sx={inputStyles}
-          maxLength={255}
         />
         {searchTerm && (
           <InputRightElement>
