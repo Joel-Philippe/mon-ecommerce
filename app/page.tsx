@@ -13,7 +13,8 @@ import StockProgressBar from '@/components/StockProgressBar';
 import { calculateDonutPercentage } from '@/components/calculateDonutPercentage';
 import Link from '@/components/ScrollRestorationLink';
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { useGlobalCart } from '@/components/GlobalCartContext'; // Removed GlobalCartProvider as it should wrap the whole app
+import MenuComponent from '@/components/Menu';
+import FilterButtons from "@/components/FilterButtons";
 
 import UpdateCardModal from '@/components/UpdateCardModal';
 import GlobalPrice from '@/components/globalprice';
@@ -405,7 +406,7 @@ const normalizeString = (str: string | undefined | null) => {
       
       <Suspense fallback={<div>Chargement du contenu...</div>}>
         <div className="page-content" ref={pageContentRef}> {/* Moved Menu inside here */}
-          <Menu
+          <MenuComponent
             cards={cards}
             selectedCategories={selectedCategories}
             activeFilter={activeFilter}
