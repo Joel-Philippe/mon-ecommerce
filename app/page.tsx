@@ -15,6 +15,8 @@ import Link from '@/components/ScrollRestorationLink';
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MenuComponent from '@/components/Menu';
 import FilterButtons from "@/components/FilterButtons";
+import NewCard from '@/components/NewCard';
+import NoSearchResults from '@/components/NoSearchResults';
 
 import UpdateCardModal from '@/components/UpdateCardModal';
 import GlobalPrice from '@/components/globalprice';
@@ -26,10 +28,12 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from '@/components/firebaseConfig.ts';
 import './globals.css';
+import './Cards.css';
 // ... other imports
 import { useRouter, usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useSearch } from '@/contexts/SearchContext'; // Import the global search context
+import { useGlobalCart } from '@/components/GlobalCartContext';
 
 // Helper function for case-insensitive and accent-insensitive search
 const normalizeString = (str: string | undefined | null) => {
@@ -68,12 +72,7 @@ const normalizeString = (str: string | undefined | null) => {
     }
   }, [cards]); // Depend on `cards` to ensure content is loaded
 
-  useEffect(() => {
-    const urlSearchTerm = searchParams.get('search');
-    if (urlSearchTerm && urlSearchTerm !== searchTerm) {
-      setSearchTerm(urlSearchTerm);
-    }
-  }, [searchParams, searchTerm, setSearchTerm]);
+
 
   // Effect to update URL when global searchTerm changes
   useEffect(() => {
@@ -161,7 +160,7 @@ const normalizeString = (str: string | undefined | null) => {
   
   
   const [buttonText, setButtonText] = useState('Ajouter au panier'); // This state might become redundant
-  const { globalCart, addToCart, updateCartItemQuantity, removeCartItem, loadingCart, errorCart } = useGlobalCart(); // Updated destructuring
+  const { globalCart, addToCart, updateCartItemQuantity, removeCartItem, loadingCart, errorCart, clearCart, clearCartError } = useGlobalCart(); // Updated destructuring
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoFading, setVideoFading] = useState(false);
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());

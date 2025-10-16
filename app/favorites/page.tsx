@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useGlobalCart } from '@/components/GlobalCartContext';
@@ -151,7 +151,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="favorites-page-container"> {/* Attach ref */}
-      <h1 className="favorites-title">Mes Articles Favoris</h1>
+      <h1 className="favorites-title">Mes Favoris</h1>
 
       {favoriteCards.length === 0 ? (
         <p className="favorites-message">Tu n'as pas encore d'articles favoris.</p>

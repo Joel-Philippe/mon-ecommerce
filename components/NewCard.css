@@ -5,10 +5,11 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
+  margin: auto;
   flex-direction: column;
   text-decoration: none;
   color: #EF6C00;
-  max-width: 600px;
+  max-width: 450px;
   height: 100%; /* Ensure card fills the link wrapper */
 }
 
@@ -122,7 +123,6 @@
 .new-card-content {
   height: inherit;
   padding: 12px 16px;
-  background-color: #fff;
   flex-grow: 1; /* Allow content to grow and push footer down */
   display: flex;
   flex-direction: column;
@@ -207,6 +207,10 @@
 
 /* Mobile-specific styles */
 @media (max-width: 768px) {
+.new-card {
+  max-width: 270px;
+  margin-top: 20px;
+}
   .new-card-content {
   background-color: #fffad591;
 }
