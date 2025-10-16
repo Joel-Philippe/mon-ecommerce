@@ -265,7 +265,17 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
 export const useGlobalCart = () => {
   const context = useContext(GlobalCartContext);
   if (!context) {
-    throw new Error("useGlobalCart must be used within a GlobalCartProvider");
+    console.error("useGlobalCart must be used within a GlobalCartProvider, but context is null. Returning dummy values for debugging.");
+    return {
+      globalCart: {},
+      loadingCart: false,
+      errorCart: "Context not available (debug mode)",
+      addToCart: async () => {},
+      updateCartItemQuantity: async () => {},
+      removeCartItem: async () => {},
+      clearCart: async () => {},
+      clearCartError: () => {},
+    };
   }
   return context;
 };
