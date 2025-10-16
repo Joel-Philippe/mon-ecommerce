@@ -21,7 +21,6 @@
   color: #FF6F00;
   background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%);
   text-decoration: none;
-  box-shadow: 0 4px 15px #795548;
   width: 50px; /* Circle size */
   height: 50px; /* Circle size */
   border-radius: 50%;
