@@ -30,27 +30,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useSearch } from '@/contexts/SearchContext'; // Import the global search context
 
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
-import RatingStars from '@/components/RatingStars';
-
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
-import { PlusCircle } from "lucide-react";
-import Menu from '@/components/Menu';
-import FilterButtons from "@/components/FilterButtons";
-import NoSearchResults from "@/components/NoSearchResults";
-import SelectedCategories from '@/components/SelectedCategories';
-import { Grid3X3, Sparkles } from 'lucide-react';
-import { Card } from '@/types';
-import ProductDetailsModal from '@/components/ProductDetailsModal';
-import NewCard from '@/components/NewCard';
-import './Cards.css';
-
-
-
-
-import { useDebounce } from '@/hooks/useDebounce';
-
 // Helper function for case-insensitive and accent-insensitive search
 const normalizeString = (str: string | undefined | null) => {
   if (!str) return '';
@@ -69,7 +48,6 @@ const normalizeString = (str: string | undefined | null) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { searchTerm, setSearchTerm } = useSearch(); // Use global search state
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [userVotes, setUserVotes] = useState<{ [cardId: string]: number }>({});
   const [products, setProducts] = useState<any[]>([]);
   
@@ -390,10 +368,10 @@ const normalizeString = (str: string | undefined | null) => {
     return <div>Error: {error}</div>;
   }
 
-  const filteredBySearch = debouncedSearchTerm
+  const filteredBySearch = searchTerm
     ? cards.filter(
         (card) => {
-          const normalizedSearchTerm = normalizeString(debouncedSearchTerm);
+          const normalizedSearchTerm = normalizeString(searchTerm);
           return (
             normalizeString(card.title).includes(normalizedSearchTerm) ||
             normalizeString(card.subtitle).includes(normalizedSearchTerm) ||
