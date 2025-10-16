@@ -207,7 +207,7 @@
 /* Mobile-specific styles */
 @media (max-width: 768px) {
 .new-card {
-  max-width: 270px;
+  max-width: 290px;
   margin-top: 20px;
 }
   .new-card-content {
