@@ -18,7 +18,7 @@ interface MenuProps {
   resultsCount: number;
 }
 
-const Menu: React.FC<MenuProps> = ({
+const MenuComponent: React.FC<MenuProps> = ({
   cards,
   selectedCategories,
   activeFilter,
@@ -156,4 +156,4 @@ const Menu: React.FC<MenuProps> = ({
   );
 };
 
-export default Menu;
+export default MenuComponent;
