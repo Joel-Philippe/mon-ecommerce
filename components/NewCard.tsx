@@ -146,9 +146,9 @@ const NewCard: React.FC<NewCardProps> = ({
                     />
                   </div>
                 )}
-                <div className="new-card-stock">
-                  <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
-                </div>
+              </div>
+              <div className="new-card-stock">
+                <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
               </div>
             </div>
           </div>
