@@ -3,8 +3,8 @@
 @import 'swiper/css/pagination';
 @import 'swiper/css/thumbs';
 body{
-    background: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
+    background:white;
 }
 .chakra-ui-light{
-    background: linear-gradient(to right, #ffe6c1 0%, #fff0c4 100%);
+    background: white;
 }

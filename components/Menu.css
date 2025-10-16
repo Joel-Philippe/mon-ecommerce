@@ -44,7 +44,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   gap: 10px;
-  background: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
+  background: white;
 }
 .menu-content.open {
   max-height: none; /* Remove max-height */
