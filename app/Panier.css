@@ -30,7 +30,7 @@
 }
 
 .continuer-shopping {
-  background: linear-gradient(to right, #e6d4ba 0%, #f87c00 100%);
+  background: #03A9F4;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -80,6 +80,7 @@
 
 .panier-item-details h2 {
   font-size: 1rem;
+  color: #FF9800;
   font-weight: 600;
   width: fit-content;
 }
@@ -87,6 +88,7 @@
 .panier-item-details p {
   margin: 0.5rem 0;
   width: fit-content;
+  color: #4CAF50;
 }
 
 .panier-item-quantity {
@@ -97,9 +99,10 @@
 }
 
 .quantity-btn {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #039BE5;;
   border-radius: 50%;
   width: 30px;
+  color: #039BE5;
   height: 30px;
   display: flex;
   align-items: center;
@@ -121,20 +124,20 @@
   padding: 1.5rem;
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
-  background-color: #f7fafc;
   height: fit-content;
 }
 
 .panier-summary h2 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
+  color: #e07b00;
 }
 
 .checkout-btn {
   width: 100%;
   padding: 1rem;
-  background-color: black;
+  background-color: #03A9F4;
   color: white;
   font-weight: 600;
   border: none;
@@ -150,12 +153,6 @@
 @media (max-width: 768px) {
   .panier-container {
   margin-top: 0;
-}
-  .panier-item-details h2 {
-  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%);
-}
-.panier-item-details p {
-  background: linear-gradient(to right, #fff2ee 0%, #ffe4da 100%);
 }
   .panier-layout {
     flex-direction: column-reverse;

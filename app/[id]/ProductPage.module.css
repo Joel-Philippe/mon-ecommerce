@@ -67,7 +67,6 @@
   flex-direction: column;
   gap: 1rem;
   border-radius: 20px;
-  background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%);
 }
 
 .productTitle {
@@ -76,6 +75,7 @@
   color: #FF9800;
   position: sticky;
   top: 0;
+  border-radius: 12px;
   background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%); /* Match parent background */
   padding: 1rem;
   z-index: 10;

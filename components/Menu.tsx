@@ -76,7 +76,6 @@ const MenuComponent: React.FC<MenuProps> = ({
             />
             <button className="menu-toggle-button close-search-button" onClick={() => {
               setIsSearchActive(false);
-              setSearchTerm('');
             }} aria-label="Fermer la recherche">
               <X className="button-icon" />
             </button>
@@ -89,6 +88,17 @@ const MenuComponent: React.FC<MenuProps> = ({
             }}>
               {isMenuOpen ? 'Valider' : <><Filter className="button-icon" />Filtre</>}
             </button>
+
+            {/* SEARCH TERM INDICATOR */}
+            {searchTerm && (
+              <div className="search-term-indicator">
+                <span>{searchTerm}</span>
+                <button onClick={() => setSearchTerm('')} className="clear-indicator-btn">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+
             {/* Hide other buttons when validate is highlighted */}
             {!(isMenuOpen && selectedCategories.length > 0) && (
               <>

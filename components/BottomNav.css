@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   height: 45px; /* Increased height */
-  background-color: rgb(255, 246, 241);
+  background: linear-gradient(to right, #f5e0d9 0%, #fffcdd 100%);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: center; /* Center content vertically */
   color: #FF6F00;
-  background: white;
+  background: linear-gradient(to right, #fffcdd 0%, #f9f9f9 100%);
   text-decoration: none;
   width: 50px; /* Circle size */
   height: 50px; /* Circle size */
