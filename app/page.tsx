@@ -19,6 +19,7 @@ import NewCard from '@/components/NewCard';
 import NoSearchResults from '@/components/NoSearchResults';
 
 import UpdateCardModal from '@/components/UpdateCardModal';
+import { Card } from '@/types';
 import GlobalPrice from '@/components/globalprice';
 import { useAuth } from '@/contexts/AuthContext';
 import SvgBackground from '@/components/SvgBackground';
