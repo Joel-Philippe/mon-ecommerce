@@ -85,6 +85,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           value={searchTerm}
           onChange={handleInputChange}
           sx={inputStyles}
+          maxLength={255}
         />
         {searchTerm && (
           <InputRightElement>
