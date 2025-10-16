@@ -10,7 +10,7 @@ import './globals.css';
 import './video-banner.css';
 import './style.css';
 
-import SvgBackground from '@/components/SvgBackground';
+
 import BottomNav from '@/components/BottomNav';
 import '@/components/BottomNav.css';
 import ProgressBar from '@/components/ProgressBar';
@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="fr">
       <body>
         <ProgressBar />
-        <SvgBackground />
+
         <AuthProvider>
           <CheckboxProvider>
             <GlobalCartProvider>
