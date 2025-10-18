@@ -6,12 +6,11 @@ interface CountdownProps {
   endDate: Date | string;
   onExpired: (title: string) => void;
   title: string;
-  color?: string; // New optional color prop
+  color?: string; // Prop de couleur optionnelle
 }
 
 const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color }) => {
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   const parseDate = (date: any) => {
     if (!date) return null;
@@ -39,47 +38,23 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color 
     timer = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(timer);
-  }, [endDate, onExpired]);
+  }, [endDate, onExpired, title]);
 
-  // 💡 Détection écran < 900px
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 900);
-    };
+  // Déterminer la couleur en fonction du temps restant
+  const getTextColor = () => {
+    if (color) return color; // Priorité à la couleur passée en prop
 
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  // 🎨 Couleur du texte selon le countdown + taille écran
-  let textColor = color || '#000'; // Use prop color if provided
-
-  if (!color) { // Only apply dynamic color if no prop color is provided
-    if (isSmallScreen) {
-      if (countdown.days > 10) {
-        textColor = 'white';
-      } else if (countdown.days <= 10 && countdown.days > 5) {
-        textColor = 'white';
-      } else if (countdown.days <= 5 && countdown.days > 2) {
-        textColor = 'white';
-      } else if (countdown.days <= 2) {
-        textColor = 'white';
-      }
+    if (countdown.days > 7) {
+      return 'green'; // Vert pour plus de 7 jours
+    } else if (countdown.days > 3) {
+      return 'orange'; // Orange pour plus de 3 jours
     } else {
-      if (countdown.days > 10) {
-        textColor = 'white';
-      } else if (countdown.days <= 10 && countdown.days > 5) {
-        textColor = 'white';
-      } else if (countdown.days <= 5 && countdown.days > 2) {
-        textColor = 'white';
-      } else if (countdown.days <= 2) {
-        textColor = 'white';
-      }
+      return 'red'; // Rouge pour 3 jours ou moins
     }
-  }
+  };
 
-  const blinkStyle = countdown.days <= 2 ? { animation: 'blink 1s infinite' } : {};
+  const textColor = getTextColor();
+  const blinkStyle = countdown.days < 1 ? { animation: 'blink 1s infinite' } : {};
 
   return (
     <div className="time_card" style={{ color: textColor, ...blinkStyle }}>
@@ -90,6 +65,14 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color 
         : countdown.minutes > 0
         ? `Expire dans ${countdown.minutes}m:${countdown.seconds}s`
         : `❌ Expiré`}
+
+      <style jsx>{`
+        @keyframes blink {
+          50% {
+            opacity: 0.5;
+          }
+        }
+      `}</style>
     </div>
   );
 };

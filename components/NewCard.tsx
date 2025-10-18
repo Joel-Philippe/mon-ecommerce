@@ -1,8 +1,7 @@
-
 "use client";
 import React, { useState } from 'react';
 import ScrollRestorationLink from './ScrollRestorationLink';
-import { FaHeart, FaCheck } from 'react-icons/fa';
+import { FaHeart, FaCheck, FaShoppingCart } from 'react-icons/fa';
 import { Sparkles } from 'lucide-react';
 import StockProgressBar from './StockProgressBar';
 import Countdown from './Countdown';
@@ -23,7 +22,7 @@ interface NewCardProps {
   currentCount: number;
   averageRating: number;
   userHasRated: boolean;
-  hasBeenPurchased: boolean; // New prop
+  hasBeenPurchased: boolean;
   onAddToCart: (card: Card) => Promise<void>;
   onFavoriteToggle: (cardId: string) => Promise<void>;
   onCountdownEnd: (cardId: string) => void;
@@ -39,7 +38,7 @@ const NewCard: React.FC<NewCardProps> = ({
   isMaxReached,
   averageRating,
   userHasRated,
-  hasBeenPurchased, // Destructure the new prop
+  hasBeenPurchased,
   onAddToCart,
   onFavoriteToggle,
   onCountdownEnd,
@@ -47,8 +46,6 @@ const NewCard: React.FC<NewCardProps> = ({
 }) => {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(false);
-  const [isFavoriteAnimating, setIsFavoriteAnimating] = useState(false);
-  const [isCartAnimating, setIsCartAnimating] = useState(false);
 
   const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -57,8 +54,6 @@ const NewCard: React.FC<NewCardProps> = ({
       setIsFavoriteLoading(true);
       try {
         await onFavoriteToggle(card._id);
-        setIsFavoriteAnimating(true);
-        setTimeout(() => setIsFavoriteAnimating(false), 500);
       } catch (error) {
         console.error("Error toggling favorite:", error);
       } finally {
@@ -74,8 +69,6 @@ const NewCard: React.FC<NewCardProps> = ({
       setIsCartLoading(true);
       try {
         await onAddToCart(card);
-        setIsCartAnimating(true);
-        setTimeout(() => setIsCartAnimating(false), 500);
       } catch (error) {
         console.error("Error adding to cart:", error);
       } finally {
@@ -95,65 +88,64 @@ const NewCard: React.FC<NewCardProps> = ({
       >
         <div className="new-card-image-container">
           <img src={card.images[0]} alt={card.title} className="new-card-image" />
+          {card.categorie && (
+            <div className="new-card-category" style={{ backgroundColor: card.categorieBackgroundColor }}>
+              {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
+              <span>{card.categorie}</span>
+            </div>
+          )}
           {hasBeenPurchased && (
             <div className="new-card-purchased-badge">
               <FaCheck size={12} />
               <span>Déjà commandé</span>
             </div>
           )}
-          {card.nouveau && !hasBeenPurchased && ( // Only show new if not already purchased
+          {card.nouveau && !hasBeenPurchased && (
             <div className="new-card-badge">
               <Sparkles size={14} />
-              <span>Nouveau</span>
             </div>
           )}
-          <button 
-            className={`new-card-favorite-button ${isFavorite ? 'favorited' : ''} ${isFavoriteAnimating ? 'favorited-animation' : ''}`}
-            onClick={handleFavoriteClick}
-            style={{ zIndex: 20 }}
-            disabled={isFavoriteLoading}
-          >
-            {isFavoriteLoading ? <AiOutlineLoading className="loading-spinner" /> : <FaHeart color={isFavorite ? '#FF5722' : 'rgb(118 111 111)'} />}
-          </button>
-          
-          {/* New overlay for all info */}
-          <div className="new-card-info-overlay">
-            <div className="info-overlay-header">
-              <h3 className="new-card-title">{card.title}</h3>
+        </div>
+        <div className="new-card-details">
+          <div className="new-card-header">
+            <h3 className="new-card-title" style={{ color: card.categorieBackgroundColor }}>{card.title}</h3>
+            <button
+              className={`new-card-favorite-button ${isFavorite ? 'favorited' : ''}`}
+              onClick={handleFavoriteClick}
+              disabled={isFavoriteLoading}
+            >
+              {isFavoriteLoading ? <AiOutlineLoading className="loading-spinner" /> : <FaHeart color={isFavorite ? '#FF5722' : 'rgb(118 111 111)'} />}
+            </button>
+          </div>
+
+          <div className="new-card-body">
+            <div className="new-card-rating">
+              {card._id && (
+                <RatingStars
+                  productId={card._id}
+                  averageRating={averageRating}
+                  userHasRated={userHasRated}
+                  onVote={fetchProducts}
+                />
+              )}
             </div>
-            <div className="info-overlay-body">
-              <div className="new-card-rating">
-                {card._id && (
-                  <RatingStars
-                    productId={card._id}
-                    averageRating={averageRating}
-                    userHasRated={userHasRated}
-                    onVote={fetchProducts}
-                  />
-                )}
+            {card.time && !isNaN(new Date(card.time).getTime()) && (
+              <div className={`new-card-countdown ${isExpired ? 'expired' : ''}`}>
+                <Countdown
+                  endDate={new Date(card.time)}
+                  onExpired={() => {
+                    if (card._id) {
+                      onCountdownEnd(card._id);
+                    }
+                  }}
+                  title={card.title}
+                />
               </div>
-              <div className="new-card-details-row">
-                {card.time && !isNaN(new Date(card.time).getTime()) && (
-                  <div className={`new-card-countdown ${isExpired ? 'expired' : ''}`}>
-                    <Countdown
-                      endDate={new Date(card.time)}
-                      onExpired={() => {
-                        if (card._id) {
-                          onCountdownEnd(card._id);
-                        }
-                      }}
-                      title={card.title}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="new-card-stock">
-                <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
-              </div>
+            )}
+            <div className="new-card-stock">
+              <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
             </div>
           </div>
-        </div>
-        <div className="new-card-content">
           <div className="new-card-footer">
             <div className="new-card-price">
               {Number(card.price_promo) > 0 ? (
@@ -167,17 +159,18 @@ const NewCard: React.FC<NewCardProps> = ({
             </div>
             {!(isExpired || isOutOfStock) && (
               <button
-                className={`new-card-add-button ${isSelected ? 'selected' : ''} ${isCartAnimating ? 'add-to-cart-animation' : ''}`}
+                className={`new-card-add-button ${isSelected ? 'selected' : ''}`}
                 onClick={handleAddToCartClick}
                 disabled={isMaxReached || isSelected || isCartLoading}
               >
-                {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : 'Ajouter')}
+                {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : <FaShoppingCart />)}
               </button>
             )}
           </div>
-                  </div>
-                </motion.div>
-            </ScrollRestorationLink>
-          );};
+        </div>
+      </motion.div>
+    </ScrollRestorationLink>
+  );
+};
 
 export default NewCard;
