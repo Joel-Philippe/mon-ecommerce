@@ -30,6 +30,13 @@ export async function PUT(req: NextRequest) {
       const availableStock = productData.stock - productData.stock_reduc;
 
       if (quantity > availableStock) {
+        console.error('--- INSUFFICIENT STOCK ERROR ---', {
+          productId,
+          requestedQuantity: quantity,
+          availableStock,
+          totalStock: productData.stock,
+          reducedStock: productData.stock_reduc,
+        });
         throw new Error("Insufficient stock");
       }
 
