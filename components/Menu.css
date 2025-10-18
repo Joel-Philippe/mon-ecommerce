@@ -44,7 +44,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   gap: 10px;
-  background: white;
+  background: #ff980057;
 }
 .menu-content.open {
   max-height: none; /* Remove max-height */
