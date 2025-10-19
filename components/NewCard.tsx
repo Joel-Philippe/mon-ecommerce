@@ -92,7 +92,7 @@ const NewCard: React.FC<NewCardProps> = ({
           <img src={card.images[0]} alt={card.title} className="new-card-image" />
           {card.categorie && (
             <button className="new-card-category-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCategoryClick && onCategoryClick(card.categorie); }}>
-              <div className="new-card-category" style={{ backgroundColor: card.categorieBackgroundColor }}>
+              <div className="new-card-category" style={{ borderColor: card.categorieBackgroundColor, color: card.categorieBackgroundColor }}>
                 {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
                 <span>{card.categorie}</span>
               </div>

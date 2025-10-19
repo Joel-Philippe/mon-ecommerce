@@ -63,6 +63,7 @@
   align-items: center;
   justify-content: center;
   font-size: larger;
+  padding-top: 0;
 }
 
 .new-card-favorite-button.favorited svg {
@@ -206,11 +207,11 @@
   border-radius: 15px;
   font-size: 0.85rem;
   font-weight: 700;
-  color: white;
   margin-top: 8px;
   width: 100px;
   height: 80px;
   transition: transform 0.2s ease;
+  border: 2px dashed;
 }
 
 .new-card-category-button:hover .new-card-category {
