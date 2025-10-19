@@ -33,7 +33,11 @@ export async function GET(req: NextRequest) {
     });
 
     // Sort orders by creation date, newest first
-    orders.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+    orders.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis() || 0;
+      const timeB = b.createdAt?.toMillis() || 0;
+      return timeB - timeA;
+    });
 
     return NextResponse.json(orders, { status: 200 });
 
