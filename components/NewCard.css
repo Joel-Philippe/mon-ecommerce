@@ -8,8 +8,9 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
-  height: 189px;
-  
+  height: 209px;
+  padding: 8px;
+  padding-bottom: 10px;
 }
 
 .new-card:hover {
@@ -57,12 +58,11 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: larger;
-  padding: revert;
 }
 
 .new-card-favorite-button.favorited svg {
