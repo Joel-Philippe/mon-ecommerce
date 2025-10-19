@@ -9,8 +9,7 @@
   text-decoration: none;
   color: inherit;
   height: 209px;
-  padding: 8px;
-  padding-bottom: 10px;
+  padding: 18px;
 }
 
 .new-card:hover {
@@ -68,10 +67,6 @@
 
 .new-card-favorite-button.favorited svg {
   fill: #e63198;
-}
-
-.new-card-body {
-  margin: 0.5rem 0;
 }
 
 .new-card-rating {
