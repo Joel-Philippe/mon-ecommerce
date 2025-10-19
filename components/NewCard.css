@@ -4,7 +4,7 @@
   gap: 1rem;
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
-  background: #fff1df;
+  background: white;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
