@@ -350,10 +350,25 @@ export async function POST(req: Request) {
         console.log('📦 Items reconstitués depuis Stripe:', items.length, 'articles');
 
         // 4️⃣ Enregistre la commande
+        const shippingDetails = session.shipping_details;
+        const customerDetails = session.customer_details;
+
+        // Map Stripe's shipping details to our deliveryInfo format
+        const deliveryInfoForEmail = {
+          firstName: shippingDetails?.name?.split(' ')[0] || '',
+          lastName: shippingDetails?.name?.split(' ').slice(1).join(' ') || '',
+          address: shippingDetails?.address?.line1 || '',
+          city: shippingDetails?.address?.city || '',
+          postalCode: shippingDetails?.address?.postal_code || '',
+          country: shippingDetails?.address?.country || '',
+          phone: customerDetails?.phone || 'Non fourni', // Phone is on customer_details
+          email: customerDetails?.email || ''
+        };
+
         const orderData = {
-          customer_email: session.customer_details?.email,
-          displayName: session.customer_details?.name || "Client",
-          deliveryInfo: session.shipping_details,
+          customer_email: customerDetails?.email,
+          displayName: customerDetails?.name || "Client",
+          deliveryInfo: shippingDetails, // Keep original Stripe object for DB
           items,
           totalPaid: (session.amount_total || 0) / 100,
           createdAt: serverTimestamp(),
@@ -385,7 +400,7 @@ export async function POST(req: Request) {
             total: item.count * item.price
           })),
           totalPaid: orderData.totalPaid,
-          deliveryInfo: orderData.deliveryInfo as any,
+          deliveryInfo: deliveryInfoForEmail, // Use the mapped object for the email
           sessionId: session.id
         };
 
