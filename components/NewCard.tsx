@@ -123,16 +123,7 @@ const NewCard: React.FC<NewCardProps> = ({
           </div>
 
           <div className="new-card-body">
-            <div className="new-card-rating">
-              {card._id && (
-                <RatingStars
-                  productId={card._id}
-                  averageRating={averageRating}
-                  userHasRated={userHasRated}
-                  onVote={fetchProducts}
-                />
-              )}
-            </div>
+
             {card.time && !isNaN(new Date(card.time).getTime()) && (
               <div className={`new-card-countdown-container ${isExpired ? 'expired' : ''}`}>
                 <Timer size={16} />
@@ -147,6 +138,16 @@ const NewCard: React.FC<NewCardProps> = ({
                 />
               </div>
             )}
+                        <div className="new-card-rating">
+              {card._id && (
+                <RatingStars
+                  productId={card._id}
+                  averageRating={averageRating}
+                  userHasRated={userHasRated}
+                  onVote={fetchProducts}
+                />
+              )}
+            </div>
             <div className="new-card-stock">
               <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
             </div>

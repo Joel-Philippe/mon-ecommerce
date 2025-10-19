@@ -367,11 +367,11 @@ export async function POST(req: Request) {
         console.log("✅ Order saved to Firestore:", orderRef.id);
 
         // 5️⃣ MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI
-        // try {
-        //   await updateStockAfterPayment(items);
-        // } catch (stockError: any) {
-        //   console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
-        // }
+        try {
+          await updateStockAfterPayment(items);
+        } catch (stockError: any) {
+          console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
+        }
 
         // 6️⃣ Envoi de l'email de confirmation
         const emailData = {
