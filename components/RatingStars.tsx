@@ -79,8 +79,8 @@ export default function RatingStars({
           size={20}
           color={
             star <= displayStars
-              ? '#ffe600ff'
-              : 'white'
+              ? '#FFC107'
+              : 'rgb(0 0 0 / 32%)'
           }
           onMouseEnter={() => !userHasRated && setHovered(star)}
           onMouseLeave={() => setHovered(null)}

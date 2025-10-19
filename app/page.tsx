@@ -472,6 +472,7 @@ const normalizeString = (str: string | undefined | null) => {
                   onFavoriteToggle={handleFavoriteToggle}
                   onCountdownEnd={handleCountdownEnd}
                   fetchProducts={fetchProducts}
+                  onCategoryClick={handleCategoryToggle}
                 />
               );
             })}
