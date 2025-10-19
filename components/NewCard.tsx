@@ -27,7 +27,7 @@ interface NewCardProps {
   onFavoriteToggle: (cardId: string) => Promise<void>;
   onCountdownEnd: (cardId: string) => void;
   fetchProducts: () => void;
-  onCategoryClick: (category: string) => void;
+  onCategoryClick?: (category: string) => void;
 }
 
 const NewCard: React.FC<NewCardProps> = ({
@@ -91,7 +91,7 @@ const NewCard: React.FC<NewCardProps> = ({
         <div className="new-card-image-container">
           <img src={card.images[0]} alt={card.title} className="new-card-image" />
           {card.categorie && (
-            <button className="new-card-category-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCategoryClick(card.categorie); }}>
+            <button className="new-card-category-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCategoryClick && onCategoryClick(card.categorie); }}>
               <div className="new-card-category" style={{ backgroundColor: card.categorieBackgroundColor }}>
                 {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
                 <span>{card.categorie}</span>
