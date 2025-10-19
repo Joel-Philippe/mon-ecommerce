@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ScrollRestorationLink from './ScrollRestorationLink';
 import { FaHeart, FaCheck, FaShoppingCart } from 'react-icons/fa';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Timer } from 'lucide-react';
 import StockProgressBar from './StockProgressBar';
 import Countdown from './Countdown';
 import RatingStars from './RatingStars';
@@ -27,6 +27,7 @@ interface NewCardProps {
   onFavoriteToggle: (cardId: string) => Promise<void>;
   onCountdownEnd: (cardId: string) => void;
   fetchProducts: () => void;
+  onCategoryClick: (category: string) => void;
 }
 
 const NewCard: React.FC<NewCardProps> = ({
@@ -43,6 +44,7 @@ const NewCard: React.FC<NewCardProps> = ({
   onFavoriteToggle,
   onCountdownEnd,
   fetchProducts,
+  onCategoryClick,
 }) => {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(false);
@@ -89,10 +91,12 @@ const NewCard: React.FC<NewCardProps> = ({
         <div className="new-card-image-container">
           <img src={card.images[0]} alt={card.title} className="new-card-image" />
           {card.categorie && (
-            <div className="new-card-category" style={{ backgroundColor: card.categorieBackgroundColor }}>
-              {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
-              <span>{card.categorie}</span>
-            </div>
+            <button className="new-card-category-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCategoryClick(card.categorie); }}>
+              <div className="new-card-category" style={{ backgroundColor: card.categorieBackgroundColor }}>
+                {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
+                <span>{card.categorie}</span>
+              </div>
+            </button>
           )}
           {hasBeenPurchased && (
             <div className="new-card-purchased-badge">
@@ -130,7 +134,8 @@ const NewCard: React.FC<NewCardProps> = ({
               )}
             </div>
             {card.time && !isNaN(new Date(card.time).getTime()) && (
-              <div className={`new-card-countdown ${isExpired ? 'expired' : ''}`}>
+              <div className={`new-card-countdown-container ${isExpired ? 'expired' : ''}`}>
+                <Timer size={16} />
                 <Countdown
                   endDate={new Date(card.time)}
                   onExpired={() => {

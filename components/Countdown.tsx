@@ -59,11 +59,11 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color 
   return (
     <div className="time_card" style={{ color: textColor, ...blinkStyle }}>
       {countdown.days > 0
-        ? `Expire dans ${countdown.days} jour${countdown.days > 1 ? 's' : ''}, ${countdown.hours}h:${countdown.minutes}m:${countdown.seconds}s`
+        ? ` ${countdown.days} jour${countdown.days > 1 ? 's' : ''}, ${countdown.hours}h:${countdown.minutes}m:${countdown.seconds}s`
         : countdown.hours > 0
-        ? `Expire dans ${countdown.hours}h:${countdown.minutes}m:${countdown.seconds}s`
+        ? ` ${countdown.hours}h:${countdown.minutes}m:${countdown.seconds}s`
         : countdown.minutes > 0
-        ? `Expire dans ${countdown.minutes}m:${countdown.seconds}s`
+        ? `${countdown.minutes}m:${countdown.seconds}s`
         : `❌ Expiré`}
 
       <style jsx>{`
