@@ -2,9 +2,9 @@
 .new-card {
   display: flex;
   gap: 1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e2f0ee;
   border-radius: 0.5rem;
-  background: white;
+  background: #fef1e0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
@@ -126,8 +126,8 @@
 }
 
 .new-card-add-button {
-  background-color: #EF6C00;
-  color: white;
+  background-color: #ffffff;
+  color: #2196F3;
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -149,7 +149,7 @@
 }
 
 .new-card-add-button:disabled {
-  background-color: #9e9e9e;
+  background-color: white;
   cursor: not-allowed;
 }
 
@@ -211,7 +211,7 @@
   width: 100px;
   height: 80px;
   transition: transform 0.2s ease;
-  border: 2px dashed;
+  border: none;
 }
 
 .new-card-category-button:hover .new-card-category {

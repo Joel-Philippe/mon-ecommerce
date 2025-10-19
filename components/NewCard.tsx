@@ -118,7 +118,7 @@ const NewCard: React.FC<NewCardProps> = ({
               onClick={handleFavoriteClick}
               disabled={isFavoriteLoading}
             >
-              {isFavoriteLoading ? <AiOutlineLoading className="loading-spinner" /> : <FaHeart color={isFavorite ? '#FF5722' : 'rgb(118 111 111)'} />}
+              {isFavoriteLoading ? <AiOutlineLoading className="loading-spinner" /> : <FaHeart color={isFavorite ? '#FF5722' : '#e631987d'} />}
             </button>
           </div>
 
