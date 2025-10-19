@@ -74,8 +74,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         querySnapshot.forEach(doc => {
           const order = doc.data();
           order.items?.forEach((item: any) => {
-            if (item.productId) {
-              productIds.add(item.productId);
+            if (item.id) {
+              productIds.add(item.id);
             }
           });
         });
