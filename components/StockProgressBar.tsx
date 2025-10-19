@@ -69,7 +69,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
           textAlign: 'center',
           lineHeight: '12px', // Match the height
           color: '#028175', // Contrasting color
-          fontSize: '0.6rem',
+          fontSize: '0.5rem',
           fontWeight: '900',
           letterSpacing: '0.5px',
         }}>
