@@ -39,8 +39,14 @@ export default function MyOrdersPage() {
     }
 
     const fetchOrders = async () => {
+      if (!user) return;
       try {
-        const response = await fetch('/api/my-orders');
+        const token = await user.getIdToken();
+        const response = await fetch('/api/my-orders', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Impossible de récupérer les commandes.');
