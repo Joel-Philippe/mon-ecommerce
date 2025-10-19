@@ -36,11 +36,14 @@ async function updateStockAfterPayment(items: Array<{ id: string; count: number;
     console.log('🔄 === MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI ===');
     
     await runTransaction(db, async (transaction) => {
-      for (const item of items) {
-        if (!item.id || !item.count) continue;
+      // 1. READ PHASE: Read all product documents first
+      const productRefs = items.map(item => doc(db, 'cards', item.id));
+      const productSnaps = await Promise.all(productRefs.map(ref => transaction.get(ref)));
 
-        const productRef = doc(db, 'cards', item.id);
-        const productSnap = await transaction.get(productRef);
+      // 2. WRITE PHASE: Now perform all updates
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const productSnap = productSnaps[i];
 
         if (productSnap.exists()) {
           const productData = productSnap.data();
@@ -55,7 +58,7 @@ async function updateStockAfterPayment(items: Array<{ id: string; count: number;
             ? Math.min(Math.round((newStockReduc / currentStock) * 100), 100)
             : 0;
           
-          transaction.update(productRef, {
+          transaction.update(productRefs[i], {
             stock_reduc: newStockReduc,
             pourcentage_vendu: pourcentage,
           });
@@ -147,6 +150,14 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "payment_intent.succeeded": {
         const paymentIntent: any = event.data.object;
+
+        // If this payment intent is associated with a Checkout Session, do nothing.
+        // The 'checkout.session.completed' webhook will handle the order.
+        if (paymentIntent.checkout_session) {
+          console.log(`ℹ️ Ignoring payment_intent.succeeded for PI: ${paymentIntent.id} as it is handled by checkout.session.completed.`);
+          break;
+        }
+
         console.log('✅ === PAIEMENT RÉUSSI (Payment Intent) ===');
         console.log('📋 Payment Intent ID:', paymentIntent.id);
         console.log('📧 Customer email:', paymentIntent.receipt_email);
@@ -239,17 +250,17 @@ export async function POST(req: Request) {
         console.log("✅ Order saved to Firestore (Payment Intent):", orderRefPI.id);
 
         // 🔄 MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI
-        try {
-          await updateStockAfterPayment(itemsPI.map(item => ({
-            id: item.id,
-            count: item.count,
-            title: item.title
-          })));
-        } catch (stockError) {
-          console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
-          // Ne pas faire échouer le webhook pour une erreur de stock
-          // La commande est déjà enregistrée et l'email sera envoyé
-        }
+        // try {
+        //   await updateStockAfterPayment(itemsPI.map(item => ({
+        //     id: item.id,
+        //     count: item.count,
+        //     title: item.title
+        //   })));
+        // } catch (stockError) {
+        //   console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
+        //   // Ne pas faire échouer le webhook pour une erreur de stock
+        //   // La commande est déjà enregistrée et l'email sera envoyé
+        // }
 
         // Envoi de l'email de confirmation
         console.log("📧 === DÉBUT ENVOI EMAIL (Payment Intent) ===");
@@ -356,11 +367,11 @@ export async function POST(req: Request) {
         console.log("✅ Order saved to Firestore:", orderRef.id);
 
         // 5️⃣ MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI
-        try {
-          await updateStockAfterPayment(items);
-        } catch (stockError: any) {
-          console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
-        }
+        // try {
+        //   await updateStockAfterPayment(items);
+        // } catch (stockError: any) {
+        //   console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
+        // }
 
         // 6️⃣ Envoi de l'email de confirmation
         const emailData = {
