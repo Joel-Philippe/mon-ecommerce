@@ -9,7 +9,7 @@
   text-decoration: none;
   color: inherit;
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow:0 8px 16px #ffd54f38;
   height: 209px;
   padding: 18px;
 }
@@ -71,10 +71,6 @@
   fill: #e63198;
 }
 
-.new-card-rating {
-  margin-bottom: 0.5rem;
-}
-
 .new-card-countdown-container {
   display: flex;
   align-items: center;
@@ -123,10 +119,10 @@
 }
 
 .new-card-add-button {
-  background-color: #ffffff;
-  color: #2196F3;
+  color: #00BCD4;
   border: none;
   border-radius: 50%;
+  border: 1px solid #9E9E9E;;
   width: 40px;
   height: 40px;
   display: flex;
@@ -137,12 +133,12 @@
 }
 
 .new-card-add-button:hover {
-  background-color: #e65100;
+  background-color: #e8e8e8;
   transform: scale(1.1);
 }
 
 .new-card-add-button.selected {
-  background-color: #4CAF50;
+  background-color: #74b777;
 }
 
 .new-card-add-button:disabled {

@@ -145,7 +145,7 @@ export default function CartPage() {
                 </Link>
                 <div className="panier-item-details">
                   <h2>{item.title}</h2>
-                  <p>{(item.price_promo || item.price) && `Prix: ${item.price_promo || item.price}€`}</p>
+                  <p>{(item.price_promo || item.price) && ` ${item.price_promo || item.price}€`}</p>
                   <div className="panier-item-quantity">
                     <button onClick={() => handleQuantityChange(item._id, item.count - 1)} className="quantity-btn"><FaMinus /></button>
                     <span>{item.count}</span>
