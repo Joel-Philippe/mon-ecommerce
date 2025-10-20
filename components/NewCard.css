@@ -4,10 +4,12 @@
   gap: 1rem;
   border: 1px solid #e2f0ee;
   border-radius: 0.5rem;
-  background: rgb(246 232 210);
+  background: white;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   height: 209px;
   padding: 18px;
 }

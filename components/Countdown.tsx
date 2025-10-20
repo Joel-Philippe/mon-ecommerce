@@ -64,7 +64,7 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color 
         ? ` ${countdown.hours}h:${countdown.minutes}m:${countdown.seconds}s`
         : countdown.minutes > 0
         ? `${countdown.minutes}m:${countdown.seconds}s`
-        : `❌ Expiré`}
+        : ` Fini`}
 
       <style jsx>{`
         @keyframes blink {
