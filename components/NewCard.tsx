@@ -98,12 +98,6 @@ const NewCard: React.FC<NewCardProps> = ({
               </div>
             </button>
           )}
-          {hasBeenPurchased && (
-            <div className="new-card-purchased-badge">
-              <FaCheck size={12} />
-              <span>Déjà commandé</span>
-            </div>
-          )}
           {card.nouveau && !hasBeenPurchased && (
             <div className="new-card-badge">
               <Sparkles size={14} />
@@ -153,6 +147,11 @@ const NewCard: React.FC<NewCardProps> = ({
             </div>
           </div>
           <div className="new-card-footer">
+            {hasBeenPurchased && (
+              <span className="new-card-purchased-text">
+                <FaCheck size={12} /> Déjà commandé
+              </span>
+            )}
           <div className="new-card-rating">
               {card._id && (
                 <RatingStars

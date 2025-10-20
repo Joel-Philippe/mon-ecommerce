@@ -4,7 +4,7 @@
   gap: 1rem;
   border: 1px solid #e2f0ee;
   border-radius: 0.5rem;
-  background: #fef1e0;
+  background: rgb(232 215 190);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
@@ -117,7 +117,7 @@
 }
 
 .new-card-promo-price {
-  color: #EF6C00;
+  color: #778979;
 }
 
 .new-card-add-button {
@@ -161,7 +161,6 @@
   }
 }
 
-.new-card-purchased-badge,
 .new-card-badge {
   position: absolute;
   top: -10px;
@@ -179,8 +178,14 @@
   z-index: 10;
 }
 
-.new-card-purchased-badge {
-  background: #64b5f6;
+.new-card-purchased-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #28a745; /* Green color */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 10px; /* Space from the button */
 }
 
 .new-card-category-button {
