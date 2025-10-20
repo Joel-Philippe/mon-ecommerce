@@ -17,7 +17,7 @@ interface OrderItem {
 
 interface Order {
   id: string;
-  createdAt: { toDate: () => Date };
+  createdAt: { seconds: number; nanoseconds: number } | Date | string;
   totalPaid: number;
   items: OrderItem[];
 }
@@ -84,20 +84,20 @@ export default function MyOrdersPage() {
                 <div>
                   <h2 className={styles.orderId}>Commande #{order.id}</h2>
                   <p className={styles.orderDate}>
-                    {new Date(order.createdAt.toDate()).toLocaleDateString('fr-FR', {
+                    {new Date(order.createdAt && typeof order.createdAt === 'object' && 'seconds' in order.createdAt ? order.createdAt.seconds * 1000 : order.createdAt).toLocaleDateString('fr-FR', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
                     })}
                   </p>
                 </div>
-                <div className={styles.orderTotal}>{order.totalPaid.toFixed(2)}€</div>
+                <div className={styles.orderTotal}>{(Number(order.totalPaid) || 0).toFixed(2)}€</div>
               </div>
               <div className={styles.itemList}>
                 {order.items.map((item) => (
                   <div key={item.id} className={styles.item}>
                     <Image 
-                      src={item.images[0]} 
+                      src={item.images && item.images.length > 0 ? item.images[0] : '/placeholder-image.png'} 
                       alt={item.title} 
                       width={60} 
                       height={60} 
