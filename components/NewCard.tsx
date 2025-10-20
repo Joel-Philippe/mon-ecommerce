@@ -123,7 +123,16 @@ const NewCard: React.FC<NewCardProps> = ({
           </div>
 
           <div className="new-card-body">
-
+            <div className="new-card-price">
+              {Number(card.price_promo) > 0 ? (
+                <>
+                  <span className="new-card-original-price">{card.price}€</span>
+                  <span className="new-card-promo-price">{card.price_promo}€</span>
+                </>
+              ) : (
+                <span>{card.price}€</span>
+              )}
+            </div>
             {card.time && !isNaN(new Date(card.time).getTime()) && (
               <div className={`new-card-countdown-container ${isExpired ? 'expired' : ''}`}>
                 <Timer size={16} />
@@ -138,7 +147,13 @@ const NewCard: React.FC<NewCardProps> = ({
                 />
               </div>
             )}
-                        <div className="new-card-rating">
+
+            <div className="new-card-stock">
+              <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
+            </div>
+          </div>
+          <div className="new-card-footer">
+          <div className="new-card-rating">
               {card._id && (
                 <RatingStars
                   productId={card._id}
@@ -148,21 +163,7 @@ const NewCard: React.FC<NewCardProps> = ({
                 />
               )}
             </div>
-            <div className="new-card-stock">
-              <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
-            </div>
-          </div>
-          <div className="new-card-footer">
-            <div className="new-card-price">
-              {Number(card.price_promo) > 0 ? (
-                <>
-                  <span className="new-card-original-price">{card.price}€</span>
-                  <span className="new-card-promo-price">{card.price_promo}€</span>
-                </>
-              ) : (
-                <span>{card.price}€</span>
-              )}
-            </div>
+
             {!(isExpired || isOutOfStock) && (
               <button
                 className={`new-card-add-button ${isSelected ? 'selected' : ''}`}

@@ -27,6 +27,42 @@ const nextConfig = {
           port: '',
           pathname: '/**',
         },
+        {
+          protocol: 'https',
+          hostname: 's.oneroof.co.nz',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'www.publika.com',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'static.vecteezy.com',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'th.bing.com',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'static7.depositphotos.com',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'static7.depositphotos.com',
+          port: '',
+          pathname: '/**',
+        },
       ],
     },
   };
