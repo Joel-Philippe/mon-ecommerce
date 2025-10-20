@@ -172,6 +172,9 @@ const NewCard: React.FC<NewCardProps> = ({
                 {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : <FaShoppingCart />)}
               </button>
             )}
+            {isOutOfStock && (
+                <span className="out-of-stock-message">Épuisé</span>
+            )}
           </div>
         </div>
       </motion.div>
