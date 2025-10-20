@@ -102,9 +102,9 @@ const AccountPage = () => {
         }
 
         h1 {
-          font-size: 2.8em;
+          font-size: 1.8em;
           font-weight: 700;
-          color: #2c3e50;
+          color: #e63198;
           margin-bottom: 40px;
           text-align: center;
           letter-spacing: -0.02em;

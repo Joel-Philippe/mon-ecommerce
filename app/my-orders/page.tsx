@@ -73,9 +73,9 @@ export default function MyOrdersPage() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Mes Achats</h1>
+      <h1 className={styles.title}></h1>
       {orders.length === 0 ? (
-        <p>Vous n'avez encore effectué aucun achat.</p>
+        <p>Tu n'as encore effectué aucun achat.</p>
       ) : (
         <div className={styles.orderList}>
           {orders.map((order) => (

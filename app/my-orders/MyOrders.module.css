@@ -2,7 +2,6 @@
   max-width: 900px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
@@ -28,10 +27,9 @@
 }
 
 .orderCard {
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
+  background-color: #ffffff;
+  border: 2px solid #545353;
   border-radius: 8px;
-  padding: 1.5rem;
   transition: box-shadow 0.3s ease;
 }
 
@@ -62,7 +60,7 @@
 .orderTotal {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #007bff;
+  color: #009688;
 }
 
 .itemList {
@@ -88,7 +86,7 @@
 
 .itemTitle {
   font-weight: 600;
-  color: #333;
+  color: #545353;
   text-decoration: none;
 }
 
