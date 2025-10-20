@@ -55,7 +55,7 @@
   background-color: #ffffff45;
   color: #FF6F00;
   border: 1px solid #ddd;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border-radius: 50px; /* Rounded shape */
   font-weight: 600;
   cursor: pointer;
@@ -270,14 +270,14 @@
   }
 
   .menu-toggle-button, .header-categorie-button {
-    padding: 8px 12px;
+    padding: 12px 12px;
   }
 }
 
 @media (max-width: 380px) {
 
   .menu-toggle-button, .header-categorie-button {
-    padding: 8px 10px; /* Slightly more horizontal padding */
+    padding: 12px 10px; /* Slightly more horizontal padding */
     gap: 4px; /* Reduce gap between icon and text */
   }
 }
