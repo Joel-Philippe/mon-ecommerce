@@ -1,6 +1,6 @@
-'use client';
 import { useEffect } from 'react';
 import { useGlobalCart } from '@/components/GlobalCartContext';
+import { useSearchParams } from 'next/navigation'; // Import useSearchParams
 // pages/success.tsx
 import { Box, Heading, Text, Button, Image, VStack } from "@chakra-ui/react";
 import Link from "next/link";
@@ -12,6 +12,8 @@ const MotionHeading = motion(Heading);
 
 const SuccessPage = () => {
   const { clearCart } = useGlobalCart();
+  const searchParams = useSearchParams();
+  const customerEmail = searchParams.get('email');
 
   useEffect(() => {
     console.log("Success page loaded, clearing cart...");
@@ -49,7 +51,7 @@ const SuccessPage = () => {
         </MotionHeading>
 
         <Text fontSize="md" color="gray.600">
-          Votre commande a bien été enregistrée. Un email de confirmation vous a été envoyé.
+          Votre commande a bien été enregistrée. Un email de confirmation vous a été envoyé à {customerEmail || 'votre adresse email'}.
         </Text>
 
         <VStack spacing={4} mt={2}>
