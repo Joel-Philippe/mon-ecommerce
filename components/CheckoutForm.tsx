@@ -38,6 +38,13 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
 
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
+      confirmParams: {
+        payment_method_data: {
+          billing_details: {
+            email: user?.email || pendingOrder.deliveryInfo.email,
+          },
+        },
+      },
       redirect: 'if_required'
     });
 
@@ -51,11 +58,7 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
       setMessage('Paiement réussi ! Enregistrement de votre commande...');
 
       try {
-        const pendingOrderJSON = localStorage.getItem('pendingOrder');
-        if (!pendingOrderJSON) {
-          throw new Error("Détails de la commande non trouvés. Impossible de finaliser.");
-        }
-        const pendingOrder = JSON.parse(pendingOrderJSON);
+        // pendingOrder is already parsed here
 
         const orderData = {
           ...pendingOrder,
@@ -88,7 +91,7 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
         // Cleanup and redirect
         localStorage.removeItem('pendingOrder');
         await clearCart();
-        router.push('/success');
+        router.push(`/success?email=${encodeURIComponent(orderData.customer_email)}`);
 
       } catch (orderError: any) {
         setMessage(`Erreur critique : Votre paiement a été accepté, mais nous n'avons pas pu enregistrer votre commande. Veuillez nous contacter. Erreur: ${orderError.message}`);
