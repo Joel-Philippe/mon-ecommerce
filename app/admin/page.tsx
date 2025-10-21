@@ -81,12 +81,24 @@ const AdminPage = () => {
     const checkAdminAccess = async () => {
       if (user) {
         const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL;
+        console.log("Admin Check: User Email ->", user.email);
+        console.log("Admin Check: Configured Admin Email ->", adminEmail);
+
+        if (!adminEmail) {
+          console.error("Admin Check: NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL is not defined.");
+          router.push('/');
+          setLoadingAdminCheck(false);
+          return;
+        }
+
         if (user.email === adminEmail) {
           setIsAdmin(true);
         } else {
+          console.warn("Admin Check: User email does not match admin email.");
           router.push('/');
         }
       } else {
+        console.warn("Admin Check: No user logged in.");
         router.push('/');
       }
       setLoadingAdminCheck(false);
