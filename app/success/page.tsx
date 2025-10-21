@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { useSearchParams } from 'next/navigation'; // Import useSearchParams
