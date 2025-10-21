@@ -17,15 +17,6 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
   const { clearCart } = useGlobalCart();
   const { user } = useAuth() || {};
 
-  const paymentElementOptions = {
-    layout: 'tabs',
-    defaultValues: {
-      billingDetails: {
-        email: user?.email || '',
-      },
-    },
-  };
-
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -113,3 +104,15 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
         setIsLoading(false);
     }
   };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <PaymentElement options={{
+        layout: 'tabs',
+        defaultValues: {
+          billingDetails: {
+            email: user?.email || '',
+          },
+        },
+      }} />
+      <button
