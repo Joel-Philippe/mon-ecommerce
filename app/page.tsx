@@ -476,17 +476,7 @@ const normalizeString = (str: string | undefined | null) => {
           {isFormVisible && formCard && (
             <UpdateCardModal
               formCard={formCard}
-              hideForm={hideForm}
-              handleInputChange={() => {}}
-              handleAddImageProduitDerive={() => {}}
-              handleRemoveProduitDerive={() => {}}
-              handleAddProduitDerive={() => {}}
-              handleAddCaracteristique={() => {}}
-              handleRemoveCaracteristique={() => {}}
-              handleAddTableauCaracteristiques={() => {}}
-              handleImageChange={() => {}}
-              updateCard={updateCard}
-              setFormCard={setFormCard}
+              onClose={hideForm}
             />
           )}
           
