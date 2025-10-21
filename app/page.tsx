@@ -287,11 +287,6 @@ const normalizeString = (str: string | undefined | null) => {
   // Removed useEffect that logs localStorage cart info
 
   const handleAddToCart = async (card: Card) => {
-    if (!user) {
-      router.push('/signup');
-      return;
-    }
-
     try {
       await addToCart(card, 1); // Pass the whole card object
     } catch (err: any) {
