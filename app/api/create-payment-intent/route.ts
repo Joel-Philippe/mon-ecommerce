@@ -49,6 +49,29 @@ export async function POST(req: Request) {
         ...(delivery ? { delivery: JSON.stringify(delivery) } : {}),
         stockReserved: 'true',
       },
+      shipping: delivery ? {
+        name: `${delivery.firstName} ${delivery.lastName}`,
+        address: {
+          line1: delivery.address,
+          city: delivery.city,
+          postal_code: delivery.postalCode,
+          country: delivery.country || 'FR', // Default to France if not provided
+        },
+      } : undefined,
+      payment_method_options: {
+        card: {
+          billing_details: delivery ? {
+            address: {
+              line1: delivery.address,
+              city: delivery.city,
+              postal_code: delivery.postalCode,
+              country: delivery.country || 'FR',
+            },
+            email: delivery.email,
+            name: `${delivery.firstName} ${delivery.lastName}`,
+          } : undefined,
+        },
+      },
       automatic_payment_methods: { enabled: true }
     });
 

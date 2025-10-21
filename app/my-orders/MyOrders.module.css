@@ -28,7 +28,7 @@
 
 .orderCard {
   background-color: #ffffff;
-  border: 2px solid #545353;
+  padding: 1rem;
   border-radius: 8px;
   transition: box-shadow 0.3s ease;
 }

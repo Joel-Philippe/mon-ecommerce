@@ -11,12 +11,11 @@ export async function POST(req: Request) {
 
   try {
     const docRef = await addDoc(collection(db, 'orders'), {
-      userEmail: email,
+      customer_email: email,
       userDisplayName: displayName || "Anonyme",
       userPhotoURL: photoURL || "",
       items,
-      purchaseDate: serverTimestamp(),
-      timestamp: serverTimestamp(),
+      createdAt: serverTimestamp(),
       status: 'paid',
     });
 

@@ -6,6 +6,7 @@ import { GlobalCartProvider } from '@/components/GlobalCartContext';
 import { SearchProvider } from '@/contexts/SearchContext';
 
 import React, { Suspense } from 'react';
+import { usePathname } from 'next/navigation';
 import './globals.css';
 import './video-banner.css';
 import './style.css';
@@ -14,17 +15,21 @@ import './style.css';
 import BottomNav from '@/components/BottomNav';
 import '@/components/BottomNav.css';
 import ProgressBar from '@/components/ProgressBar';
+import ScrollRestoration from '@/components/ScrollRestoration';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
+  const pathname = usePathname(); // Get the current pathname
+  const isAdminPage = pathname === '/admin'; // Check if it's the admin page
+
   return (
     <html lang="fr">
       <body>
         <ProgressBar />
+        <ScrollRestoration />
 
         <AuthProvider>
           <CheckboxProvider>
@@ -34,7 +39,7 @@ export default function RootLayout({
                   <Suspense fallback={<div>Chargement...</div>}>
                     {children}
                   </Suspense>
-                  <BottomNav />
+                  {!isAdminPage && <BottomNav />} {/* Conditionally render BottomNav */}
                 </ChakraProvider>
               </SearchProvider>
             </GlobalCartProvider>
