@@ -17,6 +17,15 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
   const { clearCart } = useGlobalCart();
   const { user } = useAuth() || {};
 
+  const paymentElementOptions = {
+    layout: 'tabs',
+    defaultValues: {
+      billingDetails: {
+        email: user?.email || '',
+      },
+    },
+  };
+
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -98,7 +107,7 @@ export default function CheckoutForm({ clientSecret }: { clientSecret: string })
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement />
+      <PaymentElement options={paymentElementOptions} />
       <button
         disabled={isLoading || !stripe || !elements}
         className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 w-full font-semibold"
