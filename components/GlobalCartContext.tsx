@@ -293,6 +293,7 @@ export const useGlobalCart = () => {
       errorCart: "Context not available (debug mode)",
       addToCart: async () => {},
       updateCartItemQuantity: async () => {},
+      debouncedUpdateCartItemQuantity: async () => {},
       removeCartItem: async () => {},
       clearCart: async () => {},
       clearCartError: () => {},
