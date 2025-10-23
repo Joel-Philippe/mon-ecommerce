@@ -159,6 +159,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         }
 
         .swiper-button-next, .swiper-button-prev {
+          display:none;
           color: #FFEB3B !important; /* Custom navigation color */
         }
 

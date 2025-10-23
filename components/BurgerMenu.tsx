@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { FiPower, FiUser, FiLogIn, FiHeart, FiShoppingBag } from 'react-icons/fi';
+import { FiPower, FiUser, FiLogIn, FiShoppingBag, FiMail } from 'react-icons/fi';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar } from '@chakra-ui/react';
 import ScrollRestorationLink from '@/components/ScrollRestorationLink';
@@ -78,30 +78,34 @@ const BurgerMenu = () => {
                   <span>Mon Compte</span>
                 </a>
               </ScrollRestorationLink>
-              <ScrollRestorationLink href="/favorites" passHref legacyBehavior>
-                <a className="menu-item">
-                  <FiHeart />
-                  <span>Mes Favoris</span>
-                </a>
-              </ScrollRestorationLink>
               <ScrollRestorationLink href="/my-orders" passHref legacyBehavior>
                 <a className="menu-item">
                   <FiShoppingBag />
                   <span>Mes Achats</span>
                 </a>
               </ScrollRestorationLink>
+              <a href="mailto:airpoolfan@gmail.com" className="menu-item">
+                <FiMail />
+                <span>Contact</span>
+              </a>
               <button onClick={handleLogout} className="menu-item logout-button">
                 <FiPower />
                 <span>Déconnexion</span>
               </button>
             </div>
           ) : (
-            <ScrollRestorationLink href="/login" passHref legacyBehavior>
-              <a className="menu-item">
-                <FiLogIn />
-                <span>Connexion</span>
+            <React.Fragment>
+              <ScrollRestorationLink href="/login" passHref legacyBehavior>
+                <a className="menu-item">
+                  <FiLogIn />
+                  <span>Connexion</span>
+                </a>
+              </ScrollRestorationLink>
+              <a href="mailto:airpoolfan@gmail.com" className="menu-item">
+                <FiMail />
+                <span>Contact</span>
               </a>
-            </ScrollRestorationLink>
+            </React.Fragment>
           )}
         </div>
       )}
