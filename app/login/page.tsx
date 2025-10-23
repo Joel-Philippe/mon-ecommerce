@@ -37,9 +37,10 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const trimmedUsername = username.trim();
     try {
-      await login(username, password);
-      if (username === 'philippejoel.wolff@gmail.com') {
+      await login(trimmedUsername, password);
+      if (trimmedUsername === 'philippejoel.wolff@gmail.com') {
         router.push('/admin');
       } else {
         router.push('/');

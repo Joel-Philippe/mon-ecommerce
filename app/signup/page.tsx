@@ -58,8 +58,10 @@ export default function Signup() {
 
     setLoading(true);
 
+    const trimmedEmail = email.trim();
+
     try {
-      await signup(email, password, displayName, photoFile);
+      await signup(trimmedEmail, password, displayName, photoFile);
       setLoading(false);
       setShowForm(false);
       onOpen();
