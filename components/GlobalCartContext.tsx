@@ -5,6 +5,18 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { getCartId } from "@/utils/getCartId";
 import { db } from "@/components/firebaseConfig";
 
+function debounce<F extends (...args: any[]) => void>(func: F, delay: number): (...args: Parameters<F>) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<F>) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
+
 // Define the structure of a cart item as stored in Firestore
 interface FirestoreCartItem {
   productId: string;
@@ -31,6 +43,7 @@ interface GlobalCartContextType {
   errorCart: string | null;
   addToCart: (product: Card, quantity: number) => Promise<void>;
   updateCartItemQuantity: (productId: string, quantity: number) => Promise<void>;
+  debouncedUpdateCartItemQuantity: (productId: string, quantity: number) => void;
   removeCartItem: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   clearCartError: () => void;
@@ -190,6 +203,13 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
     }
   }, []);
 
+  const debouncedUpdateCartItemQuantity = useCallback(
+    debounce(async (productId: string, quantity: number) => {
+      await updateCartItemQuantity(productId, quantity);
+    }, 500),
+    [updateCartItemQuantity]
+  );
+
   const removeCartItem = useCallback(async (productId: string) => {
     setLoadingCart(true);
     setErrorCart(null);
@@ -251,6 +271,7 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
         errorCart,
         addToCart,
         updateCartItemQuantity,
+        debouncedUpdateCartItemQuantity,
         removeCartItem,
         clearCart,
         // fetchCart, // fetchCart is no longer needed

@@ -7,6 +7,8 @@ import StockProgressBar from './StockProgressBar';
 import Countdown from './Countdown';
 import RatingStars from './RatingStars';
 import './NewCard.css';
+import { useGlobalCart } from '@/components/GlobalCartContext';
+import { useDebounce } from '@/hooks/useDebounce';
 import { Card } from '@/types';
 
 import { AiOutlineLoading } from 'react-icons/ai';
@@ -45,32 +47,36 @@ const NewCard: React.FC<NewCardProps> = ({
   onCountdownEnd,
   fetchProducts,
   onCategoryClick,
+  currentCount,
 }) => {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const { debouncedUpdateCartItemQuantity } = useGlobalCart();
+  const debouncedQuantity = useDebounce(quantity, 500);
   const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (card._id) {
-      const savedQuantity = sessionStorage.getItem(`quantity_${card._id}`);
-      console.log(`[${card.title}] Reading quantity from session storage:`, savedQuantity);
-      if (savedQuantity) {
-        setQuantity(parseInt(savedQuantity, 10));
-      }
+    if (isSelected) {
+      setQuantity(currentCount);
     }
-  }, [card._id]);
+  }, [currentCount, isSelected]);
 
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
       if (card._id) {
-        console.log(`[${card.title}] Saving quantity to session storage:`, quantity);
         sessionStorage.setItem(`quantity_${card._id}`, quantity.toString());
       }
     }
   }, [quantity, card._id]);
+
+  useEffect(() => {
+    if (isSelected && card._id) {
+      debouncedUpdateCartItemQuantity(card._id, debouncedQuantity);
+    }
+  }, [debouncedQuantity, isSelected, card._id, debouncedUpdateCartItemQuantity]);
 
   const availableStock = card.stock - card.stock_reduc;
 
@@ -191,9 +197,9 @@ const NewCard: React.FC<NewCardProps> = ({
             {!(isExpired || isOutOfStock) && (
               <div className="new-card-add-container">
                 <div className="new-card-quantity-controls">
-                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => { const newQ = Math.max(1, q - 1); console.log(`[${card.title}] Decrementing quantity to:`, newQ); return newQ; }); }}>-</button>
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }}>-</button>
                   <span>{quantity}</span>
-                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => { const newQ = Math.min(q + 1, availableStock); console.log(`[${card.title}] Incrementing quantity to:`, newQ); return newQ; }); }} disabled={quantity >= availableStock}>+</button>
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.min(q + 1, availableStock)); }} disabled={quantity >= availableStock}>+</button>
                 </div>
                 <button
                   className={`new-card-add-button ${isSelected ? 'selected' : ''}`}
