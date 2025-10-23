@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ScrollRestorationLink from './ScrollRestorationLink';
 import { FaHeart, FaCheck, FaShoppingCart } from 'react-icons/fa';
 import { Sparkles, Timer } from 'lucide-react';
@@ -23,7 +23,7 @@ interface NewCardProps {
   averageRating: number;
   userHasRated: boolean;
   hasBeenPurchased: boolean;
-  onAddToCart: (card: Card) => Promise<void>;
+  onAddToCart: (card: Card, quantity: number) => Promise<void>;
   onFavoriteToggle: (cardId: string) => Promise<void>;
   onCountdownEnd: (cardId: string) => void;
   fetchProducts: () => void;
@@ -48,6 +48,31 @@ const NewCard: React.FC<NewCardProps> = ({
 }) => {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (card._id) {
+      const savedQuantity = sessionStorage.getItem(`quantity_${card._id}`);
+      console.log(`[${card.title}] Reading quantity from session storage:`, savedQuantity);
+      if (savedQuantity) {
+        setQuantity(parseInt(savedQuantity, 10));
+      }
+    }
+  }, [card._id]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      if (card._id) {
+        console.log(`[${card.title}] Saving quantity to session storage:`, quantity);
+        sessionStorage.setItem(`quantity_${card._id}`, quantity.toString());
+      }
+    }
+  }, [quantity, card._id]);
+
+  const availableStock = card.stock - card.stock_reduc;
 
   const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -70,7 +95,7 @@ const NewCard: React.FC<NewCardProps> = ({
     if (!isCartLoading) {
       setIsCartLoading(true);
       try {
-        await onAddToCart(card);
+        await onAddToCart(card, quantity);
       } catch (error) {
         console.error("Error adding to cart:", error);
       } finally {
@@ -145,14 +170,7 @@ const NewCard: React.FC<NewCardProps> = ({
             <div className="new-card-stock">
               <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
             </div>
-          </div>
-          <div className="new-card-footer">
-            {hasBeenPurchased && (
-              <span className="new-card-purchased-text">
-                <FaCheck size={12} /> Déjà commandé
-              </span>
-            )}
-          <div className="new-card-rating">
+            <div className="new-card-rating">
               {card._id && (
                 <RatingStars
                   productId={card._id}
@@ -162,15 +180,29 @@ const NewCard: React.FC<NewCardProps> = ({
                 />
               )}
             </div>
+          </div>
+          <div className="new-card-footer">
+            {hasBeenPurchased && (
+              <span className="new-card-purchased-text">
+                <FaCheck size={12} /> Déjà commandé
+              </span>
+            )}
 
             {!(isExpired || isOutOfStock) && (
-              <button
-                className={`new-card-add-button ${isSelected ? 'selected' : ''}`}
-                onClick={handleAddToCartClick}
-                disabled={isMaxReached || isSelected || isCartLoading}
-              >
-                {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : <FaShoppingCart />)}
-              </button>
+              <div className="new-card-add-container">
+                <div className="new-card-quantity-controls">
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => { const newQ = Math.max(1, q - 1); console.log(`[${card.title}] Decrementing quantity to:`, newQ); return newQ; }); }}>-</button>
+                  <span>{quantity}</span>
+                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => { const newQ = Math.min(q + 1, availableStock); console.log(`[${card.title}] Incrementing quantity to:`, newQ); return newQ; }); }} disabled={quantity >= availableStock}>+</button>
+                </div>
+                <button
+                  className={`new-card-add-button ${isSelected ? 'selected' : ''}`}
+                  onClick={handleAddToCartClick}
+                  disabled={isMaxReached || isSelected || isCartLoading}
+                >
+                  {isCartLoading ? <AiOutlineLoading className="loading-spinner" /> : (isSelected ? <FaCheck /> : <FaShoppingCart />)}
+                </button>
+              </div>
             )}
             {isOutOfStock && (
                 <span className="out-of-stock-message">Épuisé</span>

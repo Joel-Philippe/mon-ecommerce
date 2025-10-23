@@ -45,11 +45,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur();
+    }
+  };
+
   const containerStyles: SystemStyleObject = {
     position: "relative",
     zIndex: 2,
     width: "100%",
-    maxWidth: "800px",
     margin: "0 auto",
   };
 
@@ -84,6 +89,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           placeholder={placeholder}
           value={searchTerm}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           sx={inputStyles}
         />
         {searchTerm && (
