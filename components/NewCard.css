@@ -86,7 +86,7 @@
 }
 
 .new-card-stock {
-  margin-bottom: 1rem;
+  margin-bottom: 0.4rem;
 }
 
 .new-card-footer {
@@ -231,4 +231,45 @@
   font-size: 1rem;
   font-weight: 600;
   color: #ef4444;
+}
+
+.new-card-add-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.new-card-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.new-card-quantity-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  padding-bottom: 3px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  line-height: 1;
+}
+
+.new-card-quantity-controls button:hover {
+  background-color: #e0e0e0;
+}
+
+.new-card-quantity-controls span {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.new-card-rating {
+  margin-bottom: 1px;
 }

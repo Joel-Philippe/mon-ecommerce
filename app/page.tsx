@@ -99,12 +99,6 @@ const normalizeString = (str: string | undefined | null) => {
     );
   };
 
-
-
-
-
-
-
   const hideForm = () => {
     setIsFormVisible(false);
     setFormCard(null); // Also clear formCard when hiding the form
@@ -286,9 +280,9 @@ const normalizeString = (str: string | undefined | null) => {
 
   // Removed useEffect that logs localStorage cart info
 
-  const handleAddToCart = async (card: Card) => {
+  const handleAddToCart = async (card: Card, quantity: number) => {
     try {
-      await addToCart(card, 1); // Pass the whole card object
+      await addToCart(card, quantity); // Pass the whole card object and quantity
     } catch (err: any) {
       console.error("Error adding to cart:", err);
       // The context now sets the error message, so we can display it elsewhere

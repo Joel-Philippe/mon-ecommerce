@@ -4,6 +4,7 @@
 @import 'swiper/css/thumbs';
 body{
     background:linear-gradient(to right, rgb(255, 246, 241)0%, #f9f9f9 100%);
+    min-height: 1500px;
 }
 .chakra-ui-light{
     background: linear-gradient(to right, rgb(255, 246, 241) 0%, #f9f9f9 100%);
