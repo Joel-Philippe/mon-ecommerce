@@ -16,7 +16,7 @@
 
 .favorites-message {
   text-align: center;
-  color:black;
+  color: var(--chakra-colors-chakra-body-text);
   font-size: 1.1em;
   margin-top: 50px;
   border-radius: 5px;

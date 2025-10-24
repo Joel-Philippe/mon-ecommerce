@@ -3,19 +3,19 @@
   margin: 2rem auto;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--chakra-shadows-md);
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  color: #FF9800; /* Updated color */
+  color: var(--chakra-colors-orange-500); /* Updated color */
   text-align: center;
 }
 
 .error {
-  color: #e53e3e;
+  color: var(--chakra-colors-red-500);
   text-align: center;
   font-size: 1.1rem;
 }
@@ -27,21 +27,21 @@
 }
 
 .orderCard {
-  background-color: #ffffff;
+  background-color: var(--chakra-colors-chakra-body-bg);
   padding: 1rem;
   border-radius: 8px;
   transition: box-shadow 0.3s ease;
 }
 
 .orderCard:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--chakra-shadows-lg);
 }
 
 .orderHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--chakra-colors-chakra-border-color);
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
@@ -49,18 +49,18 @@
 .orderId {
   font-size: 1rem;
   font-weight: 600;
-  color: #444;
+  color: var(--chakra-colors-chakra-body-text);
 }
 
 .orderDate {
   font-size: 0.9rem;
-  color: #777;
+  color: var(--chakra-colors-gray-500);
 }
 
 .orderTotal {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #009688;
+  color: var(--chakra-colors-teal-500);
 }
 
 .itemList {
@@ -86,7 +86,7 @@
 
 .itemTitle {
   font-weight: 600;
-  color: #545353;
+  color: var(--chakra-colors-chakra-body-text);
   text-decoration: none;
 }
 
@@ -96,13 +96,13 @@
 
 .itemQuantity {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--chakra-colors-gray-500);
 }
 
 .itemPrice {
   font-weight: 600;
   font-size: 1rem;
-  color: #555;
+  color: var(--chakra-colors-chakra-body-text);
 }
 
 /* Responsive adjustments */

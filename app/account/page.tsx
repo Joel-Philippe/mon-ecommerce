@@ -92,7 +92,6 @@ const AccountPage = () => {
           max-width: 960px;
           margin: 40px auto;
           padding: 30px;
-          background-color: white;
           border-radius: 16px;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           color: #e63198;
@@ -123,14 +122,13 @@ const AccountPage = () => {
         }
 
         .nav-item {
-          background-color: transparent;
           border: none;
           width: 100%;
           padding: 12px 20px;
           border-radius: 10px;
           font-size: 1em;
           font-weight: 600;
-          color: #64748b;
+          color: #db8505;
           cursor: pointer;
           transition: all 0.3s ease;
           display: flex;

@@ -1,14 +1,15 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { FiPower, FiUser, FiLogIn, FiShoppingBag, FiMail } from 'react-icons/fi';
+import { FiPower, FiUser, FiLogIn, FiShoppingBag, FiMail, FiMoon, FiSun } from 'react-icons/fi';
 import { useAuth } from '@/contexts/AuthContext';
-import { Avatar } from '@chakra-ui/react';
+import { Avatar, useColorMode } from '@chakra-ui/react';
 import ScrollRestorationLink from '@/components/ScrollRestorationLink';
 import './BurgerMenu.css';
 
 const BurgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { colorMode, toggleColorMode } = useColorMode();
   const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
@@ -45,7 +46,7 @@ const BurgerMenu = () => {
             name={user?.displayName || undefined}
             src={user?.photoURL || undefined}
             size="sm"
-            bg="rgb(251 0 255)"
+            bg="purple.500"
             color="white"
           />
         </button>
@@ -84,10 +85,14 @@ const BurgerMenu = () => {
                   <span>Mes Achats</span>
                 </a>
               </ScrollRestorationLink>
-              <a href="mailto:airpoolfan@gmail.com" className="menu-item">
+              <a href="mailto:admin@example.com" className="menu-item">
                 <FiMail />
                 <span>Contact</span>
               </a>
+              <button onClick={toggleColorMode} className="menu-item">
+                {colorMode === 'light' ? <FiMoon /> : <FiSun />}
+                <span>Mode {colorMode === 'light' ? 'Sombre' : 'Clair'}</span>
+              </button>
               <button onClick={handleLogout} className="menu-item logout-button">
                 <FiPower />
                 <span>Déconnexion</span>
@@ -101,10 +106,14 @@ const BurgerMenu = () => {
                   <span>Connexion</span>
                 </a>
               </ScrollRestorationLink>
-              <a href="mailto:airpoolfan@gmail.com" className="menu-item">
+              <a href="mailto:admin@example.com" className="menu-item">
                 <FiMail />
                 <span>Contact</span>
               </a>
+              <button onClick={toggleColorMode} className="menu-item">
+                {colorMode === 'light' ? <FiMoon /> : <FiSun />}
+                <span>Mode {colorMode === 'light' ? 'Sombre' : 'Clair'}</span>
+              </button>
             </React.Fragment>
           )}
         </div>
