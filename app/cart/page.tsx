@@ -8,6 +8,7 @@ import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import { AiOutlineLoading } from 'react-icons/ai';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import FixedHeader from '@/components/FixedHeader';
 import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '@/contexts/AuthContext'; // Import useAuth
 
@@ -143,57 +144,61 @@ export default function CartPage() {
   };
 
   return (
-    <div className="panier-container" ref={scrollRef}>
-      {!isAuthenticated && (
-        <div className="guest-message">
-          <p>Vous n'êtes pas connecté. <Link href="/login">Connectez-vous</Link> pour bénéficier de nos réductions exclusives !</p>
-        </div>
-      )}
-      {cartItems.length === 0 ? (
-        <div className="panier-empty">
-          <p>Ton panier est vide...</p>
-          <Link href="/" className="continuer-shopping">
-            Continuer mes achats
-          </Link>
-        </div>
-      ) : (
-        <>
-        <div className="panier-layout">
-          <div className="panier-items">
-            {cartItems.map(item => {
-              const price = isAuthenticated && item.price_promo ? item.price_promo : item.price;
-              return (
-                <div key={item._id} className="panier-item">
-                  <Link href={`/${item._id}`} passHref legacyBehavior>
-                    <div className="panier-item-image">
-                      <Image src={item.images[0]} alt={item.title} width={150} height={150} />
-                    </div>
-                  </Link>
-                  <div className="panier-item-details">
-                    <h2>{item.title}</h2>
-                    <p>{price && `${price}€`}</p>
-                    <div className="panier-item-quantity">
-                      <button onClick={() => handleQuantityChange(item._id, item.count - 1)} className="quantity-btn" disabled={loadingCart}><FaMinus /></button>
-                      <span>{item.count}</span>
-                      <button onClick={() => handleQuantityChange(item._id, item.count + 1)} className="quantity-btn" disabled={loadingCart}><FaPlus /></button>
-                      <button onClick={() => removeCartItem(item._id)} className="remove-item-btn" disabled={loadingCart}>
-                        <FaTrash />
-                      </button>
+    <>
+      <FixedHeader title="Mon Panier" />
+      <div className="panier-container" ref={scrollRef} style={{ paddingTop: '60px' }}>
+        {!isAuthenticated && (
+          <div className="guest-message">
+            <p>Vous n'êtes pas connecté. <Link href="/login">Connectez-vous</Link> pour bénéficier de nos réductions exclusives !</p>
+          </div>
+        )}
+        {cartItems.length === 0 ? (
+          <div className="panier-empty">
+            <p>Ton panier est vide...</p>
+            <Link href="/" className="continuer-shopping">
+              Continuer mes achats
+            </Link>
+          </div>
+        ) : (
+          <>
+          <div className="panier-layout">
+              <div className="panier-summary">
+              <h2>Total: {total.toFixed(2)}€</h2>
+              <button className="checkout-btn" onClick={handleCheckout} disabled={isCheckingOut}>
+                {isCheckingOut ? <AiOutlineLoading className="loading-spinner" /> : 'Passer la commande'}
+              </button>
+            </div>
+            <div className="panier-items">
+              {cartItems.map(item => {
+                const price = isAuthenticated && item.price_promo ? item.price_promo : item.price;
+                return (
+                  <div key={item._id} className="panier-item">
+                    <Link href={`/${item._id}`} passHref legacyBehavior>
+                      <div className="panier-item-image">
+                        <Image src={item.images[0]} alt={item.title} width={150} height={150} />
+                      </div>
+                    </Link>
+                    <div className="panier-item-details">
+                      <h2>{item.title}</h2>
+                      <p>{price && `${price}€`}</p>
+                      <div className="panier-item-quantity">
+                        <button onClick={() => handleQuantityChange(item._id, item.count - 1)} className="quantity-btn" disabled={loadingCart}><FaMinus /></button>
+                        <span>{item.count}</span>
+                        <button onClick={() => handleQuantityChange(item._id, item.count + 1)} className="quantity-btn" disabled={loadingCart}><FaPlus /></button>
+                        <button onClick={() => removeCartItem(item._id)} className="remove-item-btn" disabled={loadingCart}>
+                          <FaTrash />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+
           </div>
-          <div className="panier-summary">
-            <h2>Total: {total.toFixed(2)}€</h2>
-            <button className="checkout-btn" onClick={handleCheckout} disabled={isCheckingOut}>
-              {isCheckingOut ? <AiOutlineLoading className="loading-spinner" /> : 'Passer la commande'}
-            </button>
-          </div>
-        </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </>
   );
 }

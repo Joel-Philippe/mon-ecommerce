@@ -7,6 +7,7 @@ import ProfilePhotoForm from '@/components/ProfilePhotoForm';
 import DisplayNameForm from '@/components/DisplayNameForm';
 import ChangePasswordForm from '@/components/ChangePasswordForm';
 import DeleteAccountButton from '@/components/DeleteAccountButton';
+import FixedHeader from '@/components/FixedHeader';
 
 
 import { FiUser, FiLock, FiAlertCircle, FiCamera } from 'react-icons/fi'; // Import icons for tabs
@@ -37,7 +38,8 @@ const AccountPage = () => {
 
   return (
     <>
-      <div className="account-page-container"> {/* Attach the ref */}
+      <FixedHeader title="Mon Compte" />
+      <div className="account-page-container" style={{ paddingTop: '60px' }}> {/* Attach the ref */}
         <h1>Mon Compte</h1>
 
         {/* Navigation Menu */}

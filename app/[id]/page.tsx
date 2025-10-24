@@ -8,6 +8,7 @@ import Countdown from '@/components/Countdown';
 import ImageSlider from '@/components/ImageSlider'; // Import the new ImageSlider
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import FixedHeader from '@/components/FixedHeader';
 import styles from './ProductPage.module.css';
 
 
@@ -61,12 +62,14 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <motion.div
-      className={styles.productPageContainer}
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <>
+      <FixedHeader title={product.title} />
+      <motion.div
+        className={styles.productPageContainer}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
       <div className={styles.leftColumn}>
         {product.images && product.images.length > 0 && (
           <ImageSlider images={product.images} />
@@ -74,7 +77,6 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className={styles.rightColumn}>
-        <h1 className={styles.productTitle}>{product.title}</h1>
         {product.subtitle && <h2 className={styles.subtitle}>{product.subtitle}</h2>}
         
         <div className={styles.priceContainer}>
@@ -173,6 +175,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         )}
       </div>
     </motion.div>
+    </>
   );
 };
 

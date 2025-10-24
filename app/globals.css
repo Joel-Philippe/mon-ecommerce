@@ -2,6 +2,25 @@
 @import 'swiper/css/navigation';
 @import 'swiper/css/pagination';
 @import 'swiper/css/thumbs';
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/fonts/Rubik-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/fonts/Rubik-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+h1, h2, h3 {
+  font-family: 'Rubik', sans-serif;
+}
+
 body{
     background: var(--chakra-colors-chakra-body-bg);
     color: var(--chakra-colors-chakra-body-text);
@@ -31,5 +50,5 @@ body{
 }
 
 .chakra-ui-light{
-    background: white;
+    background: linear-gradient(to right, rgb(255, 246, 241) 0%, #f9f9f9 100%);
 }

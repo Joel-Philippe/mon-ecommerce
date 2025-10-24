@@ -1,0 +1,13 @@
+.fixed-header {
+  height: 60px; /* Standard height for the header */
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+  margin-left: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}

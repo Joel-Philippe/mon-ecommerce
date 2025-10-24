@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Link from 'next/link';
 import Image from 'next/image';
+import FixedHeader from '@/components/FixedHeader';
 import styles from './MyOrders.module.css';
 
 interface OrderItem {
@@ -72,8 +73,10 @@ export default function MyOrdersPage() {
   }
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}></h1>
+    <>
+      <FixedHeader title="Mes Achats" />
+      <div className={styles.container} style={{ paddingTop: '60px' }}>
+        <h1 className={styles.title}></h1>
       {orders.length === 0 ? (
         <p>Tu n'as encore effectué aucun achat.</p>
       ) : (
@@ -116,5 +119,6 @@ export default function MyOrdersPage() {
         </div>
       )}
     </div>
+    </>
   );
 }
