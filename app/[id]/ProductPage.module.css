@@ -10,6 +10,7 @@
   padding-top: 60px; /* Added for fixed header */
   gap: 2rem;
   margin-bottom: 200px;
+  margin-top: 50px;
 }
 
 .leftColumn {

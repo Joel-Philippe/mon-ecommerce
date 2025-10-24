@@ -20,7 +20,7 @@ const FixedHeader: React.FC<FixedHeaderProps> = ({ title }) => {
       top="0"
       left="0"
       right="0"
-      zIndex="999"
+      zIndex="99999"
       alignItems="center"
       p="4"
       bg={bgColor}
