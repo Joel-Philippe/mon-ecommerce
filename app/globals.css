@@ -16,6 +16,7 @@ body{
   --burger-icon-bar-color: #FF6F00;
   --profile-avatar-hover-shadow: 0 0 0 2px rgba(251, 0, 255, 0.5);
   --search-icon-color: #FF6F00;
+  --new-card-price-color: #7e9090;
 }
 
 [data-theme="dark"] {
@@ -26,8 +27,9 @@ body{
   --burger-icon-bar-color: #fff;
   --profile-avatar-hover-shadow: 0 0 0 2px rgba(150, 0, 150, 0.7);
   --search-icon-color: var(--chakra-colors-chakra-body-text);
+  --new-card-price-color: var(--chakra-colors-chakra-body-text);
 }
 
 .chakra-ui-light{
-    background: linear-gradient(to right, rgb(255, 246, 241) 0%, #f9f9f9 100%);
+    background: white;
 }

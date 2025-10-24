@@ -38,7 +38,7 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de commande - Exercide</title>
+    <title>Confirmation de commande - To Easy Service</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -595,7 +595,7 @@ export const sendOrderConfirmationEmail = async (orderData: OrderEmailData) => {
 
     // Préparer le payload pour Resend
     const emailPayload = {
-      from: 'Exercide <onboarding@resend.dev>', // Nom cohérent sans "Test"
+      from: 'To Easy Service <onboarding@resend.dev>', // Nom cohérent sans "Test"
       to: [orderData.customerEmail],
       subject: `Confirmation de votre commande #${orderData.sessionId.slice(-8)}`, // Sujet professionnel sans émojis
       html: createOrderEmailHTML(orderData),
@@ -625,10 +625,10 @@ ${orderData.deliveryInfo.country}
 ${orderData.deliveryInfo.phone}
 
 Cordialement,
-L'équipe Exercide
+L'équipe To Easy Service
 
 ---
-Exercide
+To Easy Service
 Email: contact@exercide.com
 Téléphone: +33 1 23 45 67 89
       `

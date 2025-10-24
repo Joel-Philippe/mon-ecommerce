@@ -214,9 +214,9 @@ export const sendOrderConfirmationEmail = async (orderData: OrderEmailData) => {
 
     // Préparer l'email
     const emailPayload = {
-      from: 'Exercide <noreply@resend.dev>', // Utiliser le domaine de test Resend
+      from: 'To Easy Service <noreply@resend.dev>', // Utiliser le domaine de test Resend
       to: [orderData.customerEmail],
-      subject: `🎉 Confirmation de votre commande #${orderData.sessionId.slice(-8)} - Exercide`,
+      subject: `🎉 Confirmation de votre commande #${orderData.sessionId.slice(-8)} - To Easy Service`,
       html: htmlTemplate,
       text: `
 Merci pour votre commande !
@@ -232,7 +232,7 @@ ${orderData.items.map(item => `- ${item.title} (${item.count}x) : ${item.total.t
 Total payé: ${orderData.totalPaid.toFixed(2)}€
 
 Merci de votre confiance !
-Exercide
+To Easy Service
       `
     };
 

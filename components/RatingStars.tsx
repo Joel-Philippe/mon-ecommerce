@@ -4,6 +4,7 @@ import { FaStar } from 'react-icons/fa';
 import { getAuth } from 'firebase/auth';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useColorModeValue } from '@chakra-ui/react';
 
 interface RatingStarsProps {
   productId: string;
@@ -80,7 +81,7 @@ export default function RatingStars({
           color={
             star <= displayStars
               ? '#FFC107'
-              : 'rgb(0 0 0 / 32%)'
+              : useColorModeValue('rgb(0 0 0 / 32%)', 'white')
           }
           onMouseEnter={() => !userHasRated && setHovered(star)}
           onMouseLeave={() => setHovered(null)}
