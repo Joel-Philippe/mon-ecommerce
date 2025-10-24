@@ -9,6 +9,7 @@ import NewCard from '@/components/NewCard'; // Import NewCard
 import { Card } from '@/types';
 import { FaCheck } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import FixedHeader from '@/components/FixedHeader';
 
 import Link from '@/components/ScrollRestorationLink';
 import Image from 'next/image';
@@ -139,53 +140,57 @@ export default function FavoritesPage() {
     return <div>Erreur: {error}</div>;
   }
 
-  if (!user) {
-    return (
-      <div className="favorites-page-container">
-        <h1 className="favorites-title">Mes Articles Favoris</h1>
-        <p className="favorites-message">Connecte toi pour voir tes articles favoris.</p>
-        <Link href="/login" className="favorites-login-button">Se connecter</Link>
-      </div>
-    );
-  }
-
   return (
-    <div className="favorites-page-container"> {/* Attach ref */}
-      <h1 className="favorites-title"></h1>
-
-      {favoriteCards.length === 0 ? (
-        <p className="favorites-message">Tu n'as pas encore d'articles favoris.</p>
-      ) : (
-        <div className="cards-container">
-          {favoriteCards.map((card) => {
-            const isSelected = card._id ? !!globalCart[card._id]?.count : false; // Check by _id
-            const available = Number(card.stock) - Number(card.stock_reduc);
-            const isMaxReached = card._id ? (globalCart[card._id]?.count || 0) >= available : false;
-            const isOutOfStock = available <= 0;
-            const isExpiredCard = card._id ? expiredCards.has(card._id) : false;
-
-            return (
-              <NewCard
-                key={card._id}
-                card={card}
-                isFavorite={true} // Always true in favorites page
-                isSelected={isSelected}
-                isExpired={isExpiredCard}
-                isOutOfStock={isOutOfStock}
-                isMaxReached={isMaxReached}
-                currentCount={card._id ? globalCart[card._id]?.count || 0 : 0}
-                averageRating={calculateAverageRating(card.reviews)}
-                userHasRated={hasUserRated(card.reviews)}
-                onAddToCart={handleAddToCart}
-                onFavoriteToggle={handleFavoriteToggle}
-                onCountdownEnd={handleCountdownEnd}
-                fetchProducts={fetchFavoriteCards} // Re-fetch favorites after rating
-                hasBeenPurchased={false}
-              />
-            );
-          })}
+    <>
+      <FixedHeader title="Mes Articles Favoris" />
+      {/* Content for non-logged-in user */}
+      {!user && (
+        <div className="favorites-page-container" style={{ paddingTop: '60px' }}>
+          <p className="favorites-message">Connecte toi pour voir tes articles favoris.</p>
+          <Link href="/login" className="favorites-login-button">Se connecter</Link>
         </div>
       )}
-    </div>
+
+      {/* Content for logged-in user */}
+      {user && (
+        <div className="favorites-page-container" style={{ paddingTop: '60px' }}> {/* Attach ref */}
+          <h1 className="favorites-title"></h1>
+
+          {favoriteCards.length === 0 ? (
+            <p className="favorites-message">Tu n'as pas encore d'articles favoris.</p>
+          ) : (
+            <div className="cards-container">
+              {favoriteCards.map((card) => {
+                const isSelected = card._id ? !!globalCart[card._id]?.count : false; // Check by _id
+                const available = Number(card.stock) - Number(card.stock_reduc);
+                const isMaxReached = card._id ? (globalCart[card._id]?.count || 0) >= available : false;
+                const isOutOfStock = available <= 0;
+                const isExpiredCard = card._id ? expiredCards.has(card._id) : false;
+
+                return (
+                  <NewCard
+                    key={card._id}
+                    card={card}
+                    isFavorite={true} // Always true in favorites page
+                    isSelected={isSelected}
+                    isExpired={isExpiredCard}
+                    isOutOfStock={isOutOfStock}
+                    isMaxReached={isMaxReached}
+                    currentCount={card._id ? globalCart[card._id]?.count || 0 : 0}
+                    averageRating={calculateAverageRating(card.reviews)}
+                    userHasRated={hasUserRated(card.reviews)}
+                    onAddToCart={handleAddToCart}
+                    onFavoriteToggle={handleFavoriteToggle}
+                    onCountdownEnd={handleCountdownEnd}
+                    fetchProducts={fetchFavoriteCards} // Re-fetch favorites after rating
+                    hasBeenPurchased={false}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 }

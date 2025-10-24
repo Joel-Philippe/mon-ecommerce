@@ -59,7 +59,6 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             border-radius: 24px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            border: 1px solid #e2e8f0;
         }
         
         .header { 
@@ -110,7 +109,6 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             font-size: 14px;
             font-weight: 500;
             margin: 20px 0;
-            border: 1px solid rgba(16, 185, 129, 0.2);
         }
         
         .main-content {
@@ -310,7 +308,6 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             background: #ffffff;
             padding: 24px;
             border-radius: 16px;
-            border: 1px solid #a7f3d0;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
         
@@ -333,14 +330,12 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             font-size: 15px;
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 1px solid #e5e7eb;
         }
         
         .footer {
             background: #f8fafc;
             padding: 50px 40px;
             text-align: center;
-            border-top: 1px solid #e2e8f0;
             border-radius: 0 0 24px 24px;
         }
         
@@ -376,7 +371,6 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             background: #ffffff;
             padding: 12px 20px;
             border-radius: 25px;
-            border: 1px solid #e2e8f0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
@@ -414,7 +408,6 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             background: #ffffff;
             padding: 20px;
             border-radius: 16px;
-            border: 1px solid #e5e7eb;
         }
         
         .divider {
@@ -544,13 +537,13 @@ const createOrderEmailHTML = (orderData: OrderEmailData): string => {
             
             <div class="contact-info">
                 <div class="contact-item">
-                    📧 contact@exercide.com
+                    📧 contact@ToEasy.com
                 </div>
                 <div class="contact-item">
                     📞 +33 1 23 45 67 89
                 </div>
                 <div class="contact-item">
-                    🌐 www.exercide.com
+                    🌐 www.ToEasy.com
                 </div>
             </div>
 
@@ -629,7 +622,7 @@ L'équipe To Easy Service
 
 ---
 To Easy Service
-Email: contact@exercide.com
+Email: contact@ToEasy.com
 Téléphone: +33 1 23 45 67 89
       `
     };
