@@ -40,7 +40,7 @@ export const sendOrderConfirmationEmail = async (orderData: OrderEmailData) => {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de commande - Exercide</title>
+    <title>Confirmation de commande - To Easy Service</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -206,7 +206,7 @@ export const sendTestEmail = async (testEmail: string) => {
     const emailData = {
       to: [testEmail],
       from: fromEmail,
-      subject: '🧪 Test d\'envoi d\'email - Exercide',
+      subject: '🧪 Test d\'envoi d\'email - To Easy Service',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: white; border-radius: 12px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 20px;">
@@ -214,7 +214,7 @@ export const sendTestEmail = async (testEmail: string) => {
           </div>
           <p>Si vous recevez cet email, la configuration Resend fonctionne parfaitement.</p>
           <p><strong>Date du test :</strong> ${new Date().toLocaleString('fr-FR')}</p>
-          <p><strong>Envoyé depuis :</strong> Exercide - Plateforme E-commerce Sécurisée</p>
+          <p><strong>Envoyé depuis :</strong> To Easy Service - Plateforme E-commerce Sécurisée</p>
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
           <p style="color: #666; font-size: 12px; text-align: center;">
             Cet email a été envoyé via Resend

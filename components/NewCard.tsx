@@ -10,6 +10,7 @@ import './NewCard.css';
 import { useGlobalCart } from '@/components/GlobalCartContext';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Card } from '@/types';
+import { useColorModeValue } from '@chakra-ui/react';
 
 import { AiOutlineLoading } from 'react-icons/ai';
 import { motion } from 'framer-motion';
@@ -137,7 +138,7 @@ const NewCard: React.FC<NewCardProps> = ({
         </div>
         <div className="new-card-details">
           <div className="new-card-header">
-            <h3 className="new-card-title" style={{ color: card.categorieBackgroundColor }}>{card.title}</h3>
+            <h3 className="new-card-title" style={{ color: useColorModeValue(card.categorieBackgroundColor, 'white') }}>{card.title}</h3>
             <button
               className={`new-card-favorite-button ${isFavorite ? 'favorited' : ''}`}
               onClick={handleFavoriteClick}
