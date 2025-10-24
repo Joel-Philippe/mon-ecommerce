@@ -3,9 +3,31 @@
 @import 'swiper/css/pagination';
 @import 'swiper/css/thumbs';
 body{
-    background:linear-gradient(to right, rgb(255, 246, 241)0%, #f9f9f9 100%);
+    background: var(--chakra-colors-chakra-body-bg);
+    color: var(--chakra-colors-chakra-body-text);
     min-height: 1500px;
 }
+
+:root {
+  --menu-background-gradient: linear-gradient(90deg,#f8ede9 0,#fffcdd);
+  --bottom-nav-item-color: #FF6F00;
+  --bottom-nav-item-background: linear-gradient(90deg,#fffcdd 0,#f9f9f9);
+  --menu-button-color: #FF6F00;
+  --burger-icon-bar-color: #FF6F00;
+  --profile-avatar-hover-shadow: 0 0 0 2px rgba(251, 0, 255, 0.5);
+  --search-icon-color: #FF6F00;
+}
+
+[data-theme="dark"] {
+  --menu-background-gradient: var(--chakra-colors-chakra-body-bg);
+  --bottom-nav-item-color: var(--chakra-colors-chakra-body-text);
+  --bottom-nav-item-background: var(--chakra-colors-chakra-body-bg);
+  --menu-button-color: var(--chakra-colors-chakra-body-text);
+  --burger-icon-bar-color: #fff;
+  --profile-avatar-hover-shadow: 0 0 0 2px rgba(150, 0, 150, 0.7);
+  --search-icon-color: var(--chakra-colors-chakra-body-text);
+}
+
 .chakra-ui-light{
     background: linear-gradient(to right, rgb(255, 246, 241) 0%, #f9f9f9 100%);
 }

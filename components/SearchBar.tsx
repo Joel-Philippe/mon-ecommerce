@@ -8,6 +8,7 @@ import {
   IconButton,
   Box,
   SystemStyleObject,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FaSearch } from 'react-icons/fa';
 import { X } from 'lucide-react';
@@ -62,9 +63,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
     border: "none",
     backdropFilter: "blur(10px)",
     borderRadius: "30px",
-    bg: "rgba(255, 255, 255, 0.7)",
+    bg: useColorModeValue("rgba(255, 255, 255, 0.7)", "rgba(26, 32, 44, 0.7)"),
     '::placeholder': {
-      color: 'rgb(255, 143, 0)',
+      color: useColorModeValue("#FF6F00", "gray.400"),
     },
     _hover: {
       borderColor: "transparent",
@@ -72,7 +73,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     _focus: {
       borderColor: "transparent",
       boxShadow: "0 8px 20px rgba(102, 126, 234, 0.15)",
-      background: "white",
+      background: useColorModeValue("white", "gray.700"),
       transform: "translateY(-2px)",
       zIndex: 1,
     },
@@ -82,7 +83,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <Box as="div" sx={containerStyles} className={className}>
       <InputGroup>
-        <InputLeftElement pointerEvents="none">
+        <InputLeftElement pointerEvents="none" color="var(--search-icon-color)">
           <FaSearch />
         </InputLeftElement>
         <Input

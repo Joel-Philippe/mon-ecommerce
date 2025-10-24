@@ -1,5 +1,6 @@
 'use client';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import theme from './theme';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CheckboxProvider } from '@/contexts/CheckboxContext';
 import { GlobalCartProvider } from '@/components/GlobalCartContext';
@@ -28,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <ProgressBar />
         <ScrollRestoration />
 
@@ -35,7 +37,7 @@ export default function RootLayout({
           <CheckboxProvider>
             <GlobalCartProvider>
               <SearchProvider>
-                <ChakraProvider>
+                <ChakraProvider theme={theme}>
                   <Suspense fallback={<div>Chargement...</div>}>
                     {children}
                   </Suspense>

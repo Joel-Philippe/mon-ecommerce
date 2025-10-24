@@ -17,7 +17,8 @@ import {
   VStack,
   HStack,
   Divider,
-  Text
+  Text,
+  useColorModeValue
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { FaGoogle } from 'react-icons/fa';
@@ -66,14 +67,14 @@ export default function Login() {
         minHeight="100vh" 
         align="center" 
         justify="center" 
-        bg="rgb(255, 246, 241)" 
+        bg={useColorModeValue("rgb(255, 246, 241)", "gray.900")} 
         px={4}
         backgroundSize="cover"
         backgroundPosition="center"
         backgroundRepeat="no-repeat"
         >
-        <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg="white" opacity={0.9}>
-          <Heading as="h1" size="lg" mb={6} textAlign="center" color={'black'}>
+        <Box width={{ base: 'full', md: 'md' }} p={8} borderWidth={0} borderRadius={8} bg={useColorModeValue("white", "gray.700")} opacity={0.9}>
+          <Heading as="h1" size="lg" mb={6} textAlign="center" color={useColorModeValue('black', 'white')}>
             Connexion
           </Heading>
           
@@ -89,7 +90,7 @@ export default function Login() {
 
             <HStack w="full">
               <Divider />
-              <Text color="gray.500" whiteSpace="nowrap">
+              <Text color={useColorModeValue("gray.500", "gray.400")} whiteSpace="nowrap">
                 ou
               </Text>
               <Divider />
@@ -110,7 +111,7 @@ export default function Login() {
                     fontWeight: '200',
                     lineHeight: '19.36px',
                     textAlign: 'left',
-                    color: 'black'
+                    color: useColorModeValue('black', 'gray.400')
                   },
                   '&:focus': {
                     borderColor: 'bisque',
@@ -132,7 +133,7 @@ export default function Login() {
                     fontWeight: '200',
                     lineHeight: '19.36px',
                     textAlign: 'left',
-                    color: 'black'
+                    color: useColorModeValue('black', 'gray.400')
                   },
                   '&:focus': {
                     borderColor: 'bisque',
@@ -154,19 +155,19 @@ export default function Login() {
             )}
               <Button 
                 type="submit" 
-                color="black" 
-                bg="white" 
+                color={useColorModeValue("black", "white")} 
+                bg={useColorModeValue("white", "gray.600")} 
                 colorScheme="teal" 
                 width="full" 
                 mb={10}
-                _hover={{ color:'white', bg: 'black' }}
+                _hover={{ color: useColorModeValue('white', 'black'), bg: useColorModeValue('black', 'white') }}
               >
                 Me connecter
               </Button>
           </form>
           <Flex fontSize={"13px"} justifyContent="space-between">
             <NextLink href="/signup" passHref legacyBehavior>
-              <ChakraLink colorScheme="#FF9800" variant="link">
+              <ChakraLink color={useColorModeValue("#FF9800", "orange.300")} variant="link">
                 Créer un compte
               </ChakraLink>
             </NextLink>

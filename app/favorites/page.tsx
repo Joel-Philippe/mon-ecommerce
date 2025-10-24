@@ -143,7 +143,7 @@ export default function FavoritesPage() {
     return (
       <div className="favorites-page-container">
         <h1 className="favorites-title">Mes Articles Favoris</h1>
-        <p className="favorites-message">Veuillez vous connecter pour voir vos articles favoris.</p>
+        <p className="favorites-message">Connecte toi pour voir tes articles favoris.</p>
         <Link href="/login" className="favorites-login-button">Se connecter</Link>
       </div>
     );

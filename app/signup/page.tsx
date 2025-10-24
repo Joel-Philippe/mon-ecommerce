@@ -24,6 +24,7 @@ import {
   VStack,
   HStack,
   Divider,
+  useColorModeValue
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Confetti from 'react-confetti';
@@ -109,15 +110,15 @@ export default function Signup() {
   return (
     <>
       {loading ? (
-        <Flex minHeight="50vh" align="center" justify="center" bg="rgb(255, 246, 241)" px={4}>
+        <Flex minHeight="50vh" align="center" justify="center" bg={useColorModeValue("rgb(255, 246, 241)", "gray.900")} px={4}>
           <Text>Bienvenue !</Text>
           <Text>Votre compte a été créé avec succès.</Text>
           <Confetti />
         </Flex>
       ) : showForm ? (
-        <Flex minHeight="50vh" align="center" justify="center" bg="white" px={4}>
-          <Box width={{ base: 'full', md: 'md' }} p={2} borderWidth={0} borderRadius={8} bg="white">
-            <Heading as="h1" size="lg" mb={6} textAlign="center" color="black">
+        <Flex minHeight="50vh" align="center" justify="center" bg={useColorModeValue("white", "gray.900")} px={4}>
+          <Box width={{ base: 'full', md: 'md' }} p={2} borderWidth={0} borderRadius={8} bg={useColorModeValue("white", "gray.700")}>
+            <Heading as="h1" size="lg" mb={6} textAlign="center" color={useColorModeValue("black", "white")}>
               Inscription
             </Heading>
 
@@ -134,7 +135,7 @@ export default function Signup() {
 
             <HStack w="full" mb={6}>
               <Divider />
-              <Text color="gray.500" whiteSpace="nowrap">
+              <Text color={useColorModeValue("gray.500", "gray.400")} whiteSpace="nowrap">
                 ou
               </Text>
               <Divider />
@@ -155,7 +156,7 @@ export default function Signup() {
                       fontWeight: '200',
                       lineHeight: '19.36px',
                       textAlign: 'left',
-                      color: 'black'
+                      color: useColorModeValue('black', 'gray.400')
                     },
                     '&:focus': {
                       borderColor: 'bisque',
@@ -178,7 +179,7 @@ export default function Signup() {
                       fontWeight: '200',
                       lineHeight: '19.36px',
                       textAlign: 'left',
-                      color: 'black'
+                      color: useColorModeValue('black', 'gray.400')
                     },
                     '&:focus': {
                       borderColor: 'bisque',
@@ -201,7 +202,7 @@ export default function Signup() {
                       fontWeight: '200',
                       lineHeight: '19.36px',
                       textAlign: 'left',
-                      color: 'black'
+                      color: useColorModeValue('black', 'gray.400')
                     },
                     '&:focus': {
                       borderColor: 'bisque',
@@ -224,7 +225,7 @@ export default function Signup() {
                       fontWeight: '200',
                       lineHeight: '19.36px',
                       textAlign: 'left',
-                      color: 'black'
+                      color: useColorModeValue('black', 'gray.400')
                     },
                     '&:focus': {
                       borderColor: 'bisque',
@@ -241,19 +242,19 @@ export default function Signup() {
               )}
               <Button 
                 type="submit" 
-                color="black" 
-                bg="white" 
+                color={useColorModeValue("black", "white")} 
+                bg={useColorModeValue("white", "gray.600")} 
                 colorScheme="teal" 
                 width="full" 
                 mb={10}
-                _hover={{ color:'white', bg: 'black' }}
+                _hover={{ color: useColorModeValue('white', 'black'), bg: useColorModeValue('black', 'white') }}
               >
                 M&apos;inscrire
               </Button>
             </form>
             <Flex justifyContent="space-between">
               <NextLink href="/login" passHref legacyBehavior>
-                <ChakraLink colorScheme="teal" variant="link">
+                <ChakraLink color={useColorModeValue("teal.500", "teal.300")} variant="link">
                   Déjà un compte? Se connecter
                 </ChakraLink>
               </NextLink>
