@@ -150,6 +150,46 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="favorites-page-container"> {/* Attach ref */}
-      <h1 className="favorites-title"></h1>
+    <div className="favorites-page-container">
+      <h1 className="favorites-title">Mes Articles Favoris</h1>
+      {favoriteCards.length > 0 ? (
+        <div className="card-grid">
+          {favoriteCards.map(card => (
+                        <NewCard
+                          key={card._id}
+                          card={card}
+                          onAddToCart={() => handleAddToCart(card)}
+                          onFavoriteToggle={async () => {
+                            if (card._id) {
+                              await handleFavoriteToggle(card._id);
+                            }
+                          }}
+                          isFavorite={card._id ? userFavorites.includes(card._id) : false}
+                          isSelected={card._id ? !!globalCart[card._id] : false}
+                          averageRating={calculateAverageRating(card.reviews)}
+                          userHasRated={hasUserRated(card.reviews)}
+                          onCountdownEnd={() => {
+                if (card._id) {
+                  handleCountdownEnd(card._id);
+                }
+              }}
+                          isExpired={card._id ? expiredCards.has(card._id) : false}
+                          isOutOfStock={card.stock - card.stock_reduc <= 0}
+                          isMaxReached={false}
+                          currentCount={card._id ? globalCart[card._id]?.count || 0 : 0}
+                          hasBeenPurchased={false}
+                          fetchProducts={fetchFavoriteCards}
+                        />
+          ))}
+        </div>
+      ) : (
+        <div className="favorites-empty">
+          <p>Vous n'avez aucun article en favori pour le moment.</p>
+          <Link href="/" className="continuer-shopping">
+            Découvrir nos produits
+          </Link>
+        </div>
+      )}
+    </div>
+  );
 }

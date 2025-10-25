@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Link from 'next/link';
 import Image from 'next/image';
-import FixedHeader from '@/components/FixedHeader';
+
 import styles from './MyOrders.module.css';
 
 interface OrderItem {

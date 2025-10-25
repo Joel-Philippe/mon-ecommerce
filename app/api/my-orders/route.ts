@@ -4,6 +4,9 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/components/firebaseConfig';
 import { verifyFirebaseToken } from '@/utils/verifyFirebaseToken';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   try {
     const authHeader = req.headers.get('Authorization');
