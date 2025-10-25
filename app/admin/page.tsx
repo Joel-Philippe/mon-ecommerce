@@ -297,7 +297,6 @@ const AdminPage = () => {
   }
 
   return (
-    <>
       <div className="modern-admin-container">
         {/* Header */}
         <header className="modern-admin-header">
@@ -724,9 +723,6 @@ const AdminPage = () => {
           </div>
         )}
       </div>
-
-
-    </>
   );
 };
 

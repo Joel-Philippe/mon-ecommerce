@@ -8,7 +8,6 @@ import Countdown from '@/components/Countdown';
 import ImageSlider from '@/components/ImageSlider'; // Import the new ImageSlider
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import FixedHeader from '@/components/FixedHeader';
 import styles from './ProductPage.module.css';
 
 
@@ -62,14 +61,12 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <>
-      <FixedHeader title={product.title} />
-      <motion.div
-        className={styles.productPageContainer}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+    <motion.div
+      className={styles.productPageContainer}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className={styles.leftColumn}>
         {product.images && product.images.length > 0 && (
           <ImageSlider images={product.images} />

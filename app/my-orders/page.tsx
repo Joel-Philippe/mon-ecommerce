@@ -73,10 +73,8 @@ export default function MyOrdersPage() {
   }
 
   return (
-    <>
-      <FixedHeader title="Mes Achats" />
-      <div className={styles.container} style={{ paddingTop: '60px' }}>
-        <h1 className={styles.title}></h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}></h1>
       {orders.length === 0 ? (
         <p>Tu n'as encore effectué aucun achat.</p>
       ) : (
@@ -119,6 +117,5 @@ export default function MyOrdersPage() {
         </div>
       )}
     </div>
-    </>
   );
 }
