@@ -172,7 +172,6 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         )}
       </div>
     </motion.div>
-    </>
   );
 };
 

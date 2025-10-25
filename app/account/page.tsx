@@ -36,7 +36,8 @@ const AccountPage = () => {
   }
 
   return (
-    <div className="account-page-container"> {/* Attach the ref */}
+    <>
+      <div className="account-page-container"> {/* Attach the ref */}
       <h1>Mon Compte</h1>
 
         {/* Navigation Menu */}
