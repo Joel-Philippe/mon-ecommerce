@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { calculateStockRemainingPercentage } from '@/utils/calculateStockPercentage';
 import { useInView } from 'react-intersection-observer';
+import { useColorModeValue } from '@chakra-ui/react';
 
 interface StockProgressBarProps {
   stock: number;
@@ -23,11 +24,9 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
 
   const percentage = calculateStockRemainingPercentage(stock, stock_reduc);
 
-  const getGradient = () => {
-    if (percentage >= 60) return 'rgb(109, 252, 243)';
-    if (percentage <= 50) return 'rgb(109, 252, 243)';
-    return 'rgb(109, 252, 243)';
-  };
+  const gradient = useColorModeValue('rgb(109, 252, 243)', 'white');
+  const textColor = useColorModeValue('#028175', 'black');
+  const backgroundTextColor = useColorModeValue('rgba(255, 255, 255, 0.8)', 'rgba(0, 0, 0, 0.8)');
 
   return (
     <div ref={inViewRef} style={{ position: 'relative', width: '100%', height: '12px' }}>
@@ -52,7 +51,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
         style={{
           width: isAnimated ? `${percentage}%` : '0%',
           height: '100%',
-          background: getGradient(),
+          background: gradient,
           transition: 'width 1s ease-out',
           borderRadius: '50px',
           position: 'absolute',
@@ -68,7 +67,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
           height: '100%',
           textAlign: 'center',
           lineHeight: '12px', // Match the height
-          color: '#028175', // Contrasting color
+          color: textColor, // Contrasting color
           fontSize: '0.5rem',
           fontWeight: '900',
           letterSpacing: '0.5px',
@@ -84,7 +83,7 @@ const StockProgressBar: React.FC<StockProgressBarProps> = ({ stock, stock_reduc 
         height: '100%',
         textAlign: 'center',
         lineHeight: '12px', // Match the height
-        color: 'rgba(255, 255, 255, 0.8)', // Base text color
+        color: backgroundTextColor, // Base text color
         fontSize: '0.6rem',
         fontWeight: '900',
         letterSpacing: '0.5px',
