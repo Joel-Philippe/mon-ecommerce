@@ -1,25 +1,44 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGlobalCart } from '@/components/GlobalCartContext';
-import { useSearchParams } from 'next/navigation'; // Import useSearchParams
-// pages/success.tsx
-import { Box, Heading, Text, Button, Image, VStack } from "@chakra-ui/react";
+import { useSearchParams } from 'next/navigation';
+import { Box, Heading, Text, Button, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 
-// Motion wrapper juste pour le titre
 const MotionHeading = motion(Heading);
 
 const SuccessPage = () => {
   const { clearCart } = useGlobalCart();
   const searchParams = useSearchParams();
-  const customerEmail = searchParams.get('email');
+  const sessionId = searchParams.get('session_id');
+  const [customerEmail, setCustomerEmail] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     console.log("Success page loaded, clearing cart...");
     clearCart();
   }, [clearCart]);
+
+  useEffect(() => {
+    if (sessionId) {
+      fetch(`/api/order-details?session_id=${sessionId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.customer_email) {
+            setCustomerEmail(data.customer_email);
+          }
+          setIsLoading(false);
+        })
+        .catch(error => {
+          console.error("Error fetching order details:", error);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [sessionId]);
 
   return (
     <Box
@@ -40,7 +59,6 @@ const SuccessPage = () => {
       >
         <CheckCircleIcon boxSize={12} color="green.400" mb={4} />
 
-        {/* 🎯 Animation uniquement sur le titre */}
         <MotionHeading
           size="lg"
           mb={4}
@@ -52,7 +70,8 @@ const SuccessPage = () => {
         </MotionHeading>
 
         <Text fontSize="md" color="gray.600">
-          Votre commande a bien été enregistrée. Un email de confirmation vous a été envoyé à {customerEmail || 'votre adresse email'}.
+          Votre commande a bien été enregistrée. Un email de confirmation vous sera envoyé à{' '}
+          {isLoading ? '...' : customerEmail || 'votre adresse email'}.
         </Text>
 
         <VStack spacing={4} mt={2}>
