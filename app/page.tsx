@@ -387,12 +387,10 @@ const normalizeString = (str: string | undefined | null) => {
         style={{ opacity: videoEnded ? 0 : 1, pointerEvents: videoEnded ? 'none' : 'auto' }}
       >
       </div>
-            <div
-        className={`video_animate video_animate-wrapper video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
-      >
-        <AnimatedBanner onEnd={handleVideoEnd} />
-      </div>
       
+
+      <header className="banner">
+      </header>
       <Suspense fallback={<div>Chargement du contenu...</div>}>
         <div className="page-content" ref={pageContentRef}> {/* Moved Menu inside here */}
           <MenuComponent

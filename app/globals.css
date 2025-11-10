@@ -16,6 +16,13 @@
   font-weight: bold;
   font-style: normal;
 }
+header {
+  background-image: url('/background.png'); /* ✅ Chemin absolu */
+  background-size: cover;
+  background-position: center;
+  height: 250px;
+  margin-top: 68px;
+}
 
 h1, h2, h3 {
   font-family: 'Rubik', sans-serif;
@@ -51,4 +58,10 @@ body{
 
 .chakra-ui-light{
     background: linear-gradient(to right, rgb(255, 246, 241) 0%, #f9f9f9 100%);
+}
+@media (max-width: 768px) {
+    .header {
+        height: 80%;
+        margin-top: 46px;
+    }
 }
