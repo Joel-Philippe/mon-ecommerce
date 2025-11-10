@@ -177,16 +177,6 @@ const NewCard: React.FC<NewCardProps> = ({
             <div className="new-card-stock">
               <StockProgressBar stock={card.stock} stock_reduc={card.stock_reduc} />
             </div>
-            <div className="new-card-rating">
-              {card._id && (
-                <RatingStars
-                  productId={card._id}
-                  averageRating={averageRating}
-                  userHasRated={userHasRated}
-                  onVote={fetchProducts}
-                />
-              )}
-            </div>
           </div>
           <div className="new-card-footer">
             {hasBeenPurchased && (

@@ -34,8 +34,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: #7a4924; /* Added for non-transparency */
   gap: 10px;
 }
 .menu-content.open {
@@ -97,7 +96,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease-in-out;
-  background-color: var(--menu-background-gradient);
+  background-color: white; /* Changed from var(--menu-background-gradient) for non-transparency */
   display: none; /* Explicitly hide by default */
 }
 

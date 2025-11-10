@@ -8,6 +8,7 @@
   transform: translateY(-5px);
   height: 209px;
   padding: 18px;
+  border: 7px solid #b0815b;
 }
 
 .new-card:hover {
