@@ -46,6 +46,7 @@ body{
 }
 
 [data-theme="dark"] {
+  --chakra-colors-chakra-body-bg: #000000; /* Set body background to black in dark mode */
   --menu-background-gradient: var(--chakra-colors-chakra-body-bg);
   --bottom-nav-item-color: var(--chakra-colors-chakra-body-text);
   --bottom-nav-item-background: var(--chakra-colors-chakra-body-bg);
