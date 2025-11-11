@@ -43,18 +43,176 @@ body{
   --profile-avatar-hover-shadow: 0 0 0 2px rgba(251, 0, 255, 0.5);
   --search-icon-color: #FF6F00;
   --new-card-price-color: #7e9090;
+  --menu-header-background: #FFFFFF; /* White for light mode */
+  --selected-category-button-background: #00efd9; /* Light mode color for selected category button */
+  --search-term-indicator-background: rgba(165, 165, 165, 0.547); /* Light mode color for search term indicator */
+
+  /* New variables for backgrounds */
+  --background-replying-to: rgb(246, 237, 227);
+  --background-footer-container: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  --background-menu-button: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  --background-menu-button-hover: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  --background-cart-button: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  --background-payment-modal-container: rgba(255, 255, 255, 0.98);
+  --background-payment-modal-content: linear-gradient(135deg, #f8ede9 0%, #faf5f2 100%);
+  --background-payment-section: rgba(255, 255, 255, 0.85);
+  --background-summary-card: rgba(255, 255, 255, 0.95);
+  --background-summary-item: linear-gradient(135deg, rgba(230, 49, 153, 0.08) 0%, rgba(254, 194, 11, 0.08) 100%);
+  --background-item-image: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  --background-quantity-btn: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  --background-quantity-display: rgba(124, 58, 237, 0.08);
+  --background-summary-totals: rgba(255, 255, 255, 0.5);
+  --background-order-benefits: rgba(255, 255, 255, 0.5);
+  --background-step-circle: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  --background-progress-line: linear-gradient(90deg, #e2e8f0, #cbd5e1);
+  --background-step-header: rgba(255, 255, 255, 0.8);
+  --background-form-input: rgba(255, 255, 255, 0.9);
+  --background-form-input-focus: white;
+  --background-back-button: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  --background-action-button-secondary: white;
+  --background-action-button-secondary-hover: #f8fafc;
+  --background-search-box-input: white;
+  --background-category-filter: white;
+  --background-product-card: white;
+  --background-request-card: white;
+  --background-form-input-admin: #fff;
+  --background-cancel-btn-admin-hover: #e9ecef;
+  --background-modern-admin-container: -webkit-linear-gradient(315deg, #f9ede9 0%, #dbb5b5 100%);
+  --background-admin-user-info: #f8fafc;
+  --background-tab-button-hover: #f8fafc;
+  --background-order-card: white;
+  --background-article-double: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
+  --background-article-double-div: #f5f6f0;
+  --background-article-double-text-wrapper: #ffffff8f;
+  --background-article-double-navbar: white;
+  --background-ellipse-4-wrapper-img: bisque;
+  --background-slider-overlay: wheat;
+  --background-cart-box: white;
+  --background-cart-box-scrollbar-track: bisque;
+  --background-cart-box-scrollbar-thumb: bisque;
+  --background-rectangle-35: white;
+  --background-caracteristique-item: white;
+  --background-images-en-vrac: white;
+  --background-expanded-image-overlay: wheat;
+  --background-success-container: #f0f4f8;
+  --background-animated-video-container: aliceblue;
+  --background-new-card-border: white;
+  --background-new-card-add-button: #f0f0f06b;
+  --background-new-card-add-button-hover: #e8e8e8;
+  --background-new-card-add-button-disabled: white;
+  --background-product-form-container: #f9f9fb;
+  --background-product-form-section: white;
+  --background-product-form-input: white;
+  --background-product-form-secondary-button: #e2e8f0;
+  --background-product-form-secondary-button-hover: #cbd5e0;
+  --background-product-form-image-preview: #f7fafc;
+  --background-product-form-dynamic-field-card: #f9f9fb;
+  --background-product-form-add-button: #edf2f7;
+  --background-product-form-add-button-hover: #e2e8f0;
+  --background-selected-categories-chip: #fff;
+  --background-selected-categories-chip-remove-button-hover: #f0f0f0;
+  --background-selected-categories-clear-all-button-hover: #f0f0f0;
+  --background-loader-after: rgb(255, 246, 241); /* Light mode color for loader after */
+  --background-checkbox-custom: white; /* Light mode color for checkbox custom */
+  --background-modern-form-header: white; /* Light mode color for modern form header */
+  --background-modern-form-sidebar: white; /* Light mode color for modern form sidebar */
+  --background-form-input-modern-form: white; /* Light mode color for modern form input */
+  --background-form-footer: white; /* Light mode color for modern form footer */
+  --background-panier-item: white; /* Light mode color for panier item */
+  --background-product-modal-content: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); /* Light mode color for product modal content */
+  --background-modal-header-full: white; /* Light mode color for modal header full */
+  --background-thumbnail-full: #fff; /* Light mode color for thumbnail full */
 }
 
 [data-theme="dark"] {
   --chakra-colors-chakra-body-bg: #000000; /* Set body background to black in dark mode */
-  --menu-background-gradient: var(--chakra-colors-chakra-body-bg);
+  --menu-background-gradient: #000000;
   --bottom-nav-item-color: var(--chakra-colors-chakra-body-text);
-  --bottom-nav-item-background: var(--chakra-colors-chakra-body-bg);
+  --bottom-nav-item-background: #000000;
   --menu-button-color: var(--chakra-colors-chakra-body-text);
   --burger-icon-bar-color: #fff;
   --profile-avatar-hover-shadow: 0 0 0 2px rgba(150, 0, 150, 0.7);
   --search-icon-color: var(--chakra-colors-chakra-body-text);
   --new-card-price-color: var(--chakra-colors-chakra-body-text);
+  --menu-header-background: #000000; /* Black for dark mode */
+  --selected-category-button-background: #000000; /* Black for dark mode */
+  --search-term-indicator-background: #000000; /* Black for dark mode */
+
+  /* Dark mode for new variables */
+  --background-replying-to: #000000;
+  --background-footer-container: #000000;
+  --background-menu-button: #000000;
+  --background-menu-button-hover: #000000;
+  --background-cart-button: #000000;
+  --background-payment-modal-container: #000000;
+  --background-payment-modal-content: #000000;
+  --background-payment-section: #000000;
+  --background-summary-card: #000000;
+  --background-summary-item: #000000;
+  --background-item-image: #000000;
+  --background-quantity-btn: #000000;
+  --background-quantity-display: #000000;
+  --background-summary-totals: #000000;
+  --background-order-benefits: #000000;
+  --background-step-circle: #000000;
+  --background-progress-line: #000000;
+  --background-step-header: #000000;
+  --background-form-input: #000000;
+  --background-form-input-focus: #000000;
+  --background-back-button: #000000;
+  --background-action-button-secondary: #000000;
+  --background-action-button-secondary-hover: #000000;
+  --background-search-box-input: #000000;
+  --background-category-filter: #000000;
+  --background-product-card: #000000;
+  --background-request-card: #000000;
+  --background-form-input-admin: #000000;
+  --background-cancel-btn-admin-hover: #000000;
+  --background-modern-admin-container: #000000;
+  --background-admin-user-info: #000000;
+  --background-tab-button-hover: #000000;
+  --background-order-card: #000000;
+  --background-article-double: #000000;
+  --background-article-double-div: #000000;
+  --background-article-double-text-wrapper: #000000;
+  --background-article-double-navbar: #000000;
+  --background-ellipse-4-wrapper-img: #000000;
+  --background-slider-overlay: #000000;
+  --background-cart-box: #000000;
+  --background-cart-box-scrollbar-track: #000000;
+  --background-cart-box-scrollbar-thumb: #000000;
+  --background-rectangle-35: #000000;
+  --background-caracteristique-item: #000000;
+  --background-images-en-vrac: #000000;
+  --background-expanded-image-overlay: #000000;
+  --background-success-container: #000000;
+  --background-animated-video-container: #000000;
+  --background-new-card-border: #000000;
+  --background-new-card-add-button: #000000;
+  --background-new-card-add-button-hover: #000000;
+  --background-new-card-add-button-disabled: #000000;
+  --background-product-form-container: #000000;
+  --background-product-form-section: #000000;
+  --background-product-form-input: #000000;
+  --background-product-form-secondary-button: #000000;
+  --background-product-form-secondary-button-hover: #000000;
+  --background-product-form-image-preview: #000000;
+  --background-product-form-dynamic-field-card: #000000;
+  --background-product-form-add-button: #000000;
+  --background-product-form-add-button-hover: #000000;
+  --background-selected-categories-chip: #000000;
+  --background-selected-categories-chip-remove-button-hover: #000000;
+  --background-selected-categories-clear-all-button-hover: #000000;
+  --background-loader-after: #000000; /* Black for dark mode */
+  --background-checkbox-custom: #000000; /* Black for dark mode */
+  --background-modern-form-header: #000000; /* Black for dark mode */
+  --background-modern-form-sidebar: #000000; /* Black for dark mode */
+  --background-form-input-modern-form: #000000; /* Black for dark mode */
+  --background-form-footer: #000000; /* Black for dark mode */
+  --background-panier-item: #000000; /* Black for dark mode */
+  --background-product-modal-content: #000000; /* Black for dark mode */
+  --background-modal-header-full: #000000; /* Black for dark mode */
+  --background-thumbnail-full: #000000; /* Black for dark mode */
 }
 
 .chakra-ui-light{

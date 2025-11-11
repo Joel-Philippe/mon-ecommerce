@@ -34,7 +34,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background-color: #7a4924; /* Added for non-transparency */
+  background-color: var(--menu-header-background); /* Use CSS variable for dynamic background */
   gap: 10px;
 }
 .menu-content.open {
@@ -85,7 +85,7 @@
 
 
 .header-categorie-button.selected {
-  background-color: #00efd9;
+  background-color: var(--selected-category-button-background);
   color: #703e00;
   font-size: x-small;
   font-family: 'Rubik', sans-serif;
@@ -96,7 +96,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease-in-out;
-  background-color: white; /* Changed from var(--menu-background-gradient) for non-transparency */
+  background-color: var(--menu-header-background); /* Use CSS variable for dynamic background */
   display: none; /* Explicitly hide by default */
 }
 
@@ -193,7 +193,7 @@
 }
 
 .search-term-indicator {
-  background-color: rgba(165, 165, 165, 0.547);
+  background-color: var(--search-term-indicator-background);
   color: var(--chakra-colors-chakra-body-text);
   padding: 5px 10px;
   border-radius: 20px;
