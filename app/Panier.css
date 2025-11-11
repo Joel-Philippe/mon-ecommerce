@@ -120,6 +120,7 @@
   padding: 1.5rem;
   border-radius: 0.5rem;
   height: fit-content;
+  margin-top: 70px;
 }
 
 .panier-summary h2 {
@@ -160,4 +161,20 @@
   color: #e65100;
   font-weight: 700;
   text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+    .checkout-btn {
+      width: 100%;
+      margin: 0 auto; /* Added to center the button */
+      padding: 1rem;
+      background-color: #03A9F4;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 }
