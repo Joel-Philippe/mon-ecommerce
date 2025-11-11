@@ -57,7 +57,7 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, onExpired, title, color 
   const blinkStyle = countdown.days < 1 ? { animation: 'blink 1s infinite' } : {};
 
   return (
-    <div className="time_card" style={{ fontWeight: '500', color: textColor, ...blinkStyle }}>
+    <div className="time_card countdown-white-on-mobile" style={{ fontWeight: '500', color: textColor, ...blinkStyle }}>
       {countdown.days > 0
         ? ` ${countdown.days} jour${countdown.days > 1 ? 's' : ''}, ${countdown.hours}h:${countdown.minutes}m:${countdown.seconds}s`
         : countdown.hours > 0
