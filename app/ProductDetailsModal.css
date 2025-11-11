@@ -108,11 +108,17 @@ html::-webkit-scrollbar-thumb {
   border-radius: 10px;
   width: 44px;
   height: 44px;
-  display: flex;
+  display: none; /* Hidden by default on all screens */
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+}
+
+@media (min-width: 769px) {
+  .main-image-wrap.show-nav-buttons .nav-arrow {
+    display: flex; /* Visible on larger screens when show-nav-buttons is active */
+  }
 }
 
 .nav-arrow:hover {

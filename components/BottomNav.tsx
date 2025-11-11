@@ -62,7 +62,7 @@ const BottomNav = () => {
   return (
     <div className="bottom-nav">
       <CustomLink href="/favorites" passHref>
-        <div className={`nav-item ${pathname === '/favorites' ? 'active' : ''} ${animateFavorites ? 'jiggle-animation' : ''}`}>
+        <div className={`nav-item ${pathname === '/favorites' ? 'active' : ''} ${animateFavorites ? 'jiggle-animation' : ''} ${userFavorites.length > 0 ? 'favorite-has-items' : ''}`}>
           <FaHeart size={24} />
           {userFavorites.length > 0 && <span className="nav-badge favorite-badge">{userFavorites.length}</span>}
         </div>
@@ -73,7 +73,7 @@ const BottomNav = () => {
         </div>
       </CustomLink>
       <CustomLink href="/cart" passHref>
-        <div className={`nav-item ${pathname === '/cart' ? 'active' : ''} ${animateCart ? 'jiggle-animation' : ''}`}>
+        <div className={`nav-item ${pathname === '/cart' ? 'active' : ''} ${animateCart ? 'jiggle-animation' : ''} ${cartItemsCount > 0 ? 'cart-has-items' : ''}`}>
           <FaShoppingCart size={24} />
           {cartItemsCount > 0 && <span className="nav-badge cart-badge">{cartItemsCount}</span>}
         </div>

@@ -7,6 +7,7 @@ import BurgerMenu from './BurgerMenu';
 import { Sparkles, Filter, Search, X } from 'lucide-react';
 import { Card } from '@/types';
 import { useSearch } from '@/contexts/SearchContext';
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 interface MenuProps {
   cards: Card[];
@@ -30,6 +31,8 @@ const MenuComponent: React.FC<MenuProps> = ({
   const { searchTerm, setSearchTerm } = useSearch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false); // New state for search bar
+  const pathname = usePathname(); // Get the current pathname
+  const isHomePage = pathname === '/'; // Check if it's the home page
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -86,7 +89,15 @@ const MenuComponent: React.FC<MenuProps> = ({
               setIsMenuOpen(!isMenuOpen);
               console.log('[Menu] Toggling isMenuOpen to:', !isMenuOpen); // Log toggle action
             }}>
-              {isMenuOpen ? 'Valider' : <><Filter className="button-icon" />Filtre</>}
+              {isMenuOpen ? (
+                selectedCategories.length > 0 ? (
+                  'Valider'
+                ) : (
+                  <X className="button-icon" /> // Close icon when menu is open but no categories selected
+                )
+              ) : (
+                <><Filter className="button-icon" />Filtre</>
+              )}
             </button>
 
             {/* SEARCH TERM INDICATOR */}
@@ -99,8 +110,8 @@ const MenuComponent: React.FC<MenuProps> = ({
               </div>
             )}
 
-            {/* Hide other buttons when validate is highlighted */}
-            {!(isMenuOpen && selectedCategories.length > 0) && (
+            {/* Hide other buttons when menu is open */}
+            {!isMenuOpen && (
               <>
                 <div className="header-main-buttons">
                   <button>

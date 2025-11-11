@@ -14,6 +14,7 @@ import './style.css';
 
 
 import BottomNav from '@/components/BottomNav';
+import FloatingBackButton from '@/components/FloatingBackButton'; // Import FloatingBackButton
 import '@/components/BottomNav.css';
 import ProgressBar from '@/components/ProgressBar';
 import ScrollRestoration from '@/components/ScrollRestoration';
@@ -25,6 +26,7 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname(); // Get the current pathname
   const isAdminPage = pathname === '/admin'; // Check if it's the admin page
+  const isHomePage = pathname === '/'; // Check if it's the home page
 
   return (
     <html lang="fr">
@@ -39,6 +41,7 @@ export default function RootLayout({
               <SearchProvider>
                 <ChakraProvider theme={theme}>
                   <Suspense fallback={<div>Chargement...</div>}>
+                    {!isHomePage && <FloatingBackButton />} {/* Conditionally render FloatingBackButton */}
                     {children}
                   </Suspense>
                   {!isAdminPage && <BottomNav />} {/* Conditionally render BottomNav */}
