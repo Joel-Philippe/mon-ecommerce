@@ -131,7 +131,8 @@
 }
 
 .checkout-btn {
-  width: 100%;
+  max-width: 250px; /* Added for reasonable size */
+  margin: 0 auto; /* Added to center the button */
   padding: 1rem;
   background-color: #03A9F4;
   color: white;

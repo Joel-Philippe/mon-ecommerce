@@ -1321,6 +1321,8 @@
   gap: 8px;
   transition: var(--transition-bounce);
   width: 100%;
+  max-width: 250px; /* Added for reasonable size */
+  margin: 0 auto; /* Added to center the button */
   position: relative;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.25);
@@ -1409,7 +1411,8 @@
   justify-content: center;
   gap: 8px;
   transition: var(--transition-bounce);
-  flex: 1;
+  max-width: 250px; /* Added for reasonable size */
+  margin: 0 auto; /* Added to center the button */
   position: relative;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);

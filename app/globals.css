@@ -223,4 +223,7 @@ body{
         height: 80%;
         margin-top: 46px;
     }
+    .countdown-white-on-mobile {
+        color: white !important;
+    }
 }

@@ -167,6 +167,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  max-width: 250px; /* Added for reasonable size */
+  margin: 0 auto; /* Added to center the button */
 }
 
 .addToCartButton:hover {
