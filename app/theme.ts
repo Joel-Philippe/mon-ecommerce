@@ -5,17 +5,13 @@ const theme = extendTheme({
     initialColorMode: 'system', // or 'light' | 'dark'
     useSystemColorMode: true,
   },
-  colors: {
-    // Define your light and dark mode colors here
-    // Example:
-    // light: {
-    //   background: '#ffffff',
-    //   text: '#000000',
-    // },
-    // dark: {
-    //   background: '#1a202c',
-    //   text: '#ffffff',
-    // },
+  styles: {
+    global: (props) => ({
+      body: {
+        bg: props.colorMode === 'dark' ? 'black' : 'white',
+        color: props.colorMode === 'dark' ? 'white' : 'black',
+      },
+    }),
   },
   // Add your theme customizations here
   // For example:

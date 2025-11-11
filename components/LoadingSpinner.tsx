@@ -12,7 +12,7 @@ const LoadingSpinner = () => {
       height="100%"
       justifyContent="center"
       alignItems="center"
-      background={useColorModeValue("rgb(255, 246, 241)", "gray.800")}
+      background={useColorModeValue("white", "black")}
       zIndex="1000"
     >
       <Box textAlign="center">
