@@ -36,17 +36,25 @@
   padding: 10px 15px;
   background-color: var(--menu-header-background); /* Use CSS variable for dynamic background */
   gap: 10px;
+  z-index: 101; /* Ensure it's above other content */
+  position: relative; /* Needed for z-index to work correctly */
+}
+
+.menu-header .chakra-button { /* Target the IconButton (BackButton) directly */
+  position: relative;
+  z-index: 102; /* Ensure it's above other header elements */
+  margin-right: 10px; /* Add some spacing */
 }
 .menu-content.open {
   max-height: none; /* Remove max-height */
   overflow-y: visible; /* Make overflow visible for testing */
   display: block; /* Explicitly set display to block */
   z-index: 9999; /* Very high z-index for testing */
+  position: relative; /* Needed for absolute positioning of close button */
 }
 .menu-toggle-button, .header-categorie-button {
   background-color: var(--chakra-colors-chakra-body-bg);
   color: var(--menu-button-color);
-  border: 1px solid var(--chakra-colors-chakra-border-color);
   padding: 12px 20px;
   border-radius: 50px; /* Rounded shape */
   font-weight: 600;
@@ -228,7 +236,6 @@
 }
   .menu-header {
   flex-wrap: nowrap;
-  justify-content: revert;
   }
 
   .header-main-buttons {

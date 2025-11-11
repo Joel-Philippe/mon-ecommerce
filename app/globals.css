@@ -213,6 +213,328 @@ body{
   --background-product-modal-content: #000000; /* Black for dark mode */
   --background-modal-header-full: #000000; /* Black for dark mode */
   --background-thumbnail-full: #000000; /* Black for dark mode */
+
+  .time_card {
+    color: white !important;
+  }
+
+  .menu-toggle-button,
+  .header-categorie-button {
+    color: white !important;
+    background-color: #333 !important; /* Darker background for contrast */
+    border-color: #555 !important;
+  }
+
+  .menu-toggle-button:hover,
+  .header-categorie-button:hover {
+    background-color: #555 !important;
+    border-color: #777 !important;
+  }
+
+  .menu-toggle-button.validate-button-active,
+  .header-categorie-button.selected {
+    background-color: #007bff !important; /* A distinct color for active state in dark mode */
+    color: white !important;
+    border-color: #007bff !important;
+  }
+
+  .bottom-nav {
+    background-color: black !important;
+  }
+
+  /* Dark mode for payment modal elements */
+  .payment-modal-container {
+    background: #1a202c !important; /* Darker background */
+    border-color: #4a5568 !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .payment-modal-header {
+    background: linear-gradient(315deg, #333 0%, #555 100%) !important; /* Darker gradient */
+    color: white !important;
+  }
+
+  .modal-title {
+    background: linear-gradient(45deg, #eee, #ccc) !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  .modal-subtitle {
+    color: #bbb !important;
+  }
+
+  .payment-section {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .summary-card {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .summary-title {
+    color: white !important;
+    border-bottom-color: #4a5568 !important;
+    background: linear-gradient(135deg, #7c3aed, #ec4899) !important; /* Keep original gradient for text */
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  .summary-item {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+  }
+
+  .item-title {
+    background: linear-gradient(135deg, #eee, #ccc) !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  .item-remove-btn {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #f87171 !important;
+  }
+
+  .current-price {
+    background: linear-gradient(135deg, #10b981, #34d399) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+
+  .original-price {
+    color: #a0aec0 !important;
+  }
+
+  .savings-text {
+    background: rgba(5, 150, 105, 0.2) !important;
+    color: #48bb78 !important;
+  }
+
+  .item-quantity {
+    color: #a0aec0 !important;
+  }
+
+  .item-price {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+
+  .status-message {
+    background: #4a5568 !important;
+    color: white !important;
+    border-color: #718096 !important;
+  }
+
+  .status-dot.green {
+    background: linear-gradient(135deg, #10b981, #34d399) !important;
+  }
+
+  .status-dot.orange {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+  }
+
+  .status-dot.red {
+    background: linear-gradient(135deg, #ef4444, #f87171) !important;
+  }
+
+  .quantity-controls {
+    border-color: #4a5568 !important;
+  }
+
+  .quantity-btn {
+    background: #4a5568 !important;
+    border-color: #718096 !important;
+    color: white !important;
+  }
+
+  .quantity-display {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    background-color: #4a5568 !important;
+  }
+
+  .summary-totals {
+    border-top-color: #4a5568 !important;
+    background: #2d3748 !important;
+  }
+
+  .total-row {
+    color: white !important;
+  }
+
+  .total-row.final {
+    border-top-color: #4a5568 !important;
+    background: rgba(124, 58, 237, 0.2) !important;
+  }
+
+  .final-price {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+
+  .free-shipping {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #48bb78 !important;
+  }
+
+  .order-benefits {
+    border-top-color: #4a5568 !important;
+    background: #2d3748 !important;
+  }
+
+  .benefit-item {
+    color: #a0aec0 !important;
+  }
+
+  .step-header {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+  }
+
+  .step-title {
+    color: white !important;
+    background: linear-gradient(135deg, #eee, #ccc) !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  .step-description {
+    color: #a0aec0 !important;
+  }
+
+  .step-circle {
+    background: #4a5568 !important;
+    color: white !important;
+  }
+
+  .progress-step.active .step-circle {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+  }
+
+  .progress-step.completed .step-circle {
+    background: linear-gradient(135deg, #10b981, #34d399) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5) !important;
+  }
+
+  .step-label {
+    color: #a0aec0 !important;
+  }
+
+  .progress-step.active .step-label {
+    color: white !important;
+  }
+
+  .progress-line {
+    background: #4a5568 !important;
+  }
+
+  .cart-invalid-alert,
+  .error-alert {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .error-content,
+  .error-message {
+    color: #f87171 !important;
+  }
+
+  .form-label {
+    color: white !important;
+  }
+
+  .label-icon {
+    color: #9f7aea !important;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    border-color: #4a5568 !important;
+    color: white !important;
+    background: #2d3748 !important;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: #9f7aea !important;
+    box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.3) !important;
+    background: #2d3748 !important;
+  }
+
+  .continue-button,
+  .pay-button {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5) !important;
+  }
+
+  .back-button {
+    background: #4a5568 !important;
+    color: white !important;
+    border-color: #718096 !important;
+  }
+
+  .security-badge,
+  .stock-check-progress {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .card-element-container {
+    border-color: #4a5568 !important;
+    background: #2d3748 !important;
+  }
+
+  .card-brands img {
+    opacity: 1 !important;
+  }
+
+  .save-card-option {
+    background: #2d3748 !important;
+    border-color: #4a5568 !important;
+  }
+
+  .checkbox-custom {
+    border-color: #718096 !important;
+    background: #4a5568 !important;
+  }
+
+  .checkbox-input:checked + .checkbox-custom {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border-color: #9f7aea !important;
+    color: white !important;
+  }
+
+  .checkbox-text {
+    color: white !important;
+  }
+
+  .spinner {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    border-top-color: white !important;
+  }
+
+  .trust-indicators {
+    border-top-color: #4a5568 !important;
+    background: #2d3748 !important;
+  }
+
+  .trust-item {
+    color: #a0aec0 !important;
+  }
 }
 
 .chakra-ui-light{
@@ -222,8 +544,5 @@ body{
     .header {
         height: 80%;
         margin-top: 46px;
-    }
-    .countdown-white-on-mobile {
-        color: white !important;
     }
 }

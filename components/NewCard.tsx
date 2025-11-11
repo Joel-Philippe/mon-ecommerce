@@ -187,11 +187,13 @@ const NewCard: React.FC<NewCardProps> = ({
 
             {!(isExpired || isOutOfStock) && (
               <div className="new-card-add-container">
-                <div className="new-card-quantity-controls">
-                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }}>-</button>
-                  <span>{quantity}</span>
-                  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.min(q + 1, availableStock)); }} disabled={quantity >= availableStock}>+</button>
-                </div>
+                {!isSelected && (
+                  <div className="new-card-quantity-controls">
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }}>-</button>
+                    <span>{quantity}</span>
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.min(q + 1, availableStock)); }} disabled={quantity >= availableStock}>+</button>
+                  </div>
+                )}
                 <button
                   className={`new-card-add-button ${isSelected ? 'selected' : ''}`}
                   onClick={handleAddToCartClick}

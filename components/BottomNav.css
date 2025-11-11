@@ -10,6 +10,7 @@
   z-index: 1000;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  background-color: white; /* White background for light mode */
 }
 
 .nav-item {
@@ -18,8 +19,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center; /* Center content vertically */
-  color: var(--bottom-nav-item-color);
-  background: var(--bottom-nav-item-background);
+  color: #aeaba1;
   text-decoration: none;
   width: 50px; /* Circle size */
   height: 50px; /* Circle size */
@@ -52,9 +52,19 @@
   color: rgb(109, 252, 243);
   background: rgb(109, 252, 243);
 }
-.nav-item.active {
-    background: #FF6F00;
-    color: var(--chakra-colors-white);
+
+.nav-item.cart-has-items {
+  background: linear-gradient(45deg, #FF6F00, #FFD700); /* Vibrant background */
+  color: white; /* White icon color */
+}
+
+.nav-item.cart-has-items svg {
+  color: white; /* Explicitly set icon color to white */
+}
+
+.nav-item.favorite-has-items {
+  color: #FFC107; /* Set favorite icon color when items are present */
+  background: aquamarine;
 }
 
 @keyframes jiggle {

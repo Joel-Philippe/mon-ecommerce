@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation, Thumbs, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperClass } from 'swiper';
-// import { Maximize, Minimize, X } from 'lucide-react'; // Temporarily remove icons
 
 interface ImageSliderProps {
   images: string[];
@@ -11,13 +10,13 @@ interface ImageSliderProps {
 
 const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false); // Re-add state
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const toggleFullscreen = () => { // Re-add function
+  const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
 
-  // Close fullscreen on Escape key // Re-add effect
+  // Close fullscreen on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isFullscreen) {
@@ -33,7 +32,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
   }
 
   return (
-    <div className={`product-image-slider-container ${isFullscreen ? 'fullscreen-active' : ''}`}> {/* Add fullscreen class */}
+    <div className={`product-image-slider-container ${isFullscreen ? 'fullscreen-active' : ''}`}>
       {isFullscreen && (
         <button className="fullscreen-close-button" onClick={toggleFullscreen} aria-label="Fermer le mode plein écran">
           X
@@ -50,7 +49,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
           '--swiper-navigation-color': '#fff',
           '--swiper-pagination-color': '#fff',
         } as React.CSSProperties}
-        loop={true}
+        loop={images.length > 1} // Make loop conditional
         spaceBetween={10}
         navigation={true}
         pagination={{
@@ -61,7 +60,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         className="mySwiper2"
       >
         {images.map((image, index) => (
-          <SwiperSlide key={index} onClick={toggleFullscreen}> {/* Make slides clickable */}
+          <SwiperSlide key={index} onClick={() => { toggleFullscreen(); console.log('toggleFullscreen called on main image click'); }}>
             <img src={image} alt={`Product image ${index + 1}`} loading="lazy" style={{ width: '100%', objectFit: 'contain' }} />
           </SwiperSlide>
         ))}
@@ -70,7 +69,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
       {/* Thumbnail Slider */}
       <Swiper
         onSwiper={setThumbsSwiper}
-        loop={true}
+        loop={images.length > 4} // Make loop conditional for thumbnails (assuming 4 slides per view)
         spaceBetween={10}
         slidesPerView={4}
         freeMode={true}
@@ -159,8 +158,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         }
 
         .swiper-button-next, .swiper-button-prev {
-          display:none;
           color: #FFEB3B !important; /* Custom navigation color */
+          display: none; /* Hidden by default */
+        }
+
+        @media (min-width: 769px) {
+          .swiper-button-next, .swiper-button-prev {
+            display: flex; /* Visible on larger screens */
+          }
         }
 
         .swiper-pagination-bullet-active {
@@ -180,4 +185,3 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
 };
 
 export default ImageSlider;
-

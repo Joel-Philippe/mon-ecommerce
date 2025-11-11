@@ -37,13 +37,16 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ isOpen, onClo
   const { globalCart } = useGlobalCart();
   const [mainIndex, setMainIndex] = useState(0);
   const [mainImage, setMainImage] = useState<string | null>(null);
+  const [showNavButtons, setShowNavButtons] = useState(false); // New state for nav button visibility
 
   useEffect(() => {
     if (product && product.images && product.images.length > 0) {
       setMainIndex(0);
       setMainImage(product.images[0]);
+      setShowNavButtons(false); // Reset when product changes
     } else {
       setMainImage(null);
+      setShowNavButtons(false); // Reset when product changes
     }
   }, [product]);
 
@@ -57,8 +60,10 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ isOpen, onClo
     if (!isOpen || !product || !product.images) return;
     if (e.key === "ArrowLeft") {
       setMainIndex(i => (i > 0 ? i - 1 : product.images.length - 1));
+      setShowNavButtons(true); // Show buttons on keyboard navigation
     } else if (e.key === "ArrowRight") {
       setMainIndex(i => (i < product.images.length - 1 ? i + 1 : 0));
+      setShowNavButtons(true); // Show buttons on keyboard navigation
     } else if (e.key === "Escape") {
       onClose();
     }
@@ -81,14 +86,18 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ isOpen, onClo
   const goPrev = () => {
     if (!product?.images) return;
     setMainIndex(i => (i > 0 ? i - 1 : product.images!.length - 1));
+    setShowNavButtons(true); // Show buttons on manual navigation
   };
   const goNext = () => {
     if (!product?.images) return;
     setMainIndex(i => (i < product.images!.length - 1 ? i + 1 : 0));
+    setShowNavButtons(true); // Show buttons on manual navigation
   };
 
   const onThumbClick = (idx: number) => {
     setMainIndex(idx);
+    setShowNavButtons(true); // Show buttons on thumbnail click
+    console.log('showNavButtons set to true on thumbnail click');
   };
 
   return (
@@ -131,9 +140,21 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({ isOpen, onClo
               <div className="product-grid">
                 {/* Left: galerie */}
                 <div className="gallery-col">
-                  <div className="main-image-wrap">
+                  <div className={`main-image-wrap ${showNavButtons ? 'show-nav-buttons' : ''}`} style={{ border: '2px solid blue' }}>
                     {/* Flèches */}
-                    <img src={mainImage ?? ""} alt={product.title} className="mainImageFull" />
+                    <IconButton
+                      aria-label="Previous image"
+                      icon={<ChevronLeftIcon w={8} h={8} />}
+                      onClick={(e) => { e.stopPropagation(); goPrev(); }}
+                      className="nav-arrow left"
+                    />
+                    <img src={mainImage ?? ""} alt={product.title} className="mainImageFull" onClick={() => setShowNavButtons(true)} style={{ border: '2px solid red', zIndex: 100 }} />
+                    <IconButton
+                      aria-label="Next image"
+                      icon={<ChevronRightIcon w={8} h={8} />}
+                      onClick={(e) => { e.stopPropagation(); goNext(); }}
+                      className="nav-arrow right"
+                    />
                   </div>
 
                   {/* Miniatures : scroll-snap horizontal avec fallback grid wrap */}
