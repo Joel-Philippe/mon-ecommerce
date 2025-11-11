@@ -30,7 +30,7 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #f9ede9;
+    background-color: var(--background-footer-container-home);
     padding: 10px 0;
     display: flex;
     justify-content: center;
@@ -46,7 +46,7 @@
   }
   
   .menuButtons button {
-    background-color: whitesmoke;
+    background-color: var(--background-menu-buttons-button-home);
     font-family: 'typo';
     color: #5D4037;
     padding: 8px 16px;
@@ -59,7 +59,7 @@
   }
   
   .menuButtons button:hover {
-    background: linear-gradient(to right, #f6eee2 0%, #edf0f5 100%);
+    background: var(--background-menu-buttons-button-home-hover);
     color: rgb(0, 0, 0);
   }
   
@@ -79,7 +79,7 @@
   }
   
   .modalContent {
-    background: #f6eee2;
+    background: var(--background-modal-content-home);
     width: 90%;
     padding: 20px;
     border-radius: 8px;
@@ -130,7 +130,7 @@
   /* ✅ Style par défaut du bouton panier (lorsqu'il est vide) */
 .cartButton {
   font-family: 'Xenara';
-  background-color: gray;
+  background-color: var(--background-cart-button-home);
   color: white;
   border-radius: 8px;
   padding: 10px 15px;
@@ -147,7 +147,7 @@
   font-family: 'typo';
   font-weight: 100;
   font-size:smaller;
-  background:white;
+  background:var(--background-cart-button-active-cart-home);
   color: #e05601  !important; /* Fond noir */
 }
 .cartButton.activeCart:hover {

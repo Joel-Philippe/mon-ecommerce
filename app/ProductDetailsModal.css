@@ -15,7 +15,7 @@ html::-webkit-scrollbar-thumb {
 
 /* Conteneur modal plein écran */
 .product-modal-content {
-  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  background: var(--background-product-modal-content);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -34,7 +34,7 @@ html::-webkit-scrollbar-thumb {
   justify-content: center;
   gap: 12px;
   padding: 0 20px;
-  background: white;
+  background: var(--background-modal-header-full);
   backdrop-filter: blur(4px);
 }
 .title-product-full {
@@ -163,7 +163,7 @@ html::-webkit-scrollbar-thumb {
   height: 76px;
   border-radius: 10px;
   padding: 3px;
-  background: #fff;
+  background: var(--background-thumbnail-full);
   border: 2px solid transparent;
   display: inline-flex;
   align-items: center;

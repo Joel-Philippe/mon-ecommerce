@@ -58,7 +58,7 @@
   background-color: rgb(81, 255, 0);
 }
 .replying-to {
-  background: rgb(246, 237, 227);
+  background: var(--background-replying-to);
   padding: 6px 10px;
   border-radius: 5px;
   margin-bottom: 8px;

@@ -28,7 +28,7 @@ body{
     left: 50%;
     width: 24px;
     height: 12px;
-    background: rgb(255, 246, 241);
+    background: var(--background-loader-after);
     border-radius: 50px 50px 0 0;
   }
 
