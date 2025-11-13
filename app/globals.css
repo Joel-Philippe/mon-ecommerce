@@ -538,7 +538,7 @@ body{
 }
 
 .chakra-ui-light{
-    background: linear-gradient(to right, rgb(255, 246, 241) 0%, #f9f9f9 100%);
+    background: white;
 }
 @media (max-width: 768px) {
     .header {
