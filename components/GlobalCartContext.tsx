@@ -5,17 +5,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { getCartId } from "@/utils/getCartId";
 import { db } from "@/components/firebaseConfig";
 
-function debounce<F extends (...args: any[]) => void>(func: F, delay: number): (...args: Parameters<F>) => void {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  return (...args: Parameters<F>) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-}
+
 
 // Define the structure of a cart item as stored in Firestore
 interface FirestoreCartItem {
@@ -43,7 +33,6 @@ interface GlobalCartContextType {
   errorCart: string | null;
   addToCart: (product: Card, quantity: number) => Promise<void>;
   updateCartItemQuantity: (productId: string, quantity: number) => Promise<void>;
-  debouncedUpdateCartItemQuantity: (productId: string, quantity: number) => void;
   removeCartItem: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   clearCartError: () => void;
@@ -55,47 +44,63 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
   const [globalCart, setGlobalCart] = useState<{ [key: string]: CartItemWithDetails }>({});
   const [loadingCart, setLoadingCart] = useState<boolean>(true);
   const [errorCart, setErrorCart] = useState<string | null>(null);
+  const [productDetailsCache, setProductDetailsCache] = useState<{ [key: string]: Card }>({});
 
   // Function to fetch product details for items in the cart
   const fetchProductDetails = useCallback(async (items: FirestoreCartItem[]): Promise<{ [key: string]: CartItemWithDetails }> => {
     if (items.length === 0) return {};
 
     const detailedCart: { [key: string]: CartItemWithDetails } = {};
-    try {
-      const productIds = items.map(item => item.productId);
-      const response = await fetch('/api/products/details', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productIds }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch product details');
-      }
-      const products = await response.json();
+    const productIdsToFetch: string[] = [];
 
-      items.forEach(cartItem => {
-        const productDetail = products.find((p: any) => p._id === cartItem.productId);
-        if (productDetail) {
-          detailedCart[cartItem.productId] = {
-            _id: productDetail._id,
-            count: cartItem.quantity,
-            price: productDetail.price,
-            price_promo: productDetail.price_promo,
-            images: productDetail.images,
-            deliveryTime: productDetail.deliveryTime,
-            expiryDate: productDetail.time,
-            title: productDetail.title,
-            stock: productDetail.stock,
-            stock_reduc: productDetail.stock_reduc,
-          };
+    items.forEach(item => {
+      if (!productDetailsCache[item.productId]) {
+        productIdsToFetch.push(item.productId);
+      }
+    });
+
+    let fetchedProducts: Card[] = [];
+    if (productIdsToFetch.length > 0) {
+      try {
+        const response = await fetch('/api/products/details', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productIds: productIdsToFetch }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch product details');
         }
-      });
-    } catch (err: any) {
-      console.error("Error fetching product details for cart:", err);
-      setErrorCart(err.message || "Failed to load product details for cart.");
+        fetchedProducts = await response.json();
+        const newCacheEntries: { [key: string]: Card } = {};
+        fetchedProducts.forEach(p => {
+          newCacheEntries[p._id] = p;
+        });
+        setProductDetailsCache(prevCache => ({ ...prevCache, ...newCacheEntries }));
+      } catch (err: any) {
+        console.error("Error fetching product details for cart:", err);
+        setErrorCart(err.message || "Failed to load product details for cart.");
+      }
     }
+
+    items.forEach(cartItem => {
+      const productDetail = productDetailsCache[cartItem.productId] || fetchedProducts.find((p: any) => p._id === cartItem.productId);
+      if (productDetail) {
+        detailedCart[cartItem.productId] = {
+          _id: productDetail._id,
+          count: cartItem.quantity,
+          price: productDetail.price,
+          price_promo: productDetail.price_promo,
+          images: productDetail.images,
+          deliveryTime: productDetail.deliveryTime,
+          expiryDate: productDetail.time,
+          title: productDetail.title,
+          stock: productDetail.stock,
+          stock_reduc: productDetail.stock_reduc,
+        };
+      }
+    });
     return detailedCart;
-  }, []);
+  }, [productDetailsCache]);
 
   useEffect(() => {
     let unsubscribe: () => void = () => {};
@@ -182,8 +187,19 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
   }, [globalCart]);
 
   const updateCartItemQuantity = useCallback(async (productId: string, quantity: number) => {
-    setLoadingCart(true);
     setErrorCart(null);
+    const prevGlobalCart = { ...globalCart }; // Store current cart state for rollback
+
+    // Optimistic UI update
+    setGlobalCart(prev => {
+      const newCart = { ...prev };
+      if (newCart[productId]) {
+        newCart[productId] = { ...newCart[productId], count: quantity };
+      }
+      return newCart;
+    });
+
+    setLoadingCart(true); // Still show a loading indicator for the background operation
     try {
       const response = await fetch('/api/cart/update', {
         method: 'PUT',
@@ -198,17 +214,13 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
     } catch (err: any) {
       console.error("Error updating cart item quantity:", err);
       setErrorCart(err.message || "Failed to update cart item quantity.");
+      setGlobalCart(prevGlobalCart); // Rollback on error
     } finally {
       setLoadingCart(false);
     }
-  }, []);
+  }, [globalCart]);
 
-  const debouncedUpdateCartItemQuantity = useCallback(
-    debounce(async (productId: string, quantity: number) => {
-      await updateCartItemQuantity(productId, quantity);
-    }, 500),
-    [updateCartItemQuantity]
-  );
+
 
   const removeCartItem = useCallback(async (productId: string) => {
     setLoadingCart(true);
@@ -233,9 +245,6 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
   }, []);
 
   const clearCart = useCallback(async () => {
-    // Optimistic UI update: clear the cart locally immediately.
-    setGlobalCart({});
-    
     setLoadingCart(true);
     setErrorCart(null);
     try {
@@ -244,16 +253,12 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
       });
       if (!response.ok) {
         const errorData = await response.json();
-        // If the API call fails, we might need to revert the optimistic update.
-        // For now, we just log the error and show it.
         console.error("Failed to clear cart on the server:", errorData.message);
         throw new Error(errorData.message || 'Failed to clear cart');
       }
-      // The onSnapshot listener should eventually confirm this empty state from the backend.
     } catch (err: any) {
       console.error("Error clearing cart:", err);
       setErrorCart(err.message || "Failed to clear cart.");
-      // Here you might want to re-fetch the cart to revert the optimistic update
     } finally {
       setLoadingCart(false);
     }
@@ -271,10 +276,8 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
         errorCart,
         addToCart,
         updateCartItemQuantity,
-        debouncedUpdateCartItemQuantity,
         removeCartItem,
         clearCart,
-        // fetchCart, // fetchCart is no longer needed
         clearCartError,
       }}
     >
@@ -293,7 +296,6 @@ export const useGlobalCart = () => {
       errorCart: "Context not available (debug mode)",
       addToCart: async () => {},
       updateCartItemQuantity: async () => {},
-      debouncedUpdateCartItemQuantity: async () => {},
       removeCartItem: async () => {},
       clearCart: async () => {},
       clearCartError: () => {},

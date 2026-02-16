@@ -8,7 +8,7 @@ import Countdown from './Countdown';
 import RatingStars from './RatingStars';
 import './NewCard.css';
 import { useGlobalCart } from '@/components/GlobalCartContext';
-import { useDebounce } from '@/hooks/useDebounce';
+
 import { Card } from '@/types';
 import { useColorModeValue } from '@chakra-ui/react';
 
@@ -52,32 +52,7 @@ const NewCard: React.FC<NewCardProps> = ({
 }) => {
   const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [isCartLoading, setIsCartLoading] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-  const { debouncedUpdateCartItemQuantity } = useGlobalCart();
-  const debouncedQuantity = useDebounce(quantity, 500);
   const isInitialMount = useRef(true);
-
-  useEffect(() => {
-    if (isSelected) {
-      setQuantity(currentCount);
-    }
-  }, [currentCount, isSelected]);
-
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      if (card._id) {
-        sessionStorage.setItem(`quantity_${card._id}`, quantity.toString());
-      }
-    }
-  }, [quantity, card._id]);
-
-  useEffect(() => {
-    if (isSelected && card._id) {
-      debouncedUpdateCartItemQuantity(card._id, debouncedQuantity);
-    }
-  }, [debouncedQuantity, isSelected, card._id, debouncedUpdateCartItemQuantity]);
 
   const availableStock = card.stock - card.stock_reduc;
 
@@ -102,7 +77,7 @@ const NewCard: React.FC<NewCardProps> = ({
     if (!isCartLoading) {
       setIsCartLoading(true);
       try {
-        await onAddToCart(card, quantity);
+        await onAddToCart(card, 1);
       } catch (error) {
         console.error("Error adding to cart:", error);
       } finally {
@@ -187,13 +162,7 @@ const NewCard: React.FC<NewCardProps> = ({
 
             {!(isExpired || isOutOfStock) && (
               <div className="new-card-add-container">
-                {!isSelected && (
-                  <div className="new-card-quantity-controls">
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }}>-</button>
-                    <span>{quantity}</span>
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); setQuantity(q => Math.min(q + 1, availableStock)); }} disabled={quantity >= availableStock}>+</button>
-                  </div>
-                )}
+
                 <button
                   className={`new-card-add-button ${isSelected ? 'selected' : ''}`}
                   onClick={handleAddToCartClick}

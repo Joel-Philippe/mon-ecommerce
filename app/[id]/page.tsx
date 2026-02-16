@@ -6,7 +6,6 @@ import { GlobalCartContext } from '@/components/GlobalCartContext';
 import CommentSection from '@/components/CommentSection';
 import Countdown from '@/components/Countdown';
 import ImageSlider from '@/components/ImageSlider'; // Import the new ImageSlider
-import { FaPlus, FaMinus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import styles from './ProductPage.module.css';
 
@@ -16,7 +15,6 @@ import { Card } from '@/types';
 const ProductPage = ({ params }: { params: { id: string } }) => {
   const [product, setProduct] = useState<Card | null>(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
   const [isExpired, setIsExpired] = useState(false);
   const { globalCart, addToCart } = useContext(GlobalCartContext)!;
 
@@ -56,7 +54,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product, quantity);
+      addToCart(product, 1); // Always add 1 unit
     }
   };
 
@@ -113,9 +111,6 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
 
         {product.stock - product.stock_reduc > 0 && !isExpired ? (
           <div className={styles.cartActions}>
-            <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className={styles.quantityButton}><FaMinus /></button>
-            <span className={styles.quantityDisplay}>{quantity}</span>
-            <button onClick={() => setQuantity(prev => (product && prev < product.stock - product.stock_reduc) ? prev + 1 : prev)} className={styles.quantityButton}><FaPlus /></button>
             <button 
               className={`${styles.addToCartButton} ${isInCart ? styles.inCart : ''}`}
               onClick={handleAddToCart}
