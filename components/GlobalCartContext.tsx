@@ -73,7 +73,9 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
         fetchedProducts = await response.json();
         const newCacheEntries: { [key: string]: Card } = {};
         fetchedProducts.forEach(p => {
-          newCacheEntries[p._id] = p;
+          if (p._id) {
+            newCacheEntries[p._id] = p;
+          }
         });
         setProductDetailsCache(prevCache => ({ ...prevCache, ...newCacheEntries }));
       } catch (err: any) {
