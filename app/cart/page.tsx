@@ -16,7 +16,7 @@ import '../Panier.css'; // Réutiliser le style du panier
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 export default function CartPage() {
-  const { globalCart, loadingCart, errorCart, updateCartItemQuantity, debouncedUpdateCartItemQuantity, removeCartItem, clearCartError } = useGlobalCart();
+  const { globalCart, loadingCart, errorCart, updateCartItemQuantity, removeCartItem, clearCartError } = useGlobalCart();
   const { user, loading: authLoading } = useAuth(); // Get user and auth loading state
 
   const toast = useToast();
@@ -67,7 +67,7 @@ export default function CartPage() {
   const handleQuantityChange = (productId: string, newQuantity: number) => {
     if (loadingCart) return; // Prevent multiple rapid updates
     if (newQuantity > 0) {
-      debouncedUpdateCartItemQuantity(productId, newQuantity);
+      updateCartItemQuantity(productId, newQuantity);
     } else {
       removeCartItem(productId);
     }
