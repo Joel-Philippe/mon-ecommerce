@@ -86,7 +86,7 @@ export const GlobalCartProvider = ({ children }: { children: React.ReactNode }) 
 
     items.forEach(cartItem => {
       const productDetail = productDetailsCache[cartItem.productId] || fetchedProducts.find((p: any) => p._id === cartItem.productId);
-      if (productDetail) {
+      if (productDetail && productDetail._id) {
         detailedCart[cartItem.productId] = {
           _id: productDetail._id,
           count: cartItem.quantity,
