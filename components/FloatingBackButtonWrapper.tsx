@@ -6,7 +6,8 @@ import FloatingBackButton from './FloatingBackButton';
 export default function FloatingBackButtonWrapper() {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  const isSuccessPage = pathname === '/success';
 
-  if (isHomePage) return null;
+  if (isHomePage || isSuccessPage) return null;
   return <FloatingBackButton />;
 }
