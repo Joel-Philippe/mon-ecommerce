@@ -45,8 +45,15 @@ export async function POST(req: NextRequest) {
         throw new Error(`Stock insuffisant pour le produit "${product.title}". Demandé: ${item.count}, Disponible: ${availableStock}`);
       }
       
-      const promoPrice = product.price_promo ? parseFloat(product.price_promo.replace(',', '.')) : 0;
-      const regularPrice = product.price ? parseFloat(product.price.replace(',', '.')) : 0;
+      // Parse prices safely (handles strings with commas and numbers)
+      const parsePrice = (price: any): number => {
+        if (typeof price === 'number') return price;
+        if (typeof price === 'string') return parseFloat(price.replace(',', '.'));
+        return 0;
+      };
+
+      const promoPrice = parsePrice(product.price_promo);
+      const regularPrice = parsePrice(product.price);
 
       // Apply promo price only if user is authenticated and promo price is valid
       const priceToUse = isAuthenticated && promoPrice > 0 ? promoPrice : regularPrice;
