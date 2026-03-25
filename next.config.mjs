@@ -1,13 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack: (config) => {
+    webpack: (config, { isServer }) => {
         config.experiments = { ...config.experiments, asyncWebAssembly: true };
         config.module.rules.push({
             test: /\.wasm$/,
             type: "webassembly/async",
         });
+        
+        // Optimisation pour limiter l'usage de la mémoire sur Render
+        if (!isServer) {
+          config.optimization.splitChunks = {
+            chunks: 'all',
+            maxInitialRequests: 25,
+            minSize: 20000,
+          };
+        }
+        
         return config;
     },
+    productionBrowserSourceMaps: false, // Désactive les source maps pour un build plus rapide
+    swcMinify: true, // Utilise SWC pour la minification (plus rapide que Terser)
     env: {
       NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
       NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
