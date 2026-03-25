@@ -31,9 +31,10 @@ interface MetadataItem {
 }
 
 // 🔄 Fonction pour mettre à jour le stock UNIQUEMENT après paiement réussi
-async function updateStockAfterPayment(items: Array<{ id: string; count: number; title: string }>): Promise<void> {
+async function updateStockAfterPayment(items: Array<{ id: string; count: number; title: string }>): Promise<{ success: boolean; errors?: string[] }> {
   try {
     console.log('🔄 === MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI ===');
+    const errors: string[] = [];
     
     await runTransaction(db, async (transaction) => {
       // 1. READ PHASE: Read all product documents first
@@ -47,15 +48,25 @@ async function updateStockAfterPayment(items: Array<{ id: string; count: number;
 
         if (productSnap.exists()) {
           const productData = productSnap.data();
-          const currentStock = Number(productData.stock || 0);
+          const currentTotalStock = Number(productData.stock || 0);
           const currentStockReduc = Number(productData.stock_reduc || 0);
+          const availableStock = currentTotalStock - currentStockReduc;
           
+          // ⚠️ VÉRIFICATION CRITIQUE : Le stock est-il toujours disponible ?
+          if (availableStock < item.count) {
+            const errorMsg = `⚠️ RUPTURE DE STOCK CRITIQUE : Le produit "${item.title}" n'a plus assez de stock (${availableStock} dispo, ${item.count} payés).`;
+            console.error(errorMsg);
+            errors.push(errorMsg);
+            // On ne bloque pas la transaction pour les autres produits, mais on note l'erreur
+            continue; 
+          }
+
           // ✅ INCRÉMENTER le stock_reduc avec la quantité vendue
           const newStockReduc = currentStockReduc + item.count;
           
           // Calculer le nouveau pourcentage
-          const pourcentage = currentStock > 0 
-            ? Math.min(Math.round((newStockReduc / currentStock) * 100), 100)
+          const pourcentage = currentTotalStock > 0 
+            ? Math.min(Math.round((newStockReduc / currentTotalStock) * 100), 100)
             : 0;
           
           transaction.update(productRefs[i], {
@@ -66,21 +77,17 @@ async function updateStockAfterPayment(items: Array<{ id: string; count: number;
           console.log(`✅ Stock mis à jour pour "${item.title}":`, {
             id: item.id,
             quantité_vendue: item.count,
-            ancien_stock_reduc: currentStockReduc,
             nouveau_stock_reduc: newStockReduc,
-            stock_total: currentStock,
-            pourcentage: pourcentage
+            stock_total: currentTotalStock
           });
-        } else {
-          console.warn(`⚠️ Produit non trouvé pour l'ID : ${item.id}`);
         }
       }
     });
     
-    console.log('✅ Mise à jour du stock terminée avec succès');
+    return { success: errors.length === 0, errors };
   } catch (error) {
     console.error('❌ Erreur lors de la mise à jour du stock:', error);
-    throw error; // Propager l'erreur pour que le webhook puisse la gérer
+    throw error;
   }
 }
 
@@ -373,25 +380,30 @@ export async function POST(req: Request) {
           totalPaid: (session.amount_total || 0) / 100,
           createdAt: serverTimestamp(),
           sessionId: session.id,
-          status: 'completed',
+          status: 'pending', // Will be updated after stock check
           timestamp: new Date().toISOString()
         };
 
-        console.log("💾 === SAUVEGARDE COMMANDE ===");
-        const orderRef = await addDoc(collection(db, "orders"), orderData);
-        console.log("✅ Order saved to Firestore:", orderRef.id);
-
         // 5️⃣ MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI
+        let stockUpdateResult = { success: true, errors: [] as string[] };
         try {
-          await updateStockAfterPayment(items);
+          stockUpdateResult = await updateStockAfterPayment(items.map(it => ({ id: it.id, count: it.count, title: it.title })));
         } catch (stockError: any) {
           console.error("❌ Erreur critique lors de la mise à jour du stock:", stockError);
+          stockUpdateResult = { success: false, errors: [stockError.message] };
         }
+
+        // Mettre à jour le statut final de la commande selon le stock
+        orderData.status = stockUpdateResult.success ? 'completed' : 'stock_error';
+        
+        console.log(`💾 === SAUVEGARDE COMMANDE (${orderData.status}) ===`);
+        const orderRef = await addDoc(collection(db, "orders"), orderData);
+        console.log("✅ Order saved to Firestore:", orderRef.id);
 
         // 6️⃣ Envoi de l'email de confirmation
         const emailData = {
           customerName: orderData.displayName,
-          customerEmail: orderData.customer_email,
+          customerEmail: orderData.customer_email || '',
           orderDate: new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
           items: items.map(item => ({
             title: item.title,
@@ -404,6 +416,7 @@ export async function POST(req: Request) {
           sessionId: session.id
         };
 
+        console.log(`📧 Envoi de l'email de confirmation à ${emailData.customerEmail}...`);
         const emailResult = await sendOrderConfirmationEmail(emailData);
         if (emailResult.success) {
           console.log("✅ === EMAIL ENVOYÉ AVEC SUCCÈS ===");
