@@ -2,9 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { collection, getDocs, updateDoc, doc, onSnapshot, serverTimestamp, addDoc, deleteDoc } from 'firebase/firestore';
-import SlickSlider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import './admin.css';
 import { db } from '@/components/firebaseConfig';
 import AddCard from '@/components/AddCard';
@@ -55,26 +52,8 @@ const AdminPage = () => {
   const [showAddCard, setShowAddCard] = useState(false);
   const [showUpdateCard, setShowUpdateCard] = useState(false);
   const authContext = useAuth();
-
-
-
-  if (!authContext) {
-    // This case should ideally not be reached if AuthProvider is correctly wrapping the app
-    // and admin access is checked. However, for TypeScript safety, we handle it.
-    return null; // Or a loading component, or redirect to login
-  }
-  const { logout, user } = authContext;
+  const { logout, user } = authContext || { logout: async () => {}, user: null };
   const router = useRouter();
-
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 6000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 60000,
-  };
 
   // Vérification admin
   useEffect(() => {
@@ -463,13 +442,7 @@ const AdminPage = () => {
                   <div key={card._id || index} className="product-card">
                     <div className="product-image">
                       {card.images && card.images.length > 0 && (
-                        <SlickSlider {...sliderSettings}>
-                          {card.images.map((image, idx) => (
-                            <div key={idx} className="slider-item">
-                              <img src={image} alt={`Image ${idx + 1}`} />
-                            </div>
-                          ))}
-                        </SlickSlider>
+                        <img src={card.images[0]} alt={card.title} className="admin-product-img" />
                       )}
                       
                       <div className="product-overlay">
