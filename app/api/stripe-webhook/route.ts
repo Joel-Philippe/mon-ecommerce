@@ -385,7 +385,7 @@ export async function POST(req: Request) {
         };
 
         // 5️⃣ MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI
-        let stockUpdateResult = { success: true, errors: [] as string[] };
+        let stockUpdateResult: { success: boolean; errors?: string[] } = { success: true, errors: [] };
         try {
           stockUpdateResult = await updateStockAfterPayment(items.map(it => ({ id: it.id, count: it.count, title: it.title })));
         } catch (stockError: any) {
