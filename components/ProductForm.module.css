@@ -266,6 +266,23 @@
     background-color: #e2e8f0;
 }
 
+.nestedItemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.nestedRow {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.nestedInput {
+    flex: 1;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .layout {

@@ -108,6 +108,21 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit, onClos
         handleInputChange(arrayName, [...array, newItem]);
     };
 
+    const addNestedItem = (arrayName: keyof Card, index: number, nestedArrayName: string, newItem: any) => {
+        const array = [...(formData[arrayName] as any[] || [])];
+        const nestedArray = [...(array[index][nestedArrayName] || [])];
+        nestedArray.push(newItem);
+        array[index] = { ...array[index], [nestedArrayName]: nestedArray };
+        handleInputChange(arrayName, array);
+    };
+
+    const removeNestedItem = (arrayName: keyof Card, index: number, nestedArrayName: string, nestedIndex: number) => {
+        const array = [...(formData[arrayName] as any[] || [])];
+        const nestedArray = (array[index][nestedArrayName] || []).filter((_: any, i: number) => i !== nestedIndex);
+        array[index] = { ...array[index], [nestedArrayName]: nestedArray };
+        handleInputChange(arrayName, array);
+    };
+
     const removeDynamicItem = (arrayName: keyof Card, index: number) => {
         const array = (formData[arrayName] as any[] || []);
         handleInputChange(arrayName, array.filter((_, i) => i !== index));
@@ -140,7 +155,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit, onClos
                         errors={errors}
                         handleDynamicChange={handleDynamicChange}
                         addDynamicItem={addDynamicItem}
+                        addNestedItem={addNestedItem}
                         removeDynamicItem={removeDynamicItem}
+                        removeNestedItem={removeNestedItem}
                         handleImageArrayChange={handleImageArrayChange}
                     />
                 </main>
@@ -158,7 +175,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit, onClos
     );
 };
 
-const RenderSection = ({ activeSection, formData, handleInputChange, errors, handleDynamicChange, addDynamicItem, removeDynamicItem, handleImageArrayChange }: any) => {
+const RenderSection = ({ activeSection, formData, handleInputChange, errors, handleDynamicChange, addDynamicItem, addNestedItem, removeDynamicItem, removeNestedItem, handleImageArrayChange }: any) => {
     const renderSectionContent = () => {
         switch (activeSection) {
             case 'basic':
@@ -287,19 +304,51 @@ const RenderSection = ({ activeSection, formData, handleInputChange, errors, han
                         {(formData.caracteristiques || []).map((spec: any, index: number) => (
                             <div key={index} className={styles.dynamicFieldCard}>
                                 <div className={styles.dynamicFieldHeader}>
-                                    <input type="text" value={spec.titre || ''} onChange={e => handleDynamicChange('caracteristiques', index, 'titre', e.target.value)} className={styles.formInput} placeholder="Titre de la caractéristique" />
-                                    <button onClick={() => removeDynamicItem('caracteristiques', index)} className={styles.removeButton}><Trash2 size={16} /></button>
+                                    <input 
+                                        type="text" 
+                                        value={spec.titre || ''} 
+                                        onChange={e => handleDynamicChange('caracteristiques', index, 'titre', e.target.value)} 
+                                        className={styles.formInput} 
+                                        placeholder="Titre du tableau (ex: Dimensions)" 
+                                    />
+                                    <button onClick={() => removeDynamicItem('caracteristiques', index)} className={styles.removeButton}>
+                                        <Trash2 size={16} /> Supprimer le tableau
+                                    </button>
                                 </div>
-                                {(spec.caracteristiques || []).map((item: any, itemIndex: number) => (
-                                     <div key={itemIndex} className={styles.formGrid}>
-                                        <input type="text" value={item.nom} onChange={e => handleDynamicChange('caracteristiques', index, `caracteristiques.${itemIndex}.nom`, e.target.value)} placeholder="Nom" className={styles.formInput} />
-                                        <input type="text" value={item.valeur} onChange={e => handleDynamicChange('caracteristiques', index, `caracteristiques.${itemIndex}.valeur`, e.target.value)} placeholder="Valeur" className={styles.formInput} />
-                                    </div>
-                                ))}
-                                <button onClick={() => addDynamicItem('caracteristiques', { titre: '', caracteristiques: [] })} className={styles.addButton}><Plus size={16} /> Ajouter une caractéristique</button>
+                                <div className={styles.nestedItemsList}>
+                                    {(spec.caracteristiques || []).map((item: any, itemIndex: number) => (
+                                         <div key={itemIndex} className={styles.nestedRow}>
+                                            <input 
+                                                type="text" 
+                                                value={item.nom} 
+                                                onChange={e => handleDynamicChange('caracteristiques', index, `caracteristiques.${itemIndex}.nom`, e.target.value)} 
+                                                placeholder="Caractéristique" 
+                                                className={`${styles.formInput} ${styles.nestedInput}`} 
+                                            />
+                                            <input 
+                                                type="text" 
+                                                value={item.valeur} 
+                                                onChange={e => handleDynamicChange('caracteristiques', index, `caracteristiques.${itemIndex}.valeur`, e.target.value)} 
+                                                placeholder="Valeur" 
+                                                className={`${styles.formInput} ${styles.nestedInput}`} 
+                                            />
+                                            <button onClick={() => removeNestedItem('caracteristiques', index, 'caracteristiques', itemIndex)} className={styles.removeButton}>
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button 
+                                    onClick={() => addNestedItem('caracteristiques', index, 'caracteristiques', { nom: '', valeur: '' })} 
+                                    className={styles.addButton}
+                                >
+                                    <Plus size={14} /> Ajouter une caractéristique (Nom - Valeur)
+                                </button>
                             </div>
                         ))}
-                        <button onClick={() => addDynamicItem('caracteristiques', { titre: '', caracteristiques: [] })} className={styles.addButton}><Plus size={16} /> Ajouter un tableau de caractéristiques</button>
+                        <button onClick={() => addDynamicItem('caracteristiques', { titre: '', caracteristiques: [] })} className={styles.addButton}>
+                            <Plus size={16} /> Ajouter un nouveau tableau de caractéristiques
+                        </button>
                     </div>
                 );
             case 'derived':
