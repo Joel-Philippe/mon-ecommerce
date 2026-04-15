@@ -35,6 +35,8 @@ body{
 }
 
 :root {
+  --border-color: #dee2e6;
+  --text-secondary: #6c757d;
   --menu-background-gradient: linear-gradient(90deg,#f8ede9 0,#fffcdd);
   --bottom-nav-item-color: #FF6F00;
   --bottom-nav-item-background: linear-gradient(90deg,#fffcdd 0,#f9f9f9);
@@ -125,6 +127,8 @@ body{
 }
 
 [data-theme="dark"] {
+  --border-color: #2d3748;
+  --text-secondary: #a0aec0;
   --chakra-colors-chakra-body-bg: #000000; /* Set body background to black in dark mode */
   --menu-background-gradient: #000000;
   --bottom-nav-item-color: var(--chakra-colors-chakra-body-text);
