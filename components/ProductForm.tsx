@@ -56,7 +56,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit, onClos
         if (!validate()) return;
         setIsSubmitting(true);
         try {
-            await onSubmit(formData as Card);
+            const dataToSubmit = {
+                ...formData,
+                stock: Number(formData.stock) || 0,
+                stock_reduc: Number(formData.stock_reduc) || 0,
+            };
+            await onSubmit(dataToSubmit as Card);
             onClose();
         } catch (error) {
             console.error("Submission failed", error);

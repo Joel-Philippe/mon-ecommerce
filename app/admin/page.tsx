@@ -52,17 +52,18 @@ const AdminPage = () => {
   const [showAddCard, setShowAddCard] = useState(false);
   const [showUpdateCard, setShowUpdateCard] = useState(false);
   const authContext = useAuth();
-  const { logout, user } = authContext || { logout: async () => {}, user: null };
+  const { logout, user, loading: authLoading } = authContext || { logout: async () => {}, user: null, loading: true };
   const router = useRouter();
 
   // Vérification admin
   useEffect(() => {
+    if (authLoading) return; // Wait for authentication to re-hydrate
+
     const checkAdminAccess = async () => {
       if (user) {
         const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL;
         console.log("Admin Check: User Email ->", user.email);
-        console.log("Admin Check: Configured Admin Email ->", adminEmail);
-
+        
         if (!adminEmail) {
           console.error("Admin Check: NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL is not defined.");
           router.push('/');
@@ -83,7 +84,7 @@ const AdminPage = () => {
       setLoadingAdminCheck(false);
     };
     checkAdminAccess();
-  }, [user, router]);
+  }, [user, authLoading, router]);
 
   // Charger les cartes avec Firebase
   useEffect(() => {

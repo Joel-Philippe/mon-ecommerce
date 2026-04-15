@@ -90,7 +90,7 @@ const ProductPage = ({ params }: { params: { id: string } }) => {
         </div>
 
         <div className={styles.stockInfo}>
-          <span>Stock: {product.stock - product.stock_reduc}</span>
+          <span>Stock: {(Number(product.stock) || 0) - (Number(product.stock_reduc) || 0)}</span>
           <span> | </span>
           <span>Livraison: {product.deliveryTime}</span>
         </div>
