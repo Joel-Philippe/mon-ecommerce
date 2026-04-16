@@ -1,9 +1,28 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { db, admin } from '@/utils/firebaseAdmin';
 import { sendStatusUpdateEmail } from '@/utils/resendEmailService';
 
-// ... (verifyAdmin function remains the same)
+// Fonction pour vérifier le token et les droits d'admin
+async function verifyAdmin(req: NextRequest) {
+  const authorization = req.headers.get('Authorization');
+  if (!authorization?.startsWith('Bearer ')) {
+    return { error: 'Unauthorized', status: 401 };
+  }
+
+  const token = authorization.split('Bearer ')[1];
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL;
+
+    if (decodedToken.email !== adminEmail) {
+      return { error: 'Forbidden', status: 403 };
+    }
+    return { user: decodedToken };
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return { error: 'Unauthorized', status: 401 };
+  }
+}
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { error, status } = await verifyAdmin(req);
@@ -38,7 +57,6 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       console.log(`✅ Notification par email envoyée pour la commande ${id} (Statut: ${newStatus})`);
     } catch (emailError) {
       console.error(`❌ Échec de l'envoi de l'email pour la commande ${id}:`, emailError);
-      // On ne fait pas échouer la requête si seul l'email échoue
     }
 
     return NextResponse.json({ message: 'Order status updated successfully' }, { status: 200 });
