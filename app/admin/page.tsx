@@ -687,9 +687,6 @@ const AdminPage = () => {
               )}
             </div>
           )}
-}
-            </div>
-          )}
         </div>
 
         {/* Modals */}
