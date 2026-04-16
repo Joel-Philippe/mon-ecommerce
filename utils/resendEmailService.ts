@@ -1,15 +1,20 @@
 import nodemailer from 'nodemailer';
 
-// Configuration du transporteur Nodemailer
+// Configuration robuste pour une compatibilité maximale (Gmail, Outlook, etc.)
 const transporter = nodemailer.createTransport({
-  service: 'hotmail',
+  host: "smtp.office365.com", // Serveur officiel Outlook/Hotmail
+  port: 587,
+  secure: false, // TLS
   auth: {
     user: process.env.NEXT_PUBLIC_EMAIL_USER,
     pass: process.env.NEXT_PUBLIC_EMAIL_PASS,
   },
+  tls: {
+    ciphers: 'SSLv3',
+    rejectUnauthorized: false
+  }
 });
 
-// 🎨 Template HTML pour la mise à jour du statut
 const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string => {
   const statusLabels: Record<string, string> = {
     'pending': 'En attente',
@@ -30,63 +35,80 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
   };
 
   return `
-    <div style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
-      <div style="background: linear-gradient(135deg, #FF9800 0%, #f91bf8 100%); color: white; padding: 20px; text-align: center;">
-        <h1 style="margin: 0;">To Easy Service</h1>
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
+      <div style="background: linear-gradient(135deg, #FF9800 0%, #f91bf8 100%); color: white; padding: 30px 20px; text-align: center;">
+        <h1 style="margin: 0; font-size: 24px;">To Easy Service</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.8;">Suivi de votre commande</p>
       </div>
-      <div style="padding: 20px;">
-        <h2>Bonjour ${orderData.userDisplayName || orderData.displayName || 'Client'},</h2>
-        <p>Le statut de votre commande <strong>#${orderData.id?.slice(-8)}</strong> a été mis à jour :</p>
-        <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; border: 1px solid #eee;">
-          <div style="font-size: 40px; margin-bottom: 10px;">${statusIcons[newStatus] || '🔔'}</div>
-          <div style="font-size: 18px; font-weight: bold;">Statut : ${statusLabels[newStatus] || newStatus}</div>
+      <div style="padding: 30px 20px;">
+        <h2 style="color: #444; margin-top: 0;">Bonjour ${orderData.userDisplayName || orderData.displayName || 'Client'},</h2>
+        <p>Du nouveau concernant votre commande <strong style="color: #7c3aed;">#${orderData.id?.slice(-8)}</strong> :</p>
+        
+        <div style="background: #f8fafc; padding: 25px; border-radius: 10px; text-align: center; margin: 25px 0; border: 1px solid #e2e8f0;">
+          <div style="font-size: 50px; margin-bottom: 10px;">${statusIcons[newStatus] || '🔔'}</div>
+          <div style="font-size: 20px; font-weight: bold; color: #1e293b;">Statut : ${statusLabels[newStatus] || newStatus}</div>
         </div>
-        <p>Merci de votre confiance, l'équipe To Easy Service</p>
+
+        <p>Vous recevrez une nouvelle notification à chaque étape importante de la livraison.</p>
+        <div style="text-align: center; margin-top: 30px;">
+           <a href="https://mon-ecommerce-edbs.onrender.com/account" style="background: #7c3aed; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Accéder à mon compte</a>
+        </div>
+      </div>
+      <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
+        <p style="margin: 0;">Ceci est un message automatique, merci de ne pas y répondre directement.</p>
+        <p style="margin: 5px 0 0 0;">&copy; ${new Date().getFullYear()} To Easy Service. Tous droits réservés.</p>
       </div>
     </div>
   `;
 };
 
-// 📧 Envoyer un email de mise à jour de statut
 export const sendStatusUpdateEmail = async (orderData: any, newStatus: string) => {
   try {
-    if (!process.env.NEXT_PUBLIC_EMAIL_USER || !process.env.NEXT_PUBLIC_EMAIL_PASS) {
-      return { success: false, error: 'Email credentials missing' };
-    }
+    if (!process.env.NEXT_PUBLIC_EMAIL_USER) return { success: false, error: 'Email configuration missing' };
     
     const mailOptions = {
-      from: process.env.NEXT_PUBLIC_EMAIL_USER,
+      from: `"To Easy Service" <${process.env.NEXT_PUBLIC_EMAIL_USER}>`, // Expéditeur plus "pro"
       to: orderData.customer_email,
+      // BCC: vous pouvez décommenter la ligne suivante pour recevoir une copie sur votre propre Gmail
+      // bcc: "votre-email@gmail.com", 
       subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
       html: createStatusUpdateEmailHTML(orderData, newStatus),
+      headers: {
+        'X-Priority': '1 (Highest)',
+        'X-Mailer': 'Nodemailer'
+      }
     };
 
     const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ Email (Statut: ${newStatus}) envoyé à ${orderData.customer_email}. MessageId: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
-    console.error('❌ Erreur Nodemailer:', error);
+    console.error('❌ Erreur d\'envoi email:', error);
     return { success: false, error: error.message };
   }
 };
 
-// 📧 Envoyer l'email de confirmation de commande (version complète)
 export const sendOrderConfirmationEmail = async (orderData: any) => {
   try {
-    if (!process.env.NEXT_PUBLIC_EMAIL_USER || !process.env.NEXT_PUBLIC_EMAIL_PASS) {
-      return { success: false, error: 'Email credentials missing' };
-    }
+    if (!process.env.NEXT_PUBLIC_EMAIL_USER) return { success: false, error: 'Email configuration missing' };
 
     const mailOptions = {
-      from: process.env.NEXT_PUBLIC_EMAIL_USER,
+      from: `"To Easy Service" <${process.env.NEXT_PUBLIC_EMAIL_USER}>`,
       to: orderData.customerEmail || orderData.customer_email,
       subject: `Confirmation de votre commande #${(orderData.sessionId || orderData.id || '').slice(-8)}`,
-      html: `<h1>Merci pour votre commande !</h1><p>Nous avons bien reçu votre paiement et traitons votre commande.</p>`,
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h1 style="color: #7c3aed;">Merci pour votre achat !</h1>
+          <p>Nous avons bien reçu votre commande et nous la préparons avec soin.</p>
+          <p>Vous recevrez des emails de suivi à chaque étape de l'avancement.</p>
+        </div>
+      `,
     };
 
     const info = await transporter.sendMail(mailOptions);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
-    console.error('❌ Erreur Nodemailer:', error);
+    console.error('❌ Erreur d\'envoi confirmation:', error);
     return { success: false, error: error.message };
   }
 };
