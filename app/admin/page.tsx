@@ -273,10 +273,9 @@ const AdminPage = () => {
               <h3>{cards.length}</h3>
               <p>Produits</p>
             </div>
-            </div>
+          </div>
 
-            <div className="stat-card">
-
+          <div className="stat-card">
             <div className="stat-icon orders">
               <FiUsers />
             </div>
@@ -314,16 +313,14 @@ const AdminPage = () => {
               <FiUsers />
               <span>Commandes</span>
             </button>
-            </div>
+          </div>
 
-<div className="mobile-view-selector">
-  <select value={currentView} onChange={(e) => setCurrentView(e.target.value)}>
-    <option value="products">Produits</option>
-    <option value="orders">Commandes</option>
-  </select>
-</div>
-
-{currentView === 'products' && (
+          <div className="mobile-view-selector">
+            <select value={currentView} onChange={(e) => setCurrentView(e.target.value)}>
+              <option value="products">Produits</option>
+              <option value="orders">Commandes</option>
+            </select>
+          </div>
 
           <div className="action-bar-right">
             <button 
