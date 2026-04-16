@@ -31,4 +31,6 @@ export interface Card {
   produits_derives: { titre: string, description: string, prix: string, price_promo: string, images: string[], deliveryTime: string }[];
   reviews?: any[];
   purchasedProductIds: string[];
-  }
+  localisation_gps?: string;
+  stars?: number;
+}
