@@ -26,10 +26,10 @@
     padding: 0;
   }
   
-  .animated-video{
+  .animated-video {
     height: auto;
     width: 100%;
-    margin-top: -100px;
+    display: block;
   }
   .video_animate{
     justify-content: center;
