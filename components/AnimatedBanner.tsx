@@ -14,7 +14,6 @@ const AnimatedBanner: React.FC<AnimatedBannerProps> = ({ onEnd }) => {
         autoPlay
         muted
         playsInline
-        loop
         className="animated-video"
         style={{ backgroundColor: '#f6eee2', objectFit: 'cover', width: '100%', height: '100%' }}
       >
