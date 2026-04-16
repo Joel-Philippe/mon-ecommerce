@@ -445,9 +445,21 @@ const AdminPage = () => {
                 <p>Gérez les commandes des clients et suivez leur avancement</p>
               </div>
 
-              {/* Order status filters */}
-              <div className="filters-bar">
-                <div className="action-bar-left">
+              {/* Order filters bar */}
+              <div className="filters-bar" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {/* Search in orders */}
+                <div className="search-box" style={{ maxWidth: '100%' }}>
+                  <FiSearch />
+                  <input
+                    type="text"
+                    placeholder="Rechercher par client, email, ID, article ou montant..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+
+                {/* Status tabs */}
+                <div className="action-bar-left" style={{ overflowX: 'auto', paddingBottom: '5px' }}>
                   <button 
                     className={`tab-button ${orderFilter === 'all' ? 'active' : ''}`}
                     onClick={() => setOrderFilter('all')}
@@ -515,7 +527,21 @@ const AdminPage = () => {
                     </thead>
                     <tbody>
                       {orders
-                        .filter(order => orderFilter === 'all' || order.status === orderFilter || (!order.status && orderFilter === 'paid'))
+                        .filter(order => {
+                          // Filter by status
+                          const matchesStatus = orderFilter === 'all' || order.status === orderFilter || (!order.status && orderFilter === 'paid');
+                          
+                          // Filter by search term
+                          const search = searchTerm.toLowerCase();
+                          const matchesSearch = !searchTerm || 
+                            order.displayName?.toLowerCase().includes(search) ||
+                            order.customer_email?.toLowerCase().includes(search) ||
+                            order.id?.toLowerCase().includes(search) ||
+                            order.totalPaid?.toString().includes(search) ||
+                            order.items?.some(item => item.title.toLowerCase().includes(search));
+                            
+                          return matchesStatus && matchesSearch;
+                        })
                         .map(order => (
                         <tr key={order.id}>
                           <td data-label="Client">{order.displayName}</td>
@@ -547,9 +573,19 @@ const AdminPage = () => {
                       ))}
                     </tbody>
                   </table>
-                  {orders.filter(order => orderFilter === 'all' || order.status === orderFilter || (!order.status && orderFilter === 'paid')).length === 0 && (
+                  {orders.filter(order => {
+                    const matchesStatus = orderFilter === 'all' || order.status === orderFilter || (!order.status && orderFilter === 'paid');
+                    const search = searchTerm.toLowerCase();
+                    const matchesSearch = !searchTerm || 
+                      order.displayName?.toLowerCase().includes(search) ||
+                      order.customer_email?.toLowerCase().includes(search) ||
+                      order.id?.toLowerCase().includes(search) ||
+                      order.totalPaid?.toString().includes(search) ||
+                      order.items?.some(item => item.title.toLowerCase().includes(search));
+                    return matchesStatus && matchesSearch;
+                  }).length === 0 && (
                     <div className="empty-state">
-                      <p>Aucune commande dans cette catégorie</p>
+                      <p>Aucune commande ne correspond à votre recherche ou catégorie</p>
                     </div>
                   )}
                 </div>
