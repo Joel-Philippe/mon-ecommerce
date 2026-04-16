@@ -2,50 +2,43 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
 export async function GET() {
-  const user = process.env.NEXT_PUBLIC_EMAIL_USER;
-  const pass = process.env.NEXT_PUBLIC_EMAIL_PASS;
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD;
 
   if (!user || !pass) {
     return NextResponse.json({ 
-      error: 'Variables d\'environnement manquantes',
-      user: !!user,
-      pass: !!pass
+      error: 'Variables Gmail manquantes sur Render',
+      GMAIL_USER: !!user,
+      GMAIL_APP_PASSWORD: !!pass
     }, { status: 500 });
   }
 
   const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: { user, pass },
-    tls: { ciphers: 'SSLv3', rejectUnauthorized: false }
+    service: 'gmail',
+    auth: { user, pass }
   });
 
   try {
-    // Vérifier la connexion
     await transporter.verify();
     
-    // Envoyer un mail de test à vous-même
     const info = await transporter.sendMail({
-      from: `"Debug To Easy" <${user}>`,
+      from: `"Test To Easy" <${user}>`,
       to: user,
-      subject: "Test de connexion SMTP - " + new Date().toISOString(),
-      text: "La connexion SMTP fonctionne correctement !",
-      html: "<b>La connexion SMTP fonctionne correctement !</b>"
+      subject: "Diagnostic Gmail SMTP - Succès",
+      text: "Le serveur parvient à envoyer des emails via votre compte Gmail !",
+      html: "<b>Le serveur parvient à envoyer des emails via votre compte Gmail !</b>"
     });
 
     return NextResponse.json({ 
       status: 'success', 
-      message: 'Connexion SMTP établie et mail de test envoyé',
+      message: 'Connexion Gmail établie',
       messageId: info.messageId
     });
   } catch (error: any) {
-    console.error('❌ Erreur Debug Email:', error);
     return NextResponse.json({ 
       status: 'error', 
       message: error.message,
-      code: error.code,
-      command: error.command
+      code: error.code
     }, { status: 500 });
   }
 }

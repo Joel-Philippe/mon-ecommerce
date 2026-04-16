@@ -1,18 +1,12 @@
 import nodemailer from 'nodemailer';
 
-// Configuration robuste pour une compatibilité maximale (Gmail, Outlook, etc.)
+// Configuration optimisée pour GMAIL (utilise vos variables Render existantes)
 const transporter = nodemailer.createTransport({
-  host: "smtp.office365.com", // Serveur officiel Outlook/Hotmail
-  port: 587,
-  secure: false, // TLS
+  service: 'gmail',
   auth: {
-    user: process.env.NEXT_PUBLIC_EMAIL_USER,
-    pass: process.env.NEXT_PUBLIC_EMAIL_PASS,
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
   },
-  tls: {
-    ciphers: 'SSLv3',
-    rejectUnauthorized: false
-  }
 });
 
 const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string => {
@@ -55,8 +49,7 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
         </div>
       </div>
       <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
-        <p style="margin: 0;">Ceci est un message automatique, merci de ne pas y répondre directement.</p>
-        <p style="margin: 5px 0 0 0;">&copy; ${new Date().getFullYear()} To Easy Service. Tous droits réservés.</p>
+        <p style="margin: 0;">&copy; ${new Date().getFullYear()} To Easy Service. Tous droits réservés.</p>
       </div>
     </div>
   `;
@@ -64,33 +57,27 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
 
 export const sendStatusUpdateEmail = async (orderData: any, newStatus: string) => {
   try {
-    if (!process.env.NEXT_PUBLIC_EMAIL_USER) return { success: false, error: 'Email configuration missing' };
+    if (!process.env.GMAIL_USER) return { success: false, error: 'GMAIL_USER configuration missing' };
     
     const mailOptions = {
-      from: `"To Easy Service" <${process.env.NEXT_PUBLIC_EMAIL_USER}>`, // Expéditeur plus "pro"
+      from: `"To Easy Service" <${process.env.GMAIL_USER}>`,
       to: orderData.customer_email,
-      // BCC: vous pouvez décommenter la ligne suivante pour recevoir une copie sur votre propre Gmail
-      // bcc: "votre-email@gmail.com", 
       subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
       html: createStatusUpdateEmailHTML(orderData, newStatus),
-      headers: {
-        'X-Priority': '1 (Highest)',
-        'X-Mailer': 'Nodemailer'
-      }
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Email (Statut: ${newStatus}) envoyé à ${orderData.customer_email}. MessageId: ${info.messageId}`);
+    console.log(`✅ Email (Gmail) envoyé à ${orderData.customer_email}. MessageId: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
-    console.error('❌ Erreur d\'envoi email:', error);
+    console.error('❌ Erreur d\'envoi email Gmail:', error);
     return { success: false, error: error.message };
   }
 };
 
 export const sendOrderConfirmationEmail = async (orderData: any) => {
   try {
-    if (!process.env.NEXT_PUBLIC_EMAIL_USER) return { success: false, error: 'Email configuration missing' };
+    if (!process.env.GMAIL_USER) return { success: false, error: 'GMAIL_USER configuration missing' };
 
     const itemsHtml = (orderData.items || []).map((item: any) => `
       <tr>
@@ -101,7 +88,7 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
     `).join('');
 
     const mailOptions = {
-      from: `"To Easy Service" <${process.env.NEXT_PUBLIC_EMAIL_USER}>`,
+      from: `"To Easy Service" <${process.env.GMAIL_USER}>`,
       to: orderData.customerEmail || orderData.customer_email,
       subject: `Confirmation de votre commande #${(orderData.sessionId || orderData.id || '').slice(-8)}`,
       html: `
@@ -112,35 +99,21 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
           <div style="padding: 30px 20px;">
             <p>Bonjour ${orderData.userDisplayName || orderData.displayName || 'Client'},</p>
             <p>Nous vous confirmons la réception de votre commande <strong>#${(orderData.sessionId || orderData.id || '').slice(-8)}</strong>.</p>
-            
-            <h3 style="border-bottom: 2px solid #f91bf8; padding-bottom: 5px;">Détails de la commande</h3>
-            <table style="width: 100%; border-collapse: collapse;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
               <thead>
-                <tr style="background: #f8fafc;">
-                  <th style="padding: 10px; text-align: left;">Produit</th>
-                  <th style="padding: 10px; text-align: center;">Qté</th>
-                  <th style="padding: 10px; text-align: right;">Prix</th>
-                </tr>
+                <tr style="background: #f8fafc;"><th style="padding: 10px; text-align: left;">Produit</th><th style="padding: 10px; text-align: center;">Qté</th><th style="padding: 10px; text-align: right;">Prix</th></tr>
               </thead>
-              <tbody>
-                ${itemsHtml}
-              </tbody>
+              <tbody>${itemsHtml}</tbody>
             </table>
-            
-            <p style="margin-top: 20px;">Vous recevrez des emails de suivi à chaque étape de l'avancement de votre commande.</p>
-          </div>
-          <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
-            <p>&copy; ${new Date().getFullYear()} To Easy Service. Tous droits réservés.</p>
           </div>
         </div>
       `,
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Confirmation d'achat envoyée à ${orderData.customerEmail || orderData.customer_email}`);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
-    console.error('❌ Erreur d\'envoi confirmation:', error);
+    console.error('❌ Erreur d\'envoi confirmation Gmail:', error);
     return { success: false, error: error.message };
   }
 };
