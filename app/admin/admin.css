@@ -514,9 +514,22 @@
 .modal-content.large {
   max-width: 1200px;
   max-height: 90vh;
+  width: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 0;
+  }
+  
+  .modal-content.large {
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+  }
 }
 
 .modal-header {

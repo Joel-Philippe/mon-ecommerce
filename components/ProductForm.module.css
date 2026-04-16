@@ -191,10 +191,136 @@
     background-color: var(--background-product-form-add-button-hover);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for mobile ergonomics */
 @media (max-width: 768px) {
-  .layout { flex-direction: column; }
-  .sidebar { width: 100%; border-bottom: 1px solid var(--border-color); }
-  .sidebarNav { flex-direction: row; overflow-x: auto; }
-  .formGrid { grid-template-columns: 1fr; }
+  .container {
+    padding: 0.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .layout {
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.2rem;
+    background: var(--background-product-form-section);
+    z-index: 10;
+  }
+
+  .sidebarNav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0.4rem 0.2rem;
+    gap: 0.4rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .sidebarNav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navItem {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    background: var(--background-admin-user-info);
+    border: 1px solid var(--border-color);
+  }
+
+  .navItem.active {
+    background: #4a90e2;
+    color: white;
+  }
+
+  .content {
+    overflow-y: auto;
+    padding-bottom: 4rem; /* Space for sticky footer if needed */
+  }
+
+  .section {
+    padding: 0.8rem;
+    border-radius: 6px;
+  }
+
+  .sectionHeader {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+
+  .sectionDescription {
+    font-size: 0.75rem;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .formLabel {
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .formInput,
+  .formTextarea,
+  .formSelect {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+  }
+
+  .footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--background-product-form-container);
+    padding: 0.8rem 0;
+    margin-top: 0;
+    z-index: 20;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+
+  .button {
+    flex: 1;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .secondaryButton {
+    margin-right: 0;
+  }
+
+  .dynamicFieldCard {
+    padding: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .dynamicFieldHeader {
+    margin-bottom: 0.4rem;
+  }
+
+  .dynamicFieldTitle {
+    font-size: 0.75rem;
+  }
+
+  .addButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
 }
