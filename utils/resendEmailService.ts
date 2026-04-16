@@ -35,7 +35,7 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
         <h1 style="margin: 0;">To Easy Service</h1>
       </div>
       <div style="padding: 20px;">
-        <h2>Bonjour ${orderData.displayName || 'Client'},</h2>
+        <h2>Bonjour ${orderData.userDisplayName || orderData.displayName || 'Client'},</h2>
         <p>Le statut de votre commande <strong>#${orderData.id?.slice(-8)}</strong> a été mis à jour :</p>
         <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; border: 1px solid #eee;">
           <div style="font-size: 40px; margin-bottom: 10px;">${statusIcons[newStatus] || '🔔'}</div>
