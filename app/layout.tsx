@@ -11,8 +11,8 @@ import ProgressBar from "@/components/ProgressBar";
 import ScrollRestoration from "@/components/ScrollRestoration";
 
 export const metadata: Metadata = {
-  title: "To Easy Service",
-  description: "Formation Premium et Services",
+  title: "Family Market",
+  description: "Market de quartier",
 };
 
 export default function RootLayout({

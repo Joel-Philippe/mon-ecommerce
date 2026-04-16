@@ -31,7 +31,7 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
   return `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
       <div style="background: linear-gradient(135deg, #FF9800 0%, #f91bf8 100%); color: white; padding: 30px 20px; text-align: center;">
-        <h1 style="margin: 0; font-size: 24px;">To Easy Service</h1>
+        <h1 style="margin: 0; font-size: 24px;">Family Market</h1>
         <p style="margin: 5px 0 0 0; opacity: 0.8;">Suivi de votre commande</p>
       </div>
       <div style="padding: 30px 20px;">
@@ -49,7 +49,7 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
         </div>
       </div>
       <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
-        <p style="margin: 0;">&copy; ${new Date().getFullYear()} To Easy Service. Tous droits réservés.</p>
+        <p style="margin: 0;">&copy; ${new Date().getFullYear()} Family Market. Tous droits réservés.</p>
       </div>
     </div>
   `;
@@ -60,7 +60,7 @@ export const sendStatusUpdateEmail = async (orderData: any, newStatus: string) =
     if (!process.env.GMAIL_USER) return { success: false, error: 'GMAIL_USER configuration missing' };
     
     const mailOptions = {
-      from: `"To Easy Service" <${process.env.GMAIL_USER}>`,
+      from: `"Family Market" <${process.env.GMAIL_USER}>`,
       to: orderData.customer_email,
       subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
       html: createStatusUpdateEmailHTML(orderData, newStatus),
@@ -88,7 +88,7 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
     `).join('');
 
     const mailOptions = {
-      from: `"To Easy Service" <${process.env.GMAIL_USER}>`,
+      from: `"Family Market" <${process.env.GMAIL_USER}>`,
       to: orderData.customerEmail || orderData.customer_email,
       subject: `Confirmation de votre commande #${(orderData.sessionId || orderData.id || '').slice(-8)}`,
       html: `
