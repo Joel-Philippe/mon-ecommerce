@@ -1,6 +1,6 @@
 import { db } from '@/components/firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import nodemailer from 'nodemailer';
+import { sendOrderConfirmationEmail } from '@/utils/resendEmailService';
 
 export async function POST(req: Request) {
   if (req.method !== 'POST') {
@@ -19,60 +19,20 @@ export async function POST(req: Request) {
       status: 'paid',
     });
 
-    const transporter = nodemailer.createTransport({
-      service: 'hotmail',
-      auth: {
-        user: process.env.NEXT_PUBLIC_EMAIL_USER,
-        pass: process.env.NEXT_PUBLIC_EMAIL_PASS,
-      },
-    });
-
-    interface OrderItem {
-      title: string;
-      count: number;
-      price: number;
-      price_promo?: number;
-      deliveryDate: string;
+    // Utiliser le service centralisé pour l'envoi d'email
+    try {
+      await sendOrderConfirmationEmail({
+        id: docRef.id,
+        customer_email: email,
+        userDisplayName: displayName,
+        items: items
+      });
+      console.log(`✅ Email de confirmation envoyé pour la commande ${docRef.id}`);
+    } catch (emailError) {
+      console.error('❌ Échec de l\'envoi de l\'email de confirmation:', emailError);
     }
 
-    const generateOrderDetailsHtml = (orderDetails: OrderItem[]) => {
-      return `
-        <h2>Détails de votre commande</h2>
-        <table style="width:100%; border-collapse: collapse;">
-          <thead>
-            <tr>
-              <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Produit</th>
-              <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Quantité</th>
-              <th style="border: 1px solid #dddddd; text-align: left; padding: 8px;">Prix</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${orderDetails.map(item => `
-              <tr>
-                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${item.title}</td>
-                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${item.count}</td>
-                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${item.price}€</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    };
-
-    const mailOptions = {
-      from: process.env.NEXT_PUBLIC_EMAIL_USER,
-      to: email,
-      subject: 'Confirmation de commande',
-      html: `
-        <h1>Merci pour votre achat !</h1>
-        <p>Voici les détails de votre commande :</p>
-        ${generateOrderDetailsHtml(items)}
-      `,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    return new Response(JSON.stringify({ message: 'Purchase completed and email sent successfully' }), { status: 200 });
+    return new Response(JSON.stringify({ message: 'Purchase completed', orderId: docRef.id }), { status: 200 });
   } catch (error: any) {
     console.error('Error processing purchase:', error);
     return new Response(JSON.stringify({ message: `Error processing purchase: ${error.message}` }), { status: 500 });

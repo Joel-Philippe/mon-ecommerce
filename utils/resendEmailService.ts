@@ -92,20 +92,52 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
   try {
     if (!process.env.NEXT_PUBLIC_EMAIL_USER) return { success: false, error: 'Email configuration missing' };
 
+    const itemsHtml = (orderData.items || []).map((item: any) => `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${item.count}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">${(item.price || 0).toFixed(2)}€</td>
+      </tr>
+    `).join('');
+
     const mailOptions = {
       from: `"To Easy Service" <${process.env.NEXT_PUBLIC_EMAIL_USER}>`,
       to: orderData.customerEmail || orderData.customer_email,
       subject: `Confirmation de votre commande #${(orderData.sessionId || orderData.id || '').slice(-8)}`,
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px;">
-          <h1 style="color: #7c3aed;">Merci pour votre achat !</h1>
-          <p>Nous avons bien reçu votre commande et nous la préparons avec soin.</p>
-          <p>Vous recevrez des emails de suivi à chaque étape de l'avancement.</p>
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
+          <div style="background: linear-gradient(135deg, #FF9800 0%, #f91bf8 100%); color: white; padding: 30px 20px; text-align: center;">
+            <h1 style="margin: 0; font-size: 24px;">Merci pour votre achat !</h1>
+          </div>
+          <div style="padding: 30px 20px;">
+            <p>Bonjour ${orderData.userDisplayName || orderData.displayName || 'Client'},</p>
+            <p>Nous vous confirmons la réception de votre commande <strong>#${(orderData.sessionId || orderData.id || '').slice(-8)}</strong>.</p>
+            
+            <h3 style="border-bottom: 2px solid #f91bf8; padding-bottom: 5px;">Détails de la commande</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8fafc;">
+                  <th style="padding: 10px; text-align: left;">Produit</th>
+                  <th style="padding: 10px; text-align: center;">Qté</th>
+                  <th style="padding: 10px; text-align: right;">Prix</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsHtml}
+              </tbody>
+            </table>
+            
+            <p style="margin-top: 20px;">Vous recevrez des emails de suivi à chaque étape de l'avancement de votre commande.</p>
+          </div>
+          <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
+            <p>&copy; ${new Date().getFullYear()} To Easy Service. Tous droits réservés.</p>
+          </div>
         </div>
       `,
     };
 
     const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ Confirmation d'achat envoyée à ${orderData.customerEmail || orderData.customer_email}`);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
     console.error('❌ Erreur d\'envoi confirmation:', error);
