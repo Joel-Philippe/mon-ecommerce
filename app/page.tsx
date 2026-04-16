@@ -381,15 +381,8 @@ const normalizeString = (str: string | undefined | null) => {
   return (
     <div>
       {loading && <LoadingSpinner />} {/* Render LoadingSpinner conditionally */}
-      <div
-        className={`video_animate video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
-        style={{ opacity: videoEnded ? 0 : 1, pointerEvents: videoEnded ? 'none' : 'auto' }}
-      >
-      </div>
-            <div
-        className={`video_animate video_animate-wrapper video_animate-wrapper ${videoEnded ? 'collapsed' : ''}`}
-      >
-        <AnimatedBanner onEnd={handleVideoEnd} />
+      <div className="video_animate video_animate-wrapper">
+        <AnimatedBanner onEnd={() => {}} />
       </div>
       
       <Suspense fallback={<div>Chargement du contenu...</div>}>

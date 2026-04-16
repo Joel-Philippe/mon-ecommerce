@@ -14,11 +14,10 @@ const AnimatedBanner: React.FC<AnimatedBannerProps> = ({ onEnd }) => {
         autoPlay
         muted
         playsInline
-        onEnded={onEnd} // Ensure the callback is triggered when video finishes
         className="animated-video"
         style={{ backgroundColor: '#f6eee2' }}
       >
-        <source src="/video.mp4" type="video/mp4" />
+        <source src="/vidéo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div className="animated-video-overlay" />
