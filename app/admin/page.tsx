@@ -48,6 +48,7 @@ const AdminPage = () => {
   const [loadingAdminCheck, setLoadingAdminCheck] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
+  const [orderFilter, setOrderFilter] = useState('all'); // Add order status filter
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showAddCard, setShowAddCard] = useState(false);
   const [showUpdateCard, setShowUpdateCard] = useState(false);
@@ -572,21 +573,62 @@ const AdminPage = () => {
             <div className="orders-section">
               <div className="section-header">
                 <h2>Toutes les commandes</h2>
-                <p>Gérez les commandes des clients</p>
+                <p>Gérez les commandes des clients et suivez leur avancement</p>
               </div>
+
+              {/* Order status filters */}
+              <div className="filters-bar">
+                <div className="action-bar-left">
+                  <button 
+                    className={`tab-button ${orderFilter === 'all' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('all')}
+                  >
+                    Toutes
+                  </button>
+                  <button 
+                    className={`tab-button ${orderFilter === 'pending' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('pending')}
+                  >
+                    En attente
+                  </button>
+                  <button 
+                    className={`tab-button ${orderFilter === 'paid' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('paid')}
+                  >
+                    Payées
+                  </button>
+                  <button 
+                    className={`tab-button ${orderFilter === 'processing' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('processing')}
+                  >
+                    Préparation
+                  </button>
+                  <button 
+                    className={`tab-button ${orderFilter === 'shipped' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('shipped')}
+                  >
+                    Expédiées
+                  </button>
+                  <button 
+                    className={`tab-button ${orderFilter === 'delivered' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('delivered')}
+                  >
+                    Livrées
+                  </button>
+                  <button 
+                    className={`tab-button ${orderFilter === 'completed' ? 'active' : ''}`}
+                    onClick={() => setOrderFilter('completed')}
+                  >
+                    Terminées
+                  </button>
+                </div>
+              </div>
+
               {isLoading ? (
                 <div className="loading-grid">
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="loading-card"></div>
                   ))}
-                </div>
-              ) : orders.length === 0 ? (
-                <div className="empty-state">
-                  <div className="empty-icon">
-                    <FiUsers />
-                  </div>
-                  <h3>Aucune commande</h3>
-                  <p>Les nouvelles commandes apparaîtront ici</p>
                 </div>
               ) : (
                 <div className="orders-table-container">
@@ -603,7 +645,9 @@ const AdminPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {orders.map(order => (
+                      {orders
+                        .filter(order => orderFilter === 'all' || order.status === orderFilter || (!order.status && orderFilter === 'paid'))
+                        .map(order => (
                         <tr key={order.id}>
                           <td data-label="Client">{order.displayName}</td>
                           <td data-label="Email">{order.customer_email}</td>
@@ -621,18 +665,29 @@ const AdminPage = () => {
                               value={order.status || 'paid'}
                               onChange={(e) => handleStatusChange(order.id, e.target.value)}
                               className={`status-select status-badge ${order.status || 'paid'}`}>
+                              <option value="pending">En attente</option>
                               <option value="paid">Payée</option>
+                              <option value="processing">Préparation</option>
                               <option value="shipped">Expédiée</option>
-                              <option value="delivered">Livrable</option>
+                              <option value="delivered">Livrée</option>
+                              <option value="completed">Terminée</option>
                             </select>
                           </td>
-                          <td data-label="ID Commande">{order.id}</td>
+                          <td data-label="ID Commande">#{order.id?.slice(-8)}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                  {orders.filter(order => orderFilter === 'all' || order.status === orderFilter || (!order.status && orderFilter === 'paid')).length === 0 && (
+                    <div className="empty-state">
+                      <p>Aucune commande dans cette catégorie</p>
+                    </div>
+                  )}
                 </div>
               )}
+            </div>
+          )}
+}
             </div>
           )}
         </div>

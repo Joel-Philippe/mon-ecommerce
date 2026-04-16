@@ -27,6 +27,106 @@ interface OrderEmailData {
   sessionId: string;
 }
 
+// 🎨 Template HTML pour la mise à jour du statut de la commande
+const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string => {
+  const statusLabels: Record<string, string> = {
+    'pending': 'En attente',
+    'processing': 'En cours de préparation',
+    'shipped': 'Expédiée',
+    'delivered': 'Livrée',
+    'completed': 'Terminée',
+    'paid': 'Payée'
+  };
+
+  const statusIcons: Record<string, string> = {
+    'pending': '⏳',
+    'processing': '🛠️',
+    'shipped': '🚚',
+    'delivered': '📦',
+    'completed': '✅',
+    'paid': '💳'
+  };
+
+  const statusMessages: Record<string, string> = {
+    'pending': 'Votre commande est en attente de validation.',
+    'processing': 'Nous préparons actuellement votre commande avec le plus grand soin.',
+    'shipped': 'Bonne nouvelle ! Votre commande a été remise au transporteur et est en route.',
+    'delivered': 'Votre commande a été livrée. Nous espérons qu\'elle vous apportera entière satisfaction.',
+    'completed': 'Votre commande est maintenant terminée. Merci de votre confiance !',
+    'paid': 'Votre paiement a été validé et votre commande est en cours de traitement.'
+  };
+
+  return `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise à jour de votre commande - To Easy Service</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; margin: 0; background: #f8fafc; color: #1a202c; padding: 40px 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .header { background: linear-gradient(315deg,#FF9800 0%,#f91bf8 100%); color: white; padding: 40px; text-align: center; }
+        .content { padding: 40px; }
+        .status-box { background: #f1f5f9; border-radius: 16px; padding: 24px; text-align: center; margin: 24px 0; border: 1px solid #e2e8f0; }
+        .status-icon { font-size: 48px; margin-bottom: 12px; }
+        .status-label { font-size: 20px; font-weight: 700; color: #1e293b; display: block; }
+        .status-msg { color: #64748b; font-size: 15px; margin-top: 8px; }
+        .order-id { font-family: monospace; background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 14px; }
+        .footer { background: #f8fafc; padding: 32px; text-align: center; color: #64748b; font-size: 14px; }
+        .btn { display: inline-block; background: #7c3aed; color: white; text-decoration: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; margin-top: 24px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin:0;font-size:24px;">To Easy Service</h1>
+        </div>
+        <div class="content">
+            <h2 style="margin-top:0;">Bonjour ${orderData.displayName || 'Client'},</h2>
+            <p>Il y a du nouveau concernant votre commande <span class="order-id">#${orderData.id?.slice(-8)}</span>.</p>
+            
+            <div class="status-box">
+                <div class="status-icon">${statusIcons[newStatus] || '🔔'}</div>
+                <span class="status-label">Statut : ${statusLabels[newStatus] || newStatus}</span>
+                <p class="status-msg">${statusMessages[newStatus] || 'Le statut de votre commande a été mis à jour.'}</p>
+            </div>
+
+            <p>Nous vous tiendrons informé de chaque étape importante jusqu'à la réception de vos services.</p>
+            
+            <div style="text-align:center;">
+                <a href="https://to-easy-service.com/account" class="btn">Suivre ma commande</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Merci de votre confiance,<br>L'équipe To Easy Service</p>
+        </div>
+    </div>
+</body>
+</html>`;
+};
+
+// 📧 Envoyer un email de mise à jour de statut
+export const sendStatusUpdateEmail = async (orderData: any, newStatus: string) => {
+  try {
+    if (!process.env.RESEND_API_KEY) return { success: false, error: 'API Key missing' };
+    
+    const emailPayload = {
+      from: 'To Easy Service <onboarding@resend.dev>',
+      to: [orderData.customer_email],
+      subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
+      html: createStatusUpdateEmailHTML(orderData, newStatus),
+    };
+
+    const result = await resend.emails.send(emailPayload);
+    return { success: true, data: result };
+  } catch (error) {
+    console.error('❌ Erreur envoi email statut:', error);
+    return { success: false, error };
+  }
+};
+
 // 🔧 Initialisation de Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
 
