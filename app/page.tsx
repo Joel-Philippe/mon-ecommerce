@@ -45,7 +45,6 @@ const normalizeString = (str: string | undefined | null) => {
   export default function Page() {
   const [cards, setCards] = useState<Card[]>([]);
   const [expiredCards, setExpiredCards] = useState<Set<string>>(new Set());
-  const [specialRequests, setSpecialRequests] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(false);

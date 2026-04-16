@@ -30,16 +30,5 @@ export interface Card {
   caracteristiques: { titre: string, caracteristiques: { nom: string, valeur: string }[] }[];
   produits_derives: { titre: string, description: string, prix: string, price_promo: string, images: string[], deliveryTime: string }[];
   reviews?: any[];
-  localisation_gps?: string;
-}
-
-export interface SpecialRequest {
-  id: string;
-  status: 'pending' | 'accepted';
-  senderEmail: string;
-  senderDisplayName: string;
-  senderPhoto?: string;
-  sellerName?: string;
-  sellerPhoto?: string;
-  selectedProducts: { title: string }[];
-}
+  purchasedProductIds: string[];
+  }

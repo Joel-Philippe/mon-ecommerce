@@ -7,7 +7,7 @@ import { db } from '@/components/firebaseConfig';
 import AddCard from '@/components/AddCard';
 import UpdateCardModal from '@/components/UpdateCardModal';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, SpecialRequest } from '@/types';
+import { Card } from '@/types';
 
 import { 
   FiLogOut, 
@@ -38,7 +38,6 @@ interface Order {
 
 const AdminPage = () => {
   const [cards, setCards] = useState<Card[]>([]);
-  const [specialRequests, setSpecialRequests] = useState<SpecialRequest[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [currentView, setCurrentView] = useState('products'); // 'products', 'requests', or 'orders'
   const [isLoading, setIsLoading] = useState(true);
@@ -114,24 +113,6 @@ const AdminPage = () => {
     
     // Nettoyer l'abonnement
     return () => unsubscribe();
-  }, [isAdmin]);
-
-  // Charger les demandes spéciales
-  useEffect(() => {
-    if (!isAdmin) return;
-    const fetchSpecialRequests = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'specialRequests'));
-        const requests: SpecialRequest[] = [];
-        querySnapshot.forEach((doc) => {
-          requests.push({ ...(doc.data() as SpecialRequest), id: doc.id });
-        });
-        setSpecialRequests(requests);
-      } catch (error) {
-        setError("Erreur lors de la récupération des demandes spéciales.");
-      }
-    };
-    fetchSpecialRequests();
   }, [isAdmin]);
 
   // Fetch orders
@@ -232,28 +213,6 @@ const AdminPage = () => {
     }
   };
 
-  const handleValidateRequest = async (request: SpecialRequest) => {
-    try {
-      // Implement logic to update the request status in Firebase
-      const requestRef = doc(db, 'specialRequests', request.id);
-      await updateDoc(requestRef, {
-        status: 'accepted', // Or any other status you want to set
-        updatedAt: serverTimestamp()
-      });
-      
-      // Update local state to reflect the change
-      setSpecialRequests(prevRequests => 
-        prevRequests.map(req => 
-          req.id === request.id ? { ...req, status: 'accepted' } : req
-        )
-      );
-      alert('Demande validée avec succès !');
-    } catch (error) {
-      console.error('Erreur lors de la validation de la demande:', error);
-      alert('Erreur lors de la validation de la demande.');
-    }
-  };
-
   // Filtrer les cartes
   const filteredCards = cards.filter(card => {
     const matchesSearch = card.title?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -314,19 +273,10 @@ const AdminPage = () => {
               <h3>{cards.length}</h3>
               <p>Produits</p>
             </div>
-          </div>
-
-          <div className="stat-card">
-            <div className="stat-icon requests">
-              <FiClipboard />
             </div>
-            <div className="stat-content">
-              <h3>{specialRequests.length}</h3>
-              <p>Demandes</p>
-            </div>
-          </div>
 
-          <div className="stat-card">
+            <div className="stat-card">
+
             <div className="stat-icon orders">
               <FiUsers />
             </div>
@@ -357,15 +307,6 @@ const AdminPage = () => {
               <FiShoppingBag />
               <span>Produits</span>
             </button>
-            
-            <button 
-              className={`tab-button ${currentView === 'requests' ? 'active' : ''}`}
-              onClick={() => setCurrentView('requests')}
-            >
-              <FiClipboard />
-              <span>Demandes spéciales</span>
-            </button>
-
             <button 
               className={`tab-button ${currentView === 'orders' ? 'active' : ''}`}
               onClick={() => setCurrentView('orders')}
@@ -373,16 +314,17 @@ const AdminPage = () => {
               <FiUsers />
               <span>Commandes</span>
             </button>
-          </div>
+            </div>
 
-          <div className="mobile-view-selector">
-            <select value={currentView} onChange={(e) => setCurrentView(e.target.value)}>
-              <option value="products">Produits</option>
-              <option value="requests">Demandes</option>
-              <option value="orders">Commandes</option>
-            </select>
-          </div>
-          
+<div className="mobile-view-selector">
+  <select value={currentView} onChange={(e) => setCurrentView(e.target.value)}>
+    <option value="products">Produits</option>
+    <option value="orders">Commandes</option>
+  </select>
+</div>
+
+{currentView === 'products' && (
+
           <div className="action-bar-right">
             <button 
               className="action-button primary"
@@ -496,76 +438,6 @@ const AdminPage = () => {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {currentView === 'requests' && (
-            <div className="special-requests-section">
-              <div className="section-header">
-                <h2>Demandes spéciales</h2>
-                <p>Gérez les demandes clients</p>
-              </div>
-              
-              {isLoading ? (
-                <div className="loading-grid">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="loading-card"></div>
-                  ))}
-                </div>
-              ) : specialRequests.length === 0 ? (
-                <div className="empty-state">
-                  <div className="empty-icon">
-                    <FiClipboard />
-                  </div>
-                  <h3>Aucune demande spéciale</h3>
-                  <p>Les nouvelles demandes apparaîtront ici</p>
-                </div>
-              ) : (
-                <div className="requests-grid">
-                  {specialRequests.map((request) => (
-                    <div key={request.id} className="request-card">
-                      <div className="request-header">
-                        <div className="request-status">
-                          <span className={`status-badge ${request.status || 'pending'}`}>
-                            {request.status === 'accepted' ? 'Acceptée' : 'En attente'}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="request-content">
-                        <div className="request-user">
-                          <img src={request.senderPhoto || 'https://via.placeholder.com/40'} alt="User" />
-                          <div>
-                            <h4>{request.senderDisplayName}</h4>
-                            <p>{request.senderEmail}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="request-seller">
-                          <img src={request.sellerPhoto || 'https://via.placeholder.com/32'} alt="Seller" />
-                          <span>Vendeur: {request.sellerName}</span>
-                        </div>
-                        
-                        <div className="request-products">
-                          <h5>Produits demandés:</h5>
-                          <p>{request.selectedProducts.map((p) => p.title).join(', ')}</p>
-                        </div>
-                      </div>
-                      
-                      {request.status !== 'accepted' && (
-                        <div className="request-actions">
-                          <button 
-                            className="validate-button"
-                            onClick={() => handleValidateRequest(request)}
-                          >
-                            Valider la demande
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           )}
 

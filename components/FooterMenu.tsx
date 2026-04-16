@@ -15,7 +15,6 @@ const FooterMenu: React.FC<FooterMenuProps> = ({ openModal, openPayment, cartCou
       <div className={styles.menuButtons}>
         <button className={styles.menuButton} onClick={() => openModal('displayName')}>Pseudo</button>
         <button className={styles.menuButton} onClick={() => openModal('profilePhoto')}>Photo de Profil</button>
-        <button className={styles.menuButton} onClick={() => openModal('specialRequests')}>Demandes Spéciales</button>
         <button className={styles.menuButton} onClick={() => openModal('purchases')}>Achats</button>
         <button className={styles.menuButton} onClick={() => openModal('messages')}>Messages</button>
         <button className={styles.menuButton} onClick={() => openModal('changePassword')}>Mot de Passe</button>
