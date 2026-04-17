@@ -8,6 +8,9 @@ import { Sparkles, Filter, Search, X } from 'lucide-react';
 import { Card } from '@/types';
 import { useSearch } from '@/contexts/SearchContext';
 import { usePathname } from 'next/navigation'; // Import usePathname
+import CoolImg from 'react-cool-img';
+
+const ICON_PLACEHOLDER = "https://via.placeholder.com/50x50?text=Icon";
 
 interface MenuProps {
   cards: Card[];
@@ -153,8 +156,9 @@ const MenuComponent: React.FC<MenuProps> = ({
                 }}
               >
                 {card?.categorieImage && (
-                  <img
+                  <CoolImg
                     src={card.categorieImage}
+                    error={ICON_PLACEHOLDER}
                     alt={category}
                     className="categorie-image"
                     style={{ width: '45px', height: '45px', objectFit: 'contain' }}

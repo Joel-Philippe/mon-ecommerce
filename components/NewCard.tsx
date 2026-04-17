@@ -14,6 +14,11 @@ import { useColorModeValue } from '@chakra-ui/react';
 
 import { AiOutlineLoading } from 'react-icons/ai';
 import { motion } from 'framer-motion';
+import CoolImg from 'react-cool-img';
+
+// Placeholder image in case of error
+const PLACEHOLDER_IMAGE = "https://via.placeholder.com/400x400?text=Image+Non+Disponible";
+const ICON_PLACEHOLDER = "https://via.placeholder.com/50x50?text=Icon";
 
 interface NewCardProps {
   card: Card;
@@ -96,11 +101,24 @@ const NewCard: React.FC<NewCardProps> = ({
         transition={{ duration: 0.5 }}
       >
         <div className="new-card-image-container">
-          <img src={card.images[0]} alt={card.title} className="new-card-image" style={{ borderColor: card.categorieBackgroundColor }} />
+          <CoolImg 
+            src={card.images[0] || PLACEHOLDER_IMAGE} 
+            error={PLACEHOLDER_IMAGE}
+            alt={card.title} 
+            className="new-card-image" 
+            style={{ borderColor: card.categorieBackgroundColor }}
+          />
           {card.categorie && (
             <button className="new-card-category-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCategoryClick && onCategoryClick(card.categorie); }}>
               <div className="new-card-category" style={{ borderColor: card.categorieBackgroundColor, color: card.categorieBackgroundColor }}>
-                {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
+                {card.categorieImage && (
+                  <CoolImg 
+                    src={card.categorieImage} 
+                    error={ICON_PLACEHOLDER}
+                    alt={card.categorie} 
+                    className="new-card-category-image" 
+                  />
+                )}
                 <span>{card.categorie}</span>
               </div>
             </button>
