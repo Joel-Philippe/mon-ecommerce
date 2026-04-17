@@ -241,7 +241,7 @@ const AdminPage = () => {
         {/* Header */}
         <header className="modern-admin-header">
           <div className="admin-header-content">
-            <div className="admin-logo" style={{ display: 'flex', alignText: 'center', gap: '10px', alignItems: 'center' }}>
+            <div className="admin-logo" style={{ display: 'flex', textAlign: 'center', gap: '10px', alignItems: 'center' }}>
               <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="100" height="100" rx="20" fill="url(#logo_grad)" />
                 <path d="M30 45L50 25L70 45V75H30V45Z" fill="white" />
