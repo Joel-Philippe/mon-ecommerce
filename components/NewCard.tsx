@@ -96,11 +96,11 @@ const NewCard: React.FC<NewCardProps> = ({
         transition={{ duration: 0.5 }}
       >
         <div className="new-card-image-container">
-          <img src={card.images[0]} alt={card.title} className="new-card-image" style={{ borderColor: card.categorieBackgroundColor }} />
+          <img src={card.images[0]} alt={card.title} className="new-card-image" style={{ borderColor: card.categorieBackgroundColor }} referrerPolicy="no-referrer" />
           {card.categorie && (
             <button className="new-card-category-button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onCategoryClick && onCategoryClick(card.categorie); }}>
               <div className="new-card-category" style={{ borderColor: card.categorieBackgroundColor, color: card.categorieBackgroundColor }}>
-                {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" />}
+                {card.categorieImage && <img src={card.categorieImage} alt={card.categorie} className="new-card-category-image" referrerPolicy="no-referrer" />}
                 <span>{card.categorie}</span>
               </div>
             </button>

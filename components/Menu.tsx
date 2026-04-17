@@ -152,11 +152,13 @@ const MenuComponent: React.FC<MenuProps> = ({
                   backgroundColor: isSelected ? card?.categorieBackgroundColor : '',
                 }}
               >
-                {card && card.categorieImage && card.categorieImage.trim() !== '' && (
+                {card?.categorieImage && (
                   <img
                     src={card.categorieImage}
                     alt={category}
                     className="categorie-image"
+                    referrerPolicy="no-referrer"
+                    style={{ width: '45px', height: '45px', objectFit: 'contain' }}
                   />
                 )}
                 <span className="categorie-text" style={{ color: isSelected ? 'white' : card?.categorieBackgroundColor }}>
