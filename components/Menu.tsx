@@ -152,7 +152,7 @@ const MenuComponent: React.FC<MenuProps> = ({
                   backgroundColor: isSelected ? card?.categorieBackgroundColor : '',
                 }}
               >
-                {card && card.categorieImage && (
+                {card && card.categorieImage && card.categorieImage.trim() !== '' && (
                   <img
                     src={card.categorieImage}
                     alt={category}

@@ -241,6 +241,21 @@ const AdminPage = () => {
         {/* Header */}
         <header className="modern-admin-header">
           <div className="admin-header-content">
+            <div className="admin-logo" style={{ display: 'flex', alignText: 'center', gap: '10px', alignItems: 'center' }}>
+              <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" rx="20" fill="url(#logo_grad)" />
+                <path d="M30 45L50 25L70 45V75H30V45Z" fill="white" />
+                <path d="M40 50H60V65H40V50Z" fill="url(#logo_grad)" opacity="0.8" />
+                <path d="M35 50C35 45 40 45 40 45H60C60 45 65 45 65 50" stroke="white" strokeWidth="3" />
+                <defs>
+                  <linearGradient id="logo_grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FF9800" />
+                    <stop offset="1" stopColor="#f91bf8" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, background: 'linear-gradient(135deg, #FF9800 0%, #f91bf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Family Market</h1>
+            </div>
             <div className="admin-header-right">
               <div className="admin-user-info">
                 <div className="user-avatar">

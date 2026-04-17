@@ -31,6 +31,13 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
   return `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
       <div style="background: linear-gradient(135deg, #FF9800 0%, #f91bf8 100%); color: white; padding: 30px 20px; text-align: center;">
+        <div style="background: white; width: 60px; height: 60px; border-radius: 12px; margin: 0 auto 10px auto; padding: 10px; display: flex; align-items: center; justify-content: center;">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30 45L50 25L70 45V75H30V45Z" fill="#FF9800" />
+            <path d="M40 50H60V65H40V50Z" fill="#f91bf8" opacity="0.8" />
+            <path d="M35 50C35 45 40 45 40 45H60C60 45 65 45 65 50" stroke="#FF9800" stroke-width="3" />
+          </svg>
+        </div>
         <h1 style="margin: 0; font-size: 24px;">Family Market</h1>
         <p style="margin: 5px 0 0 0; opacity: 0.8;">Suivi de votre commande</p>
       </div>
