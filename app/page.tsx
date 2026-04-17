@@ -381,25 +381,6 @@ const normalizeString = (str: string | undefined | null) => {
   return (
     <div>
       {loading && <LoadingSpinner />} {/* Render LoadingSpinner conditionally */}
-      
-      {/* Test Mode Indicator */}
-      <Box 
-        position="fixed" 
-        top="0" 
-        left="50%" 
-        transform="translateX(-50%)" 
-        bg="orange.400" 
-        color="white" 
-        px={3} 
-        py={1} 
-        fontSize="xs" 
-        fontWeight="bold" 
-        borderRadius="0 0 10px 10px" 
-        zIndex="9999"
-        pointerEvents="none"
-      >
-        MODE TEST - FAMILY MARKET
-      </Box>
 
       <div className="video_animate video_animate-wrapper">
         <AnimatedBanner onEnd={() => {}} />
