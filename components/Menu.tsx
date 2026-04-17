@@ -157,7 +157,6 @@ const MenuComponent: React.FC<MenuProps> = ({
                     src={card.categorieImage}
                     alt={category}
                     className="categorie-image"
-                    referrerPolicy="no-referrer"
                     style={{ width: '45px', height: '45px', objectFit: 'contain' }}
                   />
                 )}
