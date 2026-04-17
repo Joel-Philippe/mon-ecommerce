@@ -95,7 +95,7 @@ const NewCard: React.FC<NewCardProps> = ({
     <ScrollRestorationLink href={`/${card._id}`} passHref>
       <motion.div
         className={`new-card`}
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.5 }}
