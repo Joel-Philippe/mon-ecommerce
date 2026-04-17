@@ -32,70 +32,20 @@ const nextConfig = {
       FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
     },
     images: {
+      unoptimized: true,
       remotePatterns: [
-        {
-          protocol: 'https',
-          hostname: 'i.pinimg.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'firebasestorage.googleapis.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'lh3.googleusercontent.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'images.pexels.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 's.oneroof.co.nz',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'www.publika.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'static.vecteezy.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'th.bing.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'static7.depositphotos.com',
-          port: '',
-          pathname: '/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'static7.depositphotos.com',
-          port: '',
-          pathname: '/**',
-        },
+        { protocol: 'https', hostname: 'i.pinimg.com' },
+        { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
+        { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+        { protocol: 'https', hostname: 'images.pexels.com' },
+        { protocol: 'https', hostname: 's.oneroof.co.nz' },
+        { protocol: 'https', hostname: 'www.publika.com' },
+        { protocol: 'https', hostname: 'static.vecteezy.com' },
+        { protocol: 'https', hostname: 'th.bing.com' },
+        { protocol: 'https', hostname: 'static7.depositphotos.com' },
+        { protocol: 'https', hostname: 'via.placeholder.com' },
       ],
     },
   };
   
   export default nextConfig;
-  
