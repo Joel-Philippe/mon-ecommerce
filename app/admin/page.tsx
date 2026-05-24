@@ -7,6 +7,7 @@ import { db } from '@/components/firebaseConfig';
 import AddCard from '@/components/AddCard';
 import UpdateCardModal from '@/components/UpdateCardModal';
 import { useAuth } from '@/contexts/AuthContext';
+import { clientConfig } from '@/config/client.config';
 import { Card } from '@/types';
 
 import { 
@@ -254,7 +255,7 @@ const AdminPage = () => {
                   </linearGradient>
                 </defs>
               </svg>
-              <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, background: 'linear-gradient(135deg, #FF9800 0%, #f91bf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Family Market</h1>
+              <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: 0, background: 'linear-gradient(135deg, #FF9800 0%, #f91bf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{clientConfig.brandName}</h1>
             </div>
             <div className="admin-header-right">
               <div className="admin-user-info">

@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
+import { clientConfig, getClientUrl } from '@/config/client.config';
 
-// Configuration optimisée pour GMAIL (utilise vos variables Render existantes)
+// Configuration email via variables d'environnement du projet.
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -38,7 +39,7 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
             <path d="M35 50C35 45 40 45 40 45H60C60 45 65 45 65 50" stroke="#FF9800" stroke-width="3" />
           </svg>
         </div>
-        <h1 style="margin: 0; font-size: 24px;">Family Market</h1>
+        <h1 style="margin: 0; font-size: 24px;">${clientConfig.brandName}</h1>
         <p style="margin: 5px 0 0 0; opacity: 0.8;">Suivi de votre commande</p>
       </div>
       <div style="padding: 30px 20px;">
@@ -52,11 +53,11 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
 
         <p>Vous recevrez une nouvelle notification à chaque étape importante de la livraison.</p>
         <div style="text-align: center; margin-top: 30px;">
-           <a href="https://mon-ecommerce-edbs.onrender.com/account" style="background: #7c3aed; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Accéder à mon compte</a>
+           <a href="${getClientUrl('/account')}" style="background: #7c3aed; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Accéder à mon compte</a>
         </div>
       </div>
       <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
-        <p style="margin: 0;">&copy; ${new Date().getFullYear()} Family Market. Tous droits réservés.</p>
+        <p style="margin: 0;">&copy; ${new Date().getFullYear()} ${clientConfig.brandName}. Tous droits réservés.</p>
       </div>
     </div>
   `;
@@ -67,7 +68,7 @@ export const sendStatusUpdateEmail = async (orderData: any, newStatus: string) =
     if (!process.env.GMAIL_USER) return { success: false, error: 'GMAIL_USER configuration missing' };
     
     const mailOptions = {
-      from: `"Family Market" <${process.env.GMAIL_USER}>`,
+      from: `"${clientConfig.emailFromName}" <${process.env.GMAIL_USER}>`,
       to: orderData.customer_email,
       subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
       html: createStatusUpdateEmailHTML(orderData, newStatus),
@@ -95,7 +96,7 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
     `).join('');
 
     const mailOptions = {
-      from: `"Family Market" <${process.env.GMAIL_USER}>`,
+      from: `"${clientConfig.emailFromName}" <${process.env.GMAIL_USER}>`,
       to: orderData.customerEmail || orderData.customer_email,
       subject: `Confirmation de votre commande #${(orderData.sessionId || orderData.id || '').slice(-8)}`,
       html: `

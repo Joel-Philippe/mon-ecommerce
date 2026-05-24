@@ -9,10 +9,11 @@ import BottomNavWrapper from "@/components/BottomNavWrapper";
 import FloatingBackButtonWrapper from "@/components/FloatingBackButtonWrapper";
 import ProgressBar from "@/components/ProgressBar";
 import ScrollRestoration from "@/components/ScrollRestoration";
+import { clientConfig } from "@/config/client.config";
 
 export const metadata: Metadata = {
-  title: "Family Market",
-  description: "Market de quartier",
+  title: clientConfig.brandName,
+  description: clientConfig.description,
 };
 
 export default function RootLayout({

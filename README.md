@@ -1,4 +1,4 @@
-# 🔒 Exercide - Plateforme E-commerce Sécurisée
+# 🔒 Base Ecommerce - Plateforme e-commerce sécurisée
 
 ## 🚀 Installation et Configuration
 
@@ -29,9 +29,10 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=votre_firebase_storage_bucket
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=votre_firebase_messaging_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=votre_firebase_app_id
 
-# Email Configuration
-NEXT_PUBLIC_EMAIL_USER=votre_email@example.com
-NEXT_PUBLIC_EMAIL_PASS=votre_mot_de_passe_email
+# Email Configuration (server only)
+EMAIL_SERVICE=hotmail
+EMAIL_USER=votre_email@example.com
+EMAIL_PASS=votre_mot_de_passe_email
 ```
 
 ### 3. Configuration SSL pour le développement local
@@ -211,7 +212,7 @@ Configurez les mêmes variables que `.env.local` dans votre plateforme de déplo
 ## 📞 Support
 
 Pour toute question ou problème :
-- 📧 Email : support@exercide.com
+- 📧 Email : support@votre-domaine.com
 - 📱 Téléphone : +33 1 23 45 67 89
 - 💬 Chat : Disponible sur le site web
 

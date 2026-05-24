@@ -2,10 +2,10 @@ import nodemailer from 'nodemailer';
 import { NextRequest, NextResponse } from 'next/server';
 
 const transporter = nodemailer.createTransport({
-  service: 'hotmail', // Vous pouvez utiliser d'autres services de messagerie
+  service: process.env.EMAIL_SERVICE || 'hotmail',
   auth: {
-    user: process.env. NEXT_PUBLIC_EMAIL_USER,
-    pass: process.env. NEXT_PUBLIC_EMAIL_PASS,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const { to, subject, message } = await req.json();
 
     const mailOptions = {
-      from: process.env.NEXT_PUBLIC_EMAIL_USER,
+      from: process.env.EMAIL_USER,
       to,
       subject,
       text: message,
