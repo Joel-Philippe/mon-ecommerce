@@ -29,10 +29,10 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=votre_firebase_storage_bucket
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=votre_firebase_messaging_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=votre_firebase_app_id
 
-# Email Configuration (server only)
-EMAIL_SERVICE=hotmail
-EMAIL_USER=votre_email@example.com
-EMAIL_PASS=votre_mot_de_passe_email
+# Email Configuration (Resend - server only)
+RESEND_API_KEY=re_votre_cle_api_resend
+RESEND_FROM_EMAIL=noreply@votre-domaine.com
+RESEND_REPLY_TO_EMAIL=support@votre-domaine.com
 ```
 
 ### 3. Configuration SSL pour le développement local

@@ -4,8 +4,11 @@ const { Resend } = require('resend');
 
 admin.initializeApp();
 
-const resend = new Resend(functions.config().resend.api_key);
+const resendConfig = functions.config().resend || {};
+const resend = new Resend(resendConfig.api_key);
 const emailFromName = functions.config().client?.name || 'Votre Boutique';
+const emailFrom = resendConfig.from_email || 'noreply@votre-domaine.com';
+const emailReplyTo = resendConfig.reply_to_email;
 
 exports.sendOrderConfirmation = functions.firestore
   .document('orders/{orderId}')
@@ -32,9 +35,10 @@ exports.sendOrderConfirmation = functions.firestore
     const total = (order.amount / 100).toFixed(2);
 
     const mailOptions = {
-      from: `${emailFromName} <${functions.config().email.user}>`,
+      from: `${emailFromName} <${emailFrom}>`,
       to: order.receiverEmail,
       subject: `Confirmation de votre commande #${orderId.substring(0, 6)}`,
+      ...(emailReplyTo ? { replyTo: emailReplyTo } : {}),
       html: `
         <div style="font-family: Arial, sans-serif; color: #333;">
           <h1 style="color: #000;">Merci pour votre commande !</h1>
