@@ -1,13 +1,12 @@
-import { db } from "@/components/firebaseConfig";
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp, runTransaction } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 import { getCartId, ensureGuestCartCookie } from "@/utils/getCartId";
+import { getAdminDb, admin } from "@/utils/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
     const { productId, quantity } = await req.json();
 
-    if (!productId || typeof quantity !== 'number' || quantity <= 0) {
+    if (!productId || typeof quantity !== "number" || quantity <= 0) {
       return NextResponse.json({ message: "Invalid product ID or quantity" }, { status: 400 });
     }
 
@@ -17,21 +16,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Could not determine cart ID" }, { status: 500 });
     }
 
-    const cartRef = doc(db, "carts", cartId);
-    const productRef = doc(db, "cards", productId);
+    const db = getAdminDb();
+    const cartRef = db.collection("carts").doc(cartId);
+    const productRef = db.collection("cards").doc(productId);
 
-    await runTransaction(db, async (transaction) => {
+    await db.runTransaction(async (transaction) => {
       const productSnap = await transaction.get(productRef);
-      if (!productSnap.exists()) {
+
+      if (!productSnap.exists) {
         throw new Error("Product not found");
       }
 
       const productData = productSnap.data();
+
+      if (!productData) {
+        throw new Error("Product data not found");
+      }
+
       const availableStock = productData.stock - productData.stock_reduc;
 
       const cartSnap = await transaction.get(cartRef);
-      const cartData = cartSnap.exists() ? cartSnap.data() : { items: [] };
-      const items = cartData.items || [];
+      const cartData = cartSnap.exists ? cartSnap.data() : { items: [] };
+      const items = cartData?.items || [];
       const existingItemIndex = items.findIndex((item: any) => item.productId === productId);
 
       let newQuantity = quantity;
@@ -49,13 +55,15 @@ export async function POST(req: NextRequest) {
         items.push({ productId, quantity });
       }
 
-      if (cartSnap.exists()) {
-        transaction.update(cartRef, { items, updatedAt: serverTimestamp() });
+      const now = admin.firestore.FieldValue.serverTimestamp();
+
+      if (cartSnap.exists) {
+        transaction.update(cartRef, { items, updatedAt: now });
       } else {
         transaction.set(cartRef, {
           items,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
+          createdAt: now,
+          updatedAt: now,
         });
       }
     });
