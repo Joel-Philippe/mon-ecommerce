@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { email, items } = await req.json();
 
     try {
-+      const db = getAdminDb();
+      const db = getAdminDb();
       await db.collection('purchases').add({
         email,
         items,
