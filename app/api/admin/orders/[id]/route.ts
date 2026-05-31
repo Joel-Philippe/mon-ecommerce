@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, admin } from '@/utils/firebaseAdmin';
+import { admin, getAdminDb } from '@/utils/firebaseAdmin';
 import { sendStatusUpdateEmail } from '@/utils/resendEmailService';
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const db = getAdminDb();
+  const orderId = params.id;
+  // Additional logic for fetching order details
+}
 
 // Fonction pour vérifier le token et les droits d'admin
 async function verifyAdmin(req: NextRequest) {
@@ -38,6 +47,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 
   try {
+    const db = getAdminDb();
     const orderRef = db.collection('orders').doc(id);
     const orderDoc = await orderRef.get();
     
