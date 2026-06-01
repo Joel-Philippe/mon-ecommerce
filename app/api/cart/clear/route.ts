@@ -1,27 +1,27 @@
-import { db } from "@/components/firebaseConfig";
-import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 import { getCartId, ensureGuestCartCookie } from "@/utils/getCartId";
+import { getAdminDb, admin } from "@/utils/firebaseAdmin";
 
 export async function DELETE(req: NextRequest) {
   try {
     const cartId = await getCartId(req);
 
     if (!cartId) {
-      // If there's no cartId, there's nothing to clear.
       return NextResponse.json({ message: "Cart not found" }, { status: 404 });
     }
 
-    const cartRef = doc(db, "carts", cartId);
-    const cartSnap = await getDoc(cartRef);
+    const db = getAdminDb();
+    const cartRef = db.collection("carts").doc(cartId);
+    const cartSnap = await cartRef.get();
 
     ensureGuestCartCookie(cartId);
 
-    if (cartSnap.exists()) {
-        // Set items to an empty array to clear the cart
-        await updateDoc(cartRef, { items: [], updatedAt: serverTimestamp() });
+    if (cartSnap.exists) {
+      await cartRef.update({
+        items: [],
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
     }
-    // If the cart doesn't exist, it's already "cleared", so we can return success.
 
     return NextResponse.json({ message: "Cart cleared successfully" }, { status: 200 });
   } catch (error: any) {
