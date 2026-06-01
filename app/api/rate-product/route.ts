@@ -1,5 +1,4 @@
-import { db } from '@/components/firebaseConfig';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getAdminDb } from '@/utils/firebaseAdmin';
 import { verifyFirebaseToken } from '@/utils/verifyFirebaseToken';
 
 export async function POST(req: Request) {
@@ -10,21 +9,17 @@ export async function POST(req: Request) {
   const { rating, comment = '', productId } = await req.json();
   const authHeader = req.headers.get('authorization');
 
-  // Log de débogage
   console.log('POST /api/rate-product body:', { rating, comment, productId });
   console.log('Authorization header:', authHeader);
 
-  // Validation de productId
   if (!productId || typeof productId !== 'string' || productId.trim() === '') {
     return new Response(JSON.stringify({ success: false, message: 'ProductId invalide.' }), { status: 400 });
   }
 
-  // Validation de rating
   if (typeof rating !== 'number' || rating < 1 || rating > 5) {
     return new Response(JSON.stringify({ success: false, message: 'Rating invalide. Il doit être un nombre entre 1 et 5.' }), { status: 400 });
   }
 
-  // Validation du header Authorization
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return new Response(JSON.stringify({ success: false, message: 'Unauthorized: No or malformed token' }), { status: 401 });
   }
@@ -39,10 +34,11 @@ export async function POST(req: Request) {
   const userId = decodedUser.uid;
 
   try {
-    const cardRef = doc(db, 'cards', productId);
-    const cardSnap = await getDoc(cardRef);
+    const db = getAdminDb();
+    const cardRef = db.collection('cards').doc(productId);
+    const cardSnap = await cardRef.get();
 
-    if (!cardSnap.exists()) {
+    if (!cardSnap.exists) {
       return new Response(JSON.stringify({ success: false, message: 'Produit introuvable.' }), { status: 404 });
     }
 
@@ -65,7 +61,7 @@ export async function POST(req: Request) {
     const newAverage =
       updatedReviews.reduce((sum: number, r: any) => sum + r.rating, 0) / updatedReviews.length;
 
-    await updateDoc(cardRef, {
+    await cardRef.update({
       reviews: updatedReviews,
       stars: parseFloat(newAverage.toFixed(1)),
     });
