@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/utils/stripe';
-import { db } from '@/components/firebaseConfig';
-import { doc, getDoc } from 'firebase/firestore';
+import { getStripe } from '@/utils/stripe';
+import { getAdminDb } from '@/utils/firebaseAdmin';
 import { verifyFirebaseToken } from '@/utils/server-only-verifyFirebaseToken'; // Import the token verification utility
 
 // Define the structure of an item sent from the client
@@ -30,11 +29,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid cart items' }, { status: 400 });
     }
 
-    const line_items = await Promise.all(items.map(async (item: CartItem) => {
-      const productRef = doc(db, 'cards', item._id);
-      const productSnap = await getDoc(productRef);
+    const db = getAdminDb();
 
-      if (!productSnap.exists()) {
+    const line_items = await Promise.all(items.map(async (item: CartItem) => {
+      const productRef = db.collection('cards').doc(item._id);
+      const productSnap = await productRef.get();
+
+      if (!productSnap.exists) {
         throw new Error(`Product with ID ${item._id} not found.`);
       }
 
@@ -102,6 +103,7 @@ export async function POST(req: NextRequest) {
       sessionOptions.billing_address_collection = 'required';
     }
 
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create(sessionOptions);
 
     return NextResponse.json({ sessionId: session.id });
