@@ -1,10 +1,5 @@
 import Stripe from 'stripe';
-import { doc, runTransaction } from 'firebase/firestore';
-import { db } from '@/components/firebaseConfig';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-08-27.basil',
-});
+import { getAdminDb, admin } from '@/utils/firebaseAdmin';
 
 interface MetadataItem {
   id: string;
@@ -14,23 +9,20 @@ interface MetadataItem {
   price_promo?: number;
 }
 
-// Fonction pour libérer le stock réservé
 async function releaseReservedStock(metadataItems: MetadataItem[]): Promise<void> {
   try {
-    await runTransaction(db, async (transaction) => {
+    const db = getAdminDb();
+
+    await db.runTransaction(async (transaction) => {
       for (const item of metadataItems) {
         if (!item.id) continue;
 
-        const productRef = doc(db, 'cards', item.id);
+        const productRef = db.collection('cards').doc(item.id);
         const productSnap = await transaction.get(productRef);
 
-        if (productSnap.exists()) {
-          const productData = productSnap.data();
-          const currentStockReduc = Number(productData.stock_reduc || 0);
-          const newStockReduc = Math.max(0, currentStockReduc - item.count);
-          
+        if (productSnap.exists) {
           transaction.update(productRef, {
-            stock_reduc: newStockReduc
+            stock_reduc: admin.firestore.FieldValue.increment(-item.count),
           });
 
           console.log(`🔄 Stock libéré pour ${item.title}: ${item.count} unité(s)`);
@@ -49,59 +41,67 @@ export async function POST(req: Request) {
   }
 
   try {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+
+    if (!stripeSecretKey) {
+      return new Response(JSON.stringify({
+        error: 'Stripe secret key is not configured',
+        code: 'STRIPE_SECRET_KEY_MISSING',
+      }), { status: 500 });
+    }
+
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: '2025-08-27.basil',
+    });
+
     const { sessionId } = await req.json();
 
     if (!sessionId) {
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'Session ID manquant',
-        code: 'MISSING_SESSION_ID'
+        code: 'MISSING_SESSION_ID',
       }), { status: 400 });
     }
 
-    // Récupérer les détails de la session Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (!session) {
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'Session non trouvée',
-        code: 'SESSION_NOT_FOUND'
+        code: 'SESSION_NOT_FOUND',
       }), { status: 404 });
     }
 
-    // Vérifier si le stock était réservé
     if (session.metadata?.stockReserved !== 'true') {
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         message: 'Aucun stock à libérer pour cette session',
-        released: false
+        released: false,
       }), { status: 200 });
     }
 
-    // Récupérer les items de la session
     const metadataItems = JSON.parse(session.metadata?.items as string || '[]') as MetadataItem[];
 
     if (metadataItems.length === 0) {
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         message: 'Aucun produit à traiter',
-        released: false
+        released: false,
       }), { status: 200 });
     }
 
-    // Libérer le stock réservé
     await releaseReservedStock(metadataItems);
 
     console.log(`✅ Stock libéré avec succès pour la session: ${sessionId}`);
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       message: 'Stock libéré avec succès',
       released: true,
-      itemsCount: metadataItems.length
+      itemsCount: metadataItems.length,
     }), { status: 200 });
-
   } catch (error: any) {
     console.error('❌ Erreur lors de la libération du stock:', error);
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       error: error.message || 'Erreur interne du serveur',
-      code: 'INTERNAL_ERROR'
+      code: 'INTERNAL_ERROR',
     }), { status: 500 });
   }
 }
