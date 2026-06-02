@@ -1,13 +1,64 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+import { clientConfig, getClientUrl } from '@/config/client.config';
 
-// Configuration optimisée pour GMAIL (utilise vos variables Render existantes)
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
+
+const getFromAddress = (label = clientConfig.emailFromName) => {
+  const fromEmail = process.env.RESEND_FROM_EMAIL || process.env.NEXT_PUBLIC_SUPPORT_EMAIL || clientConfig.adminEmail;
+  return `"${label}" <${fromEmail}>`;
+};
+
+const getReplyToAddress = () => process.env.RESEND_REPLY_TO_EMAIL || process.env.NEXT_PUBLIC_SUPPORT_EMAIL || undefined;
+
+type EmailSendResult = {
+  success: boolean;
+  messageId?: string;
+  error?: string;
+};
+
+const sendWithResend = async ({
+  from,
+  to,
+  subject,
+  html,
+  text,
+  replyTo,
+}: {
+  from?: string;
+  to: string | string[];
+  subject: string;
+  html?: string;
+  text?: string;
+  replyTo?: string;
+}): Promise<EmailSendResult> => {
+  if (!resend) {
+    return { success: false, error: 'RESEND_API_KEY configuration missing' };
+  }
+
+  const payload: any = {
+    from: from || getFromAddress(),
+    to: Array.isArray(to) ? to : [to],
+    subject,
+    ...(replyTo || getReplyToAddress() ? { replyTo: replyTo || getReplyToAddress() } : {}),
+  };
+
+  if (html) {
+    payload.html = html;
+  } else if (text) {
+    payload.text = text;
+  } else {
+    payload.text = '';
+  }
+
+  const { data, error } = await resend.emails.send(payload);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, messageId: data?.id };
+};
 
 const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string => {
   const statusLabels: Record<string, string> = {
@@ -38,7 +89,7 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
             <path d="M35 50C35 45 40 45 40 45H60C60 45 65 45 65 50" stroke="#FF9800" stroke-width="3" />
           </svg>
         </div>
-        <h1 style="margin: 0; font-size: 24px;">Family Market</h1>
+        <h1 style="margin: 0; font-size: 24px;">${clientConfig.brandName}</h1>
         <p style="margin: 5px 0 0 0; opacity: 0.8;">Suivi de votre commande</p>
       </div>
       <div style="padding: 30px 20px;">
@@ -52,40 +103,67 @@ const createStatusUpdateEmailHTML = (orderData: any, newStatus: string): string 
 
         <p>Vous recevrez une nouvelle notification à chaque étape importante de la livraison.</p>
         <div style="text-align: center; margin-top: 30px;">
-           <a href="https://mon-ecommerce-edbs.onrender.com/account" style="background: #7c3aed; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Accéder à mon compte</a>
+           <a href="${getClientUrl('/account')}" style="background: #7c3aed; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Accéder à mon compte</a>
         </div>
       </div>
       <div style="background: #f1f5f9; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
-        <p style="margin: 0;">&copy; ${new Date().getFullYear()} Family Market. Tous droits réservés.</p>
+        <p style="margin: 0;">&copy; ${new Date().getFullYear()} ${clientConfig.brandName}. Tous droits réservés.</p>
       </div>
     </div>
   `;
 };
 
-export const sendStatusUpdateEmail = async (orderData: any, newStatus: string) => {
+export const sendGenericEmail = async ({
+  to,
+  subject,
+  message,
+  html,
+}: {
+  to: string | string[];
+  subject: string;
+  message?: string;
+  html?: string;
+}): Promise<EmailSendResult> => {
   try {
-    if (!process.env.GMAIL_USER) return { success: false, error: 'GMAIL_USER configuration missing' };
-    
-    const mailOptions = {
-      from: `"Family Market" <${process.env.GMAIL_USER}>`,
-      to: orderData.customer_email,
-      subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
-      html: createStatusUpdateEmailHTML(orderData, newStatus),
-    };
+    const result = await sendWithResend({
+      to,
+      subject,
+      text: message,
+      html,
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Email (Gmail) envoyé à ${orderData.customer_email}. MessageId: ${info.messageId}`);
-    return { success: true, messageId: info.messageId };
+    if (result.success) {
+      console.log(`✅ Email Resend envoyé à ${Array.isArray(to) ? to.join(', ') : to}. MessageId: ${result.messageId}`);
+    }
+
+    return result;
   } catch (error: any) {
-    console.error('❌ Erreur d\'envoi email Gmail:', error);
+    console.error('❌ Erreur d\'envoi email Resend:', error);
     return { success: false, error: error.message };
   }
 };
 
-export const sendOrderConfirmationEmail = async (orderData: any) => {
+export const sendStatusUpdateEmail = async (orderData: any, newStatus: string): Promise<EmailSendResult> => {
   try {
-    if (!process.env.GMAIL_USER) return { success: false, error: 'GMAIL_USER configuration missing' };
+    const result = await sendWithResend({
+      to: orderData.customer_email,
+      subject: `Mise à jour de votre commande #${orderData.id?.slice(-8)}`,
+      html: createStatusUpdateEmailHTML(orderData, newStatus),
+    });
 
+    if (result.success) {
+      console.log(`✅ Email Resend envoyé à ${orderData.customer_email}. MessageId: ${result.messageId}`);
+    }
+
+    return result;
+  } catch (error: any) {
+    console.error('❌ Erreur d\'envoi email Resend:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+export const sendOrderConfirmationEmail = async (orderData: any): Promise<EmailSendResult> => {
+  try {
     const itemsHtml = (orderData.items || []).map((item: any) => `
       <tr>
         <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.title}</td>
@@ -94,8 +172,7 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
       </tr>
     `).join('');
 
-    const mailOptions = {
-      from: `"Family Market" <${process.env.GMAIL_USER}>`,
+    const result = await sendWithResend({
       to: orderData.customerEmail || orderData.customer_email,
       subject: `Confirmation de votre commande #${(orderData.sessionId || orderData.id || '').slice(-8)}`,
       html: `
@@ -115,12 +192,11 @@ export const sendOrderConfirmationEmail = async (orderData: any) => {
           </div>
         </div>
       `,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    return { success: true, messageId: info.messageId };
+    return result;
   } catch (error: any) {
-    console.error('❌ Erreur d\'envoi confirmation Gmail:', error);
+    console.error('❌ Erreur d\'envoi confirmation Resend:', error);
     return { success: false, error: error.message };
   }
 };

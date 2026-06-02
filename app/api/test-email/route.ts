@@ -1,4 +1,6 @@
 // 🧪 API de test pour diagnostiquer l'envoi d'emails - Version simplifiée
+import { clientConfig } from '@/config/client.config';
+
 // 🔧 Fonction de diagnostic intégrée
 const diagnoseEmailConfig = () => {
   console.log('🔍 === DIAGNOSTIC CONFIGURATION EMAIL ===');
@@ -102,11 +104,15 @@ const sendTestEmail = async (testEmail: string) => {
 </html>`;
 
     // Préparer l'email
+    const fromEmail = process.env.RESEND_FROM_EMAIL || process.env.NEXT_PUBLIC_SUPPORT_EMAIL || clientConfig.adminEmail;
+    const replyToEmail = process.env.RESEND_REPLY_TO_EMAIL || process.env.NEXT_PUBLIC_SUPPORT_EMAIL;
+
     const emailPayload = {
-      from: 'Test Exercide <onboarding@resend.dev>',
+      from: `Test ${clientConfig.emailFromName} <${fromEmail}>`,
       to: [testEmail],
       subject: '🧪 Test Email Resend - Configuration OK',
       html: htmlTemplate,
+      ...(replyToEmail ? { replyTo: replyToEmail } : {}),
       text: `
 Test Email Resend
 

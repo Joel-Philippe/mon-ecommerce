@@ -1,10 +1,5 @@
 import Stripe from 'stripe';
-import { db } from "@/components/firebaseConfig";
-import { doc, runTransaction } from "firebase/firestore";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-08-27.basil',
-});
+import { getAdminDb, admin } from "@/utils/firebaseAdmin";
 
 export async function POST(req: Request) {
   if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
@@ -12,27 +7,46 @@ export async function POST(req: Request) {
   const { items, delivery } = await req.json();
 
   if (!Array.isArray(items)) {
-    return new Response(JSON.stringify({ error: '`items` is required and must be an array' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'items is required and must be an array' }), { status: 400 });
   }
 
   try {
-    await runTransaction(db, async (transaction) => {
+    const db = getAdminDb();
+
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+
+    if (!stripeSecretKey) {
+      return new Response(JSON.stringify({ error: 'Stripe secret key is not configured' }), { status: 500 });
+    }
+
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: '2025-08-27.basil',
+    });
+
+    await db.runTransaction(async (transaction) => {
       for (const item of items) {
-        const productRef = doc(db, "cards", item._id);
+        const productRef = db.collection("cards").doc(item._id);
         const productSnap = await transaction.get(productRef);
 
-        if (!productSnap.exists()) {
+        if (!productSnap.exists) {
           throw new Error(`Product with ID ${item._id} not found`);
         }
 
         const productData = productSnap.data();
+
+        if (!productData) {
+          throw new Error(`Product data for ID ${item._id} not found`);
+        }
+
         const availableStock = productData.stock - productData.stock_reduc;
 
         if (item.count > availableStock) {
           throw new Error(`Insufficient stock for ${item.title}`);
         }
 
-        transaction.update(productRef, { stock_reduc: productData.stock_reduc + item.count });
+        transaction.update(productRef, {
+          stock_reduc: admin.firestore.FieldValue.increment(item.count),
+        });
       }
     });
 
@@ -55,10 +69,10 @@ export async function POST(req: Request) {
           line1: delivery.address,
           city: delivery.city,
           postal_code: delivery.postalCode,
-          country: delivery.country || 'FR', // Default to France if not provided
+          country: delivery.country || 'FR',
         },
       } : undefined,
-      automatic_payment_methods: { enabled: true }
+      automatic_payment_methods: { enabled: true },
     });
 
     return new Response(JSON.stringify({ clientSecret: paymentIntent.client_secret }), { status: 200 });

@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { FaGoogle } from 'react-icons/fa';
+import { clientConfig } from '@/config/client.config';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -41,7 +42,7 @@ export default function Login() {
     const trimmedUsername = username.trim();
     try {
       await login(trimmedUsername, password);
-      if (trimmedUsername === 'philippejoel.wolff@gmail.com') {
+      if (trimmedUsername === clientConfig.adminEmail) {
         router.push('/admin');
       } else {
         router.push('/');

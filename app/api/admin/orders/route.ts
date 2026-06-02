@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, admin } from '@/utils/firebaseAdmin';
+import { admin, getAdminDb } from '@/utils/firebaseAdmin';
 
 // Fonction pour vérifier le token et les droits d'admin
 async function verifyAdmin(req: NextRequest) {
@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const db = getAdminDb();
     const ordersRef = db.collection('orders').orderBy('createdAt', 'desc');
     const snapshot = await ordersRef.get();
 

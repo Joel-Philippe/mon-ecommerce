@@ -18,6 +18,7 @@ import Link from "next/link";
 import { CheckCircleIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 import ReactConfetti from 'react-confetti';
+import { clientConfig } from '@/config/client.config';
 
 const MotionBox = motion(Box);
 
@@ -168,7 +169,7 @@ const SuccessPage = () => {
               </Link>
               
               <Text fontSize="xs" color="gray.500" mt={4}>
-                Une question ? Contactez notre support à <strong>support@exercide.com</strong>
+                Une question ? Contactez notre support à <strong>{clientConfig.supportEmail}</strong>
               </Text>
             </VStack>
           </MotionBox>

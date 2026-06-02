@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/utils/stripe';
-import { admin } from '@/utils/firebaseAdmin'; // Using admin SDK for server-side operations
-const db = admin.firestore();
+import { getStripe } from '@/utils/stripe';
+import { getAdminDb } from '@/utils/firebaseAdmin';
 import Stripe from 'stripe';
 
-// This is your Stripe CLI webhook secret for testing.
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
 async function createOrderInFirestore(session: Stripe.PaymentIntent) {
+    const db = getAdminDb();
     if (!session.metadata?.customer_email || !session.metadata?.line_items) {
         console.error('Missing metadata for order creation', session.id);
         return;
@@ -54,6 +51,13 @@ async function createOrderInFirestore(session: Stripe.PaymentIntent) {
 }
 
 export async function POST(req: NextRequest) {
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  if (!endpointSecret) {
+    return NextResponse.json({ error: 'Stripe webhook secret is not configured' }, { status: 500 });
+  }
+
+  const stripe = getStripe();
   const sig = req.headers.get('stripe-signature');
   const body = await req.text();
 
