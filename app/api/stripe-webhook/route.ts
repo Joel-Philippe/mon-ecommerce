@@ -1,15 +1,6 @@
 import Stripe from 'stripe';
-import { db } from '@/components/firebaseConfig';
 import { sendOrderConfirmationEmail } from '@/utils/resendEmailService';
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  doc,
-  getDoc,
-  updateDoc,
-  runTransaction,
-} from 'firebase/firestore';
+import { getAdminDb, admin } from '@/utils/firebaseAdmin';
 
 // ✅ Vérification des variables d'environnement au démarrage
 if (!process.env.RESEND_API_KEY) {
@@ -19,8 +10,6 @@ if (!process.env.RESEND_API_KEY) {
   console.log('✅ RESEND_API_KEY détectée dans le webhook');
 }
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, { apiVersion: '2025-08-27.basil' }); // Initialize Stripe
 
 interface MetadataItem {
   id: string;
@@ -36,9 +25,10 @@ async function updateStockAfterPayment(items: Array<{ id: string; count: number;
     console.log('🔄 === MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI ===');
     const errors: string[] = [];
     
-    await runTransaction(db, async (transaction) => {
+    const db = getAdminDb();
+    await db.runTransaction(async (transaction) => {
       // 1. READ PHASE: Read all product documents first
-      const productRefs = items.map(item => doc(db, 'cards', item.id));
+      const productRefs = items.map(item => db.collection('cards').doc(item.id));
       const productSnaps = await Promise.all(productRefs.map(ref => transaction.get(ref)));
 
       // 2. WRITE PHASE: Now perform all updates
@@ -46,8 +36,11 @@ async function updateStockAfterPayment(items: Array<{ id: string; count: number;
         const item = items[i];
         const productSnap = productSnaps[i];
 
-        if (productSnap.exists()) {
+        if (productSnap.exists) {
           const productData = productSnap.data();
+          if (!productData) {
+            continue;
+          }
           const currentTotalStock = Number(productData.stock || 0);
           const currentStockReduc = Number(productData.stock_reduc || 0);
           const availableStock = currentTotalStock - currentStockReduc;
@@ -96,15 +89,19 @@ async function releaseReservedStock(metadataItems: MetadataItem[]): Promise<void
   try {
     console.log('🔄 === LIBÉRATION DU STOCK RÉSERVÉ ===');
     
-    await runTransaction(db, async (transaction) => {
+    const db = getAdminDb();
+    await db.runTransaction(async (transaction) => {
       for (const item of metadataItems) {
         if (!item.id) continue;
 
-        const productRef = doc(db, 'cards', item.id);
+        const productRef = db.collection('cards').doc(item.id);
         const productSnap = await transaction.get(productRef);
 
-        if (productSnap.exists()) {
+        if (productSnap.exists) {
           const productData = productSnap.data();
+          if (!productData) {
+            continue;
+          }
           const currentStockReduc = Number(productData.stock_reduc || 0);
           const newStockReduc = Math.max(0, currentStockReduc - item.count);
           
@@ -136,6 +133,21 @@ export async function POST(req: Request) {
   if (req.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
   }
+
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!(stripeSecretKey && webhookSecret)) {
+    return new Response(JSON.stringify({
+      error: 'Stripe configuration is missing',
+      code: 'STRIPE_CONFIG_MISSING',
+    }), { status: 500 });
+  }
+
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2025-08-27.basil',
+  });
+
+  const db = getAdminDb();
 
   // 1️⃣ Vérification de la signature Stripe
   let event;
@@ -195,13 +207,17 @@ export async function POST(req: Request) {
           const { id, title, count } = it;
           if (!id || !count) continue;
 
-          const productRef = doc(db, "cards", id);
-          const snap = await getDoc(productRef);
-          if (!snap.exists()) {
+          const productRef = db.collection("cards").doc(id);
+          const snap = await productRef.get();
+          if (!snap.exists) {
             console.warn(`⚠️ Produit non trouvé pour l'ID : ${id}`);
             continue;
           }
           const data = snap.data();
+          if (!data) {
+            console.warn("Données produit absentes pour le produit: " + id);
+            continue;
+          }
           itemsPI.push({
             id,
             title,
@@ -232,7 +248,7 @@ export async function POST(req: Request) {
           deliveryInfo: deliveryInfoPI,
           items: itemsPI,
           totalPaid: (paymentIntent.amount || 0) / 100,
-          createdAt: serverTimestamp(),
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
           sessionId: paymentIntent.id,
           status: 'completed',
           rawMetadata: paymentIntent.metadata || {},
@@ -253,7 +269,7 @@ export async function POST(req: Request) {
           break;
         }
         
-        const orderRefPI = await addDoc(collection(db, "orders"), orderDataPI);
+        const orderRefPI = await db.collection("orders").add(orderDataPI);
         console.log("✅ Order saved to Firestore (Payment Intent):", orderRefPI.id);
 
         // 🔄 MISE À JOUR DU STOCK APRÈS PAIEMENT RÉUSSI
@@ -378,7 +394,7 @@ export async function POST(req: Request) {
           deliveryInfo: shippingDetails, // Keep original Stripe object for DB
           items,
           totalPaid: (session.amount_total || 0) / 100,
-          createdAt: serverTimestamp(),
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
           sessionId: session.id,
           status: 'pending', // Will be updated after stock check
           timestamp: new Date().toISOString()
@@ -397,7 +413,7 @@ export async function POST(req: Request) {
         orderData.status = stockUpdateResult.success ? 'completed' : 'stock_error';
         
         console.log(`💾 === SAUVEGARDE COMMANDE (${orderData.status}) ===`);
-        const orderRef = await addDoc(collection(db, "orders"), orderData);
+        const orderRef = await db.collection("orders").add(orderData);
         console.log("✅ Order saved to Firestore:", orderRef.id);
 
         // 6️⃣ Envoi de l'email de confirmation
