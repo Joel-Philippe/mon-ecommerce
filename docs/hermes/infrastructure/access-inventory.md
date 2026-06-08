@@ -71,7 +71,12 @@
 
 ## Resend
 
-- Domains: UNKNOWN
+* Domains: 0 configured
+* Authentication: RESEND_API_KEY configured in /root/.hermes/.env
+* Access level verified: API access confirmed
+* Domain management: available
+* Email sending capability: available
+* API test status: HTTP 200 verified
 - Main API route: app/api/send-email/route.ts
 - Test route: app/api/test-email/route.ts
 - Debug route: app/api/debug-webhook/route.ts
@@ -81,8 +86,20 @@
 
 ## Hosting
 
-- Vercel: UNKNOWN
+- Vercel: connected
+- Vercel account: joel-philippe
+- Vercel team/scope: philippes-projects-c7aa6646
+- VERCEL_TOKEN: configured in /root/.hermes/.env
+- Access level verified: read access to projects
+- Vercel projects discovered:
+  - philippe-studio
+  - time
+  - easy-gcly
+  - easy-joq8
+  - easy
 - VPS: UNKNOWN
+- OVH: available account, not connected to Hermes yet
+- Render: available account, not connected to Hermes yet
 - Docker: not detected
 - vercel.json: not detected
 - Dockerfile: not detected
