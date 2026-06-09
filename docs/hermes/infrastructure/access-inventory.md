@@ -60,7 +60,13 @@
 
 ## Stripe
 
-- Dashboard: UNKNOWN
+- Dashboard: connected
+- STRIPE_SECRET_KEY: configured in /root/.hermes/.env
+- Stripe API access verified: yes
+- Stripe key mode verified: test
+- Stripe account id: acct_1S6FAcPcTPcGClGU
+- Charges enabled: true
+- Payouts enabled: true
 - Webhooks: used
 - Checkout Sessions route: app/api/stripe/checkout-sessions/route.ts
 - Stripe webhooks route: app/api/stripe/webhooks/route.ts
