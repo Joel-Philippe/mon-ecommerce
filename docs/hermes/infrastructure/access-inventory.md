@@ -9,7 +9,10 @@
 
 ## Firebase
 
-- Project: UNKNOWN
+- Project: time-sigup
+- Firebase Admin authentication: configured in /root/.hermes/.env
+- Firebase Admin access verified: yes
+- Firestore read access verified: yes
 - Firestore: used
 - Storage: used
 - Authentication: used
