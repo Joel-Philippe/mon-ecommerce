@@ -102,7 +102,19 @@
   - easy
 - VPS: UNKNOWN
 - OVH: available account, not connected to Hermes yet
-- Render: available account, not connected to Hermes yet
+- Render: connected
+- RENDER_API_KEY: configured in /root/.hermes/.env
+- Render API access verified: yes
+- Render services count: 8
+- Render services discovered:
+  - fastfood-backend
+  - fastfood-docker
+  - habitat-jeunes-90
+  - fastfood
+  - mon-ecommerce
+  - Render-ecommerce
+  - quiz-backend
+  - quiz-frontend
 - Docker: not detected
 - vercel.json: not detected
 - Dockerfile: not detected
