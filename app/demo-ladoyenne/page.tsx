@@ -6,13 +6,12 @@ import products from './products.js';
 
 const DemoLadoyenne = () => {
   return (
-    <div className="demo-container">
-      <section className="hero">
+    <div className="ladoyenne-demo-container">
+      <section className="ladoyenne-hero">
         <h1>La Doyenne</h1>
         <p>Épicerie africaine et alimentation générale à Belfort.</p>
       </section>
-
-      <section className="categories">
+      <section className="ladoyenne-categories">
         <h2>Catégories</h2>
         <ul>
           <li>Épices</li>
@@ -23,11 +22,10 @@ const DemoLadoyenne = () => {
           <li>Hygiène</li>
         </ul>
       </section>
-
-      <section className="products">
+      <section className="ladoyenne-products">
         <h2>Produits</h2>
         {products.map((product, index) => (
-          <div key={index} className="product-card">
+          <div key={index} className="ladoyenne-product-card">
             <h4>{product.name}</h4>
             <p>💲{product.price.toFixed(2)}</p>
             <p>{product.description}</p>
@@ -35,17 +33,14 @@ const DemoLadoyenne = () => {
           </div>
         ))}
       </section>
-
-      <section className="pickup-info">
+      <section className="ladoyenne-pickup-info">
         <h2>Retrait en Boutique</h2>
         <p>Retirez vos produits à notre boutique au 8 rue Aristide Briand, 90000 Belfort.</p>
       </section>
-
-      <section className="contact-info">
+      <section className="ladoyenne-contact-info">
         <h2>Contact</h2>
         <p>Pour toute question, contactez-nous au 📞 : 0123456789</p>
       </section>
-
     </div>
   );
 };
