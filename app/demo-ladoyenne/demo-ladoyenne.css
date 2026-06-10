@@ -1,22 +1,22 @@
-.ladoyenne-demo-container {
+.demo-container {
   font-family: Arial, sans-serif;
   padding: 20px;
   max-width: 800px;
   margin: auto;
 }
 
-.ladoyenne-hero {
+.hero {
   background-color: #4CAF50;
   color: white;
   padding: 30px;
   text-align: center;
 }
 
-.ladoyenne-categories {
+.categories {
   margin: 20px 0;
 }
 
-.ladoyenne-product-card {
+.product-card {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 10px;
@@ -24,22 +24,11 @@
   display: inline-block;
   width: calc(30% - 20px);
   text-align: center;
-  transition: transform 0.2s;
 }
 
-.ladoyenne-product-card:hover {
-  transform: scale(1.05);
-}
-
-.ladoyenne-pickup-info, .ladoyenne-contact-info {
+.pickup-info, .contact-info {
   margin: 20px 0;
   background-color: #f1f1f1;
   padding: 15px;
   border-radius: 8px;
-}
-
-.ladoyenne-products {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 }
