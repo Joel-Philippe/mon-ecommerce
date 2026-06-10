@@ -1,0 +1,34 @@
+.demo-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.hero {
+  background-color: #4CAF50;
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.categories {
+  margin: 20px 0;
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  display: inline-block;
+  width: calc(30% - 20px);
+  text-align: center;
+}
+
+.pickup-info, .contact-info {
+  margin: 20px 0;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+}
