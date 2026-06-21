@@ -1,6 +1,5 @@
-import { db } from "@/components/firebaseConfig";
-import { collection, query, where, getDocs, documentId } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
+import { getAdminDb, admin } from "@/utils/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,11 +9,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Invalid or empty product IDs array" }, { status: 400 });
     }
 
-    const productsRef = collection(db, "cards");
-    const q = query(productsRef, where(documentId(), "in", productIds));
-    const querySnapshot = await getDocs(q);
+    const db = getAdminDb();
+    const productsRef = db.collection("cards");
+    const querySnapshot = await productsRef
+      .where(admin.firestore.FieldPath.documentId(), "in", productIds)
+      .get();
 
-    const products = querySnapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
+    const products = querySnapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
 
     return NextResponse.json(products, { status: 200 });
   } catch (error: any) {

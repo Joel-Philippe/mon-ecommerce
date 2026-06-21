@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
-import { db, admin } from '@/utils/firebaseAdmin';
+import { admin, getAdminDb } from '@/utils/firebaseAdmin';
 
 export async function GET() {
   try {
+    const db = getAdminDb();
     const cardsCol = db.collection('cards');
-    
+
     // 1. Nettoyage complet
     const snapshot = await cardsCol.get();
     const batch = db.batch();

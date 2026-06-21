@@ -1,29 +1,19 @@
-import nodemailer from 'nodemailer';
-import { NextRequest, NextResponse } from 'next/server';
-
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'hotmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+import { NextRequest } from 'next/server';
+import { sendGenericEmail } from '@/utils/resendEmailService';
 
 export async function POST(req: NextRequest) {
   if (req.method === 'POST') {
     const { to, subject, message } = await req.json();
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to,
-      subject,
-      text: message,
-    };
-
     try {
-      await transporter.sendMail(mailOptions);
-      return new Response(JSON.stringify({ success: true }), { status: 200 });
-    } catch (error: unknown) { // Explicitly type error as unknown
+      const result = await sendGenericEmail({ to, subject, message });
+
+      if (!result.success) {
+        return new Response(JSON.stringify({ success: false, error: result.error }), { status: 500 });
+      }
+
+      return new Response(JSON.stringify({ success: true, messageId: result.messageId }), { status: 200 });
+    } catch (error: unknown) {
       let errorMessage = 'An unknown error occurred.';
       if (error instanceof Error) {
         errorMessage = error.message;

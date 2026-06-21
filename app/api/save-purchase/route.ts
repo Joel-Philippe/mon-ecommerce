@@ -1,12 +1,12 @@
-import { db } from '@/components/firebaseConfig';
-import { collection, addDoc } from 'firebase/firestore';
+import { getAdminDb } from '@/utils/firebaseAdmin';
 
 export async function POST(req: Request) {
   if (req.method === 'POST') {
     const { email, items } = await req.json();
 
     try {
-      await addDoc(collection(db, 'purchases'), {
+      const db = getAdminDb();
+      await db.collection('purchases').add({
         email,
         items,
         timestamp: new Date().toISOString(),

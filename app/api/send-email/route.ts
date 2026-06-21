@@ -1,17 +1,19 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend with API key from environment variables
-// Make sure to set RESEND_API_KEY in your .env.local or environment
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
   try {
+    const resendApiKey = process.env.RESEND_API_KEY;
+
+    if (!resendApiKey) {
+      return NextResponse.json({ error: 'Resend API key is not configured' }, { status: 500 });
+    }
+
+    const resend = new Resend(resendApiKey);
     const { email, displayName, productName } = await request.json();
 
-    // You might want to define your email content here or use a template
     const { data, error } = await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>', // Replace with your verified Resend domain
+      from: 'Acme <onboarding@resend.dev>',
       to: [email],
       subject: 'Confirmation de votre demande',
       html: `

@@ -1,5 +1,4 @@
-import { db } from '@/components/firebaseConfig';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getAdminDb, admin } from '@/utils/firebaseAdmin';
 import { sendOrderConfirmationEmail } from '@/utils/resendEmailService';
 
 export async function POST(req: Request) {
@@ -10,22 +9,22 @@ export async function POST(req: Request) {
   const { email, items, displayName, photoURL } = await req.json();
 
   try {
-    const docRef = await addDoc(collection(db, 'orders'), {
+    const db = getAdminDb();
+    const docRef = await db.collection('orders').add({
       customer_email: email,
       userDisplayName: displayName || "Anonyme",
       userPhotoURL: photoURL || "",
       items,
-      createdAt: serverTimestamp(),
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
       status: 'paid',
     });
 
-    // Utiliser le service centralisé pour l'envoi d'email
     try {
       await sendOrderConfirmationEmail({
         id: docRef.id,
         customer_email: email,
         userDisplayName: displayName,
-        items: items
+        items,
       });
       console.log(`✅ Email de confirmation envoyé pour la commande ${docRef.id}`);
     } catch (emailError) {

@@ -1,7 +1,6 @@
-import { db } from "@/components/firebaseConfig";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getAdminDb } from "@/utils/firebaseAdmin";
+import admin from "firebase-admin";
 import { NextRequest, NextResponse } from "next/server";
-
 export interface OrderItem {
   _id: string;
   title: string;
@@ -35,7 +34,7 @@ export async function POST(req: NextRequest) {
         deliveryInfo, 
         items, 
         paymentIntentId, 
-        totalPaid, // Add totalPaid
+        totalPaid,
         userId 
     } = await req.json() as OrderData;
 
@@ -49,16 +48,17 @@ export async function POST(req: NextRequest) {
       deliveryInfo,
       items,
       paymentIntentId,
-      totalPaid, // Add totalPaid
-      status: 'paid', // Add an initial status
-      createdAt: serverTimestamp(),
+      totalPaid,
+      status: 'paid',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
     if (userId) {
       orderData.userId = userId;
     }
 
-    const docRef = await addDoc(collection(db, "orders"), orderData);
+    const db = getAdminDb();
+    const docRef = await db.collection("orders").add(orderData);
     return NextResponse.json({
       message: "Order recorded successfully",
       orderId: docRef.id,

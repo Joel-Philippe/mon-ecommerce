@@ -1,156 +1,73 @@
-# 📧 Configuration Email Firebase - Guide Complet
+# 📧 Configuration Email officielle — Resend
 
-## 🎯 Solution Recommandée : Firebase Extensions + Gmail/Outlook Pro
+## 🎯 Solution retenue pour le template
 
-### 1️⃣ Installation de l'extension Firebase Email
+Le template ecommerce utilise **Resend uniquement** pour les emails applicatifs actifs :
 
-```bash
-# Installer Firebase CLI si pas déjà fait
-npm install -g firebase-tools
+- confirmation de commande ;
+- mises à jour de statut ;
+- demandes spéciales ;
+- emails de test/diagnostic.
 
-# Se connecter à Firebase
-firebase login
+Gmail SMTP, Outlook SMTP et `nodemailer` ne font plus partie du code actif du template.
 
-# Installer l'extension Email
-firebase ext:install firestore-send-email
-```
+## 1️⃣ Créer et vérifier le compte Resend
 
-### 2️⃣ Configuration de l'extension
+1. Créez un compte sur [resend.com](https://resend.com).
+2. Ajoutez le domaine du client dans Resend.
+3. Configurez les DNS demandés par Resend (SPF/DKIM/verification domaine).
+4. Attendez que le domaine soit marqué comme vérifié.
+5. Créez une clé API Resend côté serveur.
 
-Lors de l'installation, vous devrez configurer :
+## 2️⃣ Variables d'environnement Next.js
 
-- **SMTP Host** : `smtp.gmail.com` (pour Gmail Pro) ou `smtp-mail.outlook.com` (pour Outlook)
-- **SMTP Port** : `587`
-- **SMTP Username** : `votre-email@votre-domaine.com`
-- **SMTP Password** : Mot de passe d'application (voir étapes ci-dessous)
-- **Default FROM** : `noreply@votre-domaine.com`
-- **Default REPLY-TO** : `support@votre-domaine.com`
-
-### 3️⃣ Création d'un email professionnel
-
-#### Option A : Google Workspace (Recommandé)
-1. Allez sur [workspace.google.com](https://workspace.google.com)
-2. Créez un compte avec votre domaine
-3. Coût : ~6€/mois par utilisateur
-4. Avantages : Intégration parfaite, fiable, support 24/7
-
-#### Option B : Microsoft 365
-1. Allez sur [microsoft.com/microsoft-365/business](https://www.microsoft.com/microsoft-365/business)
-2. Choisissez le plan Business Basic
-3. Coût : ~5€/mois par utilisateur
-
-#### Option C : Solution gratuite (pour tests)
-1. Utilisez Gmail avec un domaine personnalisé
-2. Activez l'authentification à 2 facteurs
-3. Générez un mot de passe d'application
-
-### 4️⃣ Configuration du mot de passe d'application
-
-#### Pour Gmail :
-1. Allez dans votre compte Google
-2. Sécurité → Authentification à 2 facteurs
-3. Mots de passe des applications
-4. Générez un mot de passe pour "Mail"
-
-#### Pour Outlook :
-1. Allez dans votre compte Microsoft
-2. Sécurité → Options de sécurité avancées
-3. Mots de passe d'application
-4. Créez un nouveau mot de passe
-
-### 5️⃣ Variables d'environnement Firebase
-
-Ajoutez dans votre projet Firebase (Console → Project Settings → Service Accounts) :
+Ajoutez ces valeurs dans `.env.local` en local, puis dans les variables d'environnement de l'hébergeur :
 
 ```env
-SMTP_CONNECTION_URI=smtps://votre-email@votre-domaine.com:mot-de-passe-app@smtp.gmail.com:465
-DEFAULT_FROM=noreply@votre-domaine.com
-DEFAULT_REPLY_TO=support@votre-domaine.com
+RESEND_API_KEY=re_votre_cle_api_resend
+RESEND_FROM_EMAIL=noreply@votre-domaine.com
+RESEND_REPLY_TO_EMAIL=support@votre-domaine.com
 ```
 
-## 📋 Template d'email professionnel
+Notes :
 
-L'extension Firebase utilise des templates HTML. Voici un exemple :
+- `RESEND_API_KEY` est obligatoire et doit rester côté serveur.
+- `RESEND_FROM_EMAIL` doit utiliser un domaine vérifié dans Resend.
+- `RESEND_REPLY_TO_EMAIL` est optionnel mais recommandé pour le support client.
+- `NEXT_PUBLIC_SUPPORT_EMAIL` reste l'email public affiché dans l'interface.
 
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Confirmation de commande</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; background: #f9f9f9; }
-        .order-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
-        .total { font-size: 18px; font-weight: bold; color: #667eea; }
-        .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🎉 Merci pour votre commande !</h1>
-            <p>Commande confirmée pour {{customerName}}</p>
-        </div>
-        
-        <div class="content">
-            <h2>📋 Détails de votre commande</h2>
-            <p><strong>Email :</strong> {{customerEmail}}</p>
-            <p><strong>Date :</strong> {{orderDate}}</p>
-            
-            <h3>🛍️ Articles commandés :</h3>
-            {{#each items}}
-            <div class="order-item">
-                <strong>{{this.title}}</strong><br>
-                Quantité : {{this.count}} × {{this.price}}€<br>
-                <em>Total : {{this.total}}€</em>
-            </div>
-            {{/each}}
-            
-            <div class="total">
-                💰 Total payé : {{totalPaid}}€
-            </div>
-            
-            <h3>🚚 Informations de livraison :</h3>
-            <p>
-                {{deliveryInfo.firstName}} {{deliveryInfo.lastName}}<br>
-                {{deliveryInfo.address}}<br>
-                {{deliveryInfo.postalCode}} {{deliveryInfo.city}}<br>
-                {{deliveryInfo.country}}
-            </p>
-        </div>
-        
-        <div class="footer">
-            <p>Merci de votre confiance ! 💜</p>
-            <p>Support : support@votre-domaine.com | Tél : +33 1 23 45 67 89</p>
-        </div>
-    </div>
-</body>
-</html>
+## 3️⃣ Firebase Functions
+
+Si les Firebase Functions du dossier `functions/` sont utilisées, configurez Resend avec Firebase Functions config :
+
+```bash
+firebase functions:config:set \
+  resend.api_key="re_votre_cle_api_resend" \
+  resend.from_email="noreply@votre-domaine.com" \
+  resend.reply_to_email="support@votre-domaine.com" \
+  client.name="Votre Boutique"
 ```
 
-## 🔧 Avantages de cette solution
+Puis redéployez les functions :
 
-✅ **Professionnel** : Emails depuis votre domaine  
-✅ **Fiable** : Infrastructure Google/Microsoft  
-✅ **Scalable** : Gère des milliers d'emails  
-✅ **Templates** : HTML personnalisables  
-✅ **Tracking** : Suivi des envois et erreurs  
-✅ **Sécurisé** : Chiffrement et authentification  
+```bash
+firebase deploy --only functions
+```
 
-## 💰 Coûts
+## 4️⃣ Vérification
 
-- **Firebase Extensions** : Gratuit
-- **Google Workspace** : ~6€/mois
-- **Envois d'emails** : Inclus (jusqu'à limites généreuses)
+- Lancez l'application en local.
+- Configurez `RESEND_API_KEY` et `RESEND_FROM_EMAIL`.
+- Utilisez la route ou l'écran de diagnostic email si présent.
+- Vérifiez que Resend affiche l'email dans ses logs d'envoi.
+- Testez le flux Stripe/webhook en environnement de test avant production.
 
-## 🚀 Alternative rapide : Resend
+## 5️⃣ Ancienne extension Firebase SMTP
 
-Si vous voulez une solution encore plus simple :
+Le fichier `extensions/firestore-send-email.env` peut encore exister comme référence historique/legacy, mais il n'est pas la solution officielle du template et ne doit pas être supprimé sans confirmation explicite.
 
-1. Créez un compte sur [resend.com](https://resend.com)
-2. Vérifiez votre domaine
-3. Utilisez leur API directement
-4. Coût : Gratuit jusqu'à 3000 emails/mois
+Pour les nouveaux clients, configurez Resend plutôt que Gmail SMTP ou Outlook SMTP.
+
+## 6️⃣ Coûts et limites
+
+Consultez les tarifs et limites à jour sur [resend.com/pricing](https://resend.com/pricing). Le plan gratuit suffit souvent pour les premiers tests, mais chaque client doit vérifier ses besoins de volume et de domaine.

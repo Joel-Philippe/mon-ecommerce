@@ -1,8 +1,13 @@
-// utils/stripe.ts
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-08-27.basil',
-});
+export function getStripe() {
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
-export { stripe };
+  if (!stripeSecretKey) {
+    throw new Error('Stripe secret key is not configured');
+  }
+
+  return new Stripe(stripeSecretKey, {
+    apiVersion: '2025-08-27.basil',
+  });
+}

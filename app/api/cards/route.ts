@@ -1,11 +1,11 @@
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import { db } from '@/components/firebaseConfig';
+import { getAdminDb } from '@/utils/firebaseAdmin';
 
 export async function GET() {
   try {
-    const cardsCol = collection(db, "cards");
-    const snapshot = await getDocs(cardsCol);
-    const cards = snapshot.docs.map(doc => ({ _id: doc.id, ...doc.data() }));
+    const db = getAdminDb();
+    const snapshot = await db.collection("cards").get();
+    const cards = snapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
+
     return new Response(JSON.stringify({ success: true, data: cards }), { status: 200 });
   } catch (error: any) {
     console.error(error);
@@ -15,8 +15,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const db = getAdminDb();
     const body = await req.json();
-    // Conversion explicite en nombre
+
     const stock = Number(body.stock) || 0;
     const stock_reduc = Number(body.stock_reduc) || 0;
     const computedPourcentage = stock > 0 ? Math.round(((stock - stock_reduc) / stock) * 100) : 0;
@@ -26,8 +27,8 @@ export async function POST(req: Request) {
       subtitle: body.subtitle,
       description: body.description,
       images: body.images,
-      stock: stock,
-      stock_reduc: stock_reduc,
+      stock,
+      stock_reduc,
       pourcentage_disponible: computedPourcentage,
       price: body.price,
       price_promo: body.price_promo,
@@ -45,22 +46,21 @@ export async function POST(req: Request) {
       photo_du_proposant: body.photo_du_proposant,
       origine: body.origine,
       caracteristiques: body.caracteristiques,
-      produits_derives: body.produits_derives.map((produit: any) => ({
+      produits_derives: (body.produits_derives || []).map((produit: any) => ({
         ...produit,
-        deliveryTime: produit.deliveryTime
+        deliveryTime: produit.deliveryTime,
       })),
       categorie: body.categorie,
       categorieImage: body.categorieImage,
       categorieBackgroundColor: body.categorieBackgroundColor,
       affiche: body.affiche,
       nouveau: true,
-
-      // ⭐ Champs de notation
-      reviews: [],     // Vide au départ
-      stars: 0         // Moyenne initiale
+      reviews: [],
+      stars: 0,
     };
 
-    const docRef = await addDoc(collection(db, "cards"), newCard);
+    const docRef = await db.collection("cards").add(newCard);
+
     return new Response(JSON.stringify({ success: true, data: { _id: docRef.id, ...newCard } }), { status: 201 });
   } catch (error: any) {
     console.error(error);
