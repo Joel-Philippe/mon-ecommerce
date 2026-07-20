@@ -1,5 +1,8 @@
 import { extendTheme, type StyleFunctionProps } from '@chakra-ui/react';
 
+export const LIGHT_APP_BACKGROUND = '#fbf3f1';
+export const DARK_APP_BACKGROUND = '#000000';
+
 const theme = extendTheme({
   config: {
     initialColorMode: 'system', // or 'light' | 'dark'
@@ -7,9 +10,15 @@ const theme = extendTheme({
   },
   styles: {
     global: (props: StyleFunctionProps) => ({
+      html: {
+        bg: props.colorMode === 'dark' ? DARK_APP_BACKGROUND : LIGHT_APP_BACKGROUND,
+      },
       body: {
-        bg: props.colorMode === 'dark' ? 'black' : 'white',
+        bg: props.colorMode === 'dark' ? DARK_APP_BACKGROUND : LIGHT_APP_BACKGROUND,
         color: props.colorMode === 'dark' ? 'white' : 'black',
+      },
+      '#__next': {
+        bg: props.colorMode === 'dark' ? DARK_APP_BACKGROUND : LIGHT_APP_BACKGROUND,
       },
     }),
   },

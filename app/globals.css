@@ -29,12 +29,19 @@ h1, h2, h3 {
 }
 
 body{
-    background: var(--chakra-colors-chakra-body-bg);
+    background: var(--app-page-background);
     color: var(--chakra-colors-chakra-body-text);
-    min-height: 1500px;
+    min-height: 100svh;
+    min-height: 100dvh;
+    margin: 0;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 :root {
+  --app-light-background: #fbf3f1;
+  --app-dark-background: #000000;
+  --app-page-background: var(--app-light-background);
+  --light-surface: #fbf3f1;
   --border-color: #dee2e6;
   --text-secondary: #6c757d;
   --menu-background-gradient: linear-gradient(90deg,#f8ede9 0,#fffcdd);
@@ -45,88 +52,106 @@ body{
   --profile-avatar-hover-shadow: 0 0 0 2px rgba(251, 0, 255, 0.5);
   --search-icon-color: #FF6F00;
   --new-card-price-color: #7e9090;
-  --menu-header-background: #FFFFFF; /* White for light mode */
+  --menu-header-background: var(--light-surface); /* Light mode surface */
   --selected-category-button-background: #00efd9; /* Light mode color for selected category button */
   --search-term-indicator-background: rgba(165, 165, 165, 0.547); /* Light mode color for search term indicator */
 
   /* New variables for backgrounds */
   --background-replying-to: rgb(246, 237, 227);
-  --background-footer-container: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  --background-footer-container: linear-gradient(135deg, rgba(251, 243, 241, 0.95) 0%, rgba(251, 243, 241, 0.95) 100%);
   --background-menu-button: linear-gradient(135deg, #f8fafc, #f1f5f9);
   --background-menu-button-hover: linear-gradient(135deg, #faf5ff, #f3e8ff);
   --background-cart-button: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-  --background-payment-modal-container: rgba(255, 255, 255, 0.98);
+  --background-payment-modal-container: rgba(251, 243, 241, 0.98);
   --background-payment-modal-content: linear-gradient(135deg, #f8ede9 0%, #faf5f2 100%);
-  --background-payment-section: rgba(255, 255, 255, 0.85);
-  --background-summary-card: rgba(255, 255, 255, 0.95);
+  --background-payment-section: rgba(251, 243, 241, 0.85);
+  --background-summary-card: rgba(251, 243, 241, 0.95);
   --background-summary-item: linear-gradient(135deg, rgba(230, 49, 153, 0.08) 0%, rgba(254, 194, 11, 0.08) 100%);
   --background-item-image: linear-gradient(135deg, #f1f5f9, #e2e8f0);
   --background-quantity-btn: linear-gradient(135deg, #f8fafc, #f1f5f9);
   --background-quantity-display: rgba(124, 58, 237, 0.08);
-  --background-summary-totals: rgba(255, 255, 255, 0.5);
-  --background-order-benefits: rgba(255, 255, 255, 0.5);
+  --background-summary-totals: rgba(251, 243, 241, 0.5);
+  --background-order-benefits: rgba(251, 243, 241, 0.5);
   --background-step-circle: linear-gradient(135deg, #e2e8f0, #cbd5e1);
   --background-progress-line: linear-gradient(90deg, #e2e8f0, #cbd5e1);
-  --background-step-header: rgba(255, 255, 255, 0.8);
-  --background-form-input: rgba(255, 255, 255, 0.9);
-  --background-form-input-focus: white;
+  --background-step-header: rgba(251, 243, 241, 0.8);
+  --background-form-input: rgba(251, 243, 241, 0.9);
+  --background-form-input-focus: var(--light-surface);
   --background-back-button: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  --background-action-button-secondary: white;
+  --background-action-button-secondary: var(--light-surface);
   --background-action-button-secondary-hover: #f8fafc;
-  --background-search-box-input: white;
-  --background-category-filter: white;
-  --background-product-card: white;
-  --background-request-card: white;
-  --background-form-input-admin: #fff;
+  --background-search-box-input: var(--light-surface);
+  --background-category-filter: var(--light-surface);
+  --background-product-card: var(--light-surface);
+  --background-request-card: var(--light-surface);
+  --background-form-input-admin: var(--light-surface);
   --background-cancel-btn-admin-hover: #e9ecef;
   --background-modern-admin-container: -webkit-linear-gradient(315deg, #f9ede9 0%, #dbb5b5 100%);
   --background-admin-user-info: #f8fafc;
   --background-tab-button-hover: #f8fafc;
-  --background-order-card: white;
+  --background-order-card: var(--light-surface);
   --background-article-double: linear-gradient(to right, #f8ede9 0%, #fffcdd 100%);
   --background-article-double-div: #f5f6f0;
   --background-article-double-text-wrapper: #ffffff8f;
-  --background-article-double-navbar: white;
+  --background-article-double-navbar: var(--light-surface);
   --background-ellipse-4-wrapper-img: bisque;
   --background-slider-overlay: wheat;
-  --background-cart-box: white;
+  --background-cart-box: var(--light-surface);
   --background-cart-box-scrollbar-track: bisque;
   --background-cart-box-scrollbar-thumb: bisque;
-  --background-rectangle-35: white;
-  --background-caracteristique-item: white;
-  --background-images-en-vrac: white;
+  --background-rectangle-35: var(--light-surface);
+  --background-caracteristique-item: var(--light-surface);
+  --background-images-en-vrac: var(--light-surface);
   --background-expanded-image-overlay: wheat;
   --background-success-container: #f0f4f8;
   --background-animated-video-container: aliceblue;
-  --background-new-card-border: white;
+  --background-new-card-border: var(--light-surface);
   --background-new-card-add-button: #f0f0f06b;
   --background-new-card-add-button-hover: #e8e8e8;
-  --background-new-card-add-button-disabled: white;
+  --background-new-card-add-button-disabled: var(--light-surface);
   --background-product-form-container: #f9f9fb;
-  --background-product-form-section: white;
-  --background-product-form-input: white;
+  --background-product-form-section: var(--light-surface);
+  --background-product-form-input: var(--light-surface);
   --background-product-form-secondary-button: #e2e8f0;
   --background-product-form-secondary-button-hover: #cbd5e0;
   --background-product-form-image-preview: #f7fafc;
   --background-product-form-dynamic-field-card: #f9f9fb;
   --background-product-form-add-button: #edf2f7;
   --background-product-form-add-button-hover: #e2e8f0;
-  --background-selected-categories-chip: #fff;
+  --background-selected-categories-chip: var(--light-surface);
   --background-selected-categories-chip-remove-button-hover: #f0f0f0;
   --background-selected-categories-clear-all-button-hover: #f0f0f0;
   --background-loader-after: rgb(255, 246, 241); /* Light mode color for loader after */
-  --background-checkbox-custom: white; /* Light mode color for checkbox custom */
-  --background-modern-form-header: white; /* Light mode color for modern form header */
-  --background-modern-form-sidebar: white; /* Light mode color for modern form sidebar */
-  --background-form-input-modern-form: white; /* Light mode color for modern form input */
-  --background-form-footer: white; /* Light mode color for modern form footer */
-  --background-panier-item: white; /* Light mode color for panier item */
-  --background-product-modal-content: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); /* Light mode color for product modal content */
-  --background-modal-header-full: white; /* Light mode color for modal header full */
-  --background-thumbnail-full: #fff; /* Light mode color for thumbnail full */
+  --background-checkbox-custom: var(--light-surface); /* Light mode color for checkbox custom */
+  --background-modern-form-header: var(--light-surface); /* Light mode color for modern form header */
+  --background-modern-form-sidebar: var(--light-surface); /* Light mode color for modern form sidebar */
+  --background-form-input-modern-form: var(--light-surface); /* Light mode color for modern form input */
+  --background-form-footer: var(--light-surface); /* Light mode color for modern form footer */
+  --background-panier-item: var(--light-surface); /* Light mode color for panier item */
+  --background-product-modal-content: linear-gradient(180deg, #fbf3f1 0%, #fbf3f1 100%); /* Light mode color for product modal content */
+  --background-modal-header-full: var(--light-surface); /* Light mode color for modal header full */
+  --background-thumbnail-full: var(--light-surface); /* Light mode color for thumbnail full */
+}
+
+html,
+body {
+  background-color: var(--app-page-background);
+  color-scheme: light;
+  overscroll-behavior-y: none;
+}
+
+html[data-theme="light"],
+html[data-theme="light"] body,
+html:not([data-theme="dark"]),
+html:not([data-theme="dark"]) body {
+  --app-page-background: var(--app-light-background);
+  --chakra-colors-chakra-body-bg: var(--app-light-background);
+  --menu-header-background: var(--app-light-background);
+  background-color: var(--app-light-background);
 }
 
 [data-theme="dark"] {
+  --app-page-background: var(--app-dark-background);
   --border-color: #2d3748;
   --text-secondary: #a0aec0;
   --chakra-colors-chakra-body-bg: #000000; /* Set body background to black in dark mode */
@@ -541,9 +566,12 @@ body{
   }
 }
 
-.chakra-ui-light{
-    background: white;
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background-color: var(--app-dark-background);
+  color-scheme: dark;
 }
+
 @media (max-width: 768px) {
     .header {
         height: 80%;

@@ -10,7 +10,8 @@
   z-index: 1000;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  background-color: white; /* White background for light mode */
+  background-color: var(--app-page-background); /* Match mobile browser chrome in light/dark mode */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .nav-item {
@@ -38,7 +39,7 @@
   color: var(--chakra-colors-chakra-body-text);
   font-size: 12px;
   font-weight: bold;
-  background: var(--chakra-colors-chakra-body-bg);
+  background: var(--app-page-background);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -26,7 +26,7 @@
   position: absolute;
   height: 3px;
   width: 100%;
-  background: #FF6F00;
+  background: var(--burger-icon-bar-color);
   border-radius: 3px;
   opacity: 1;
   left: 0;
@@ -65,7 +65,8 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: var(--chakra-colors-chakra-body-bg);
+  background-color: var(--app-page-background);
+  color: var(--chakra-colors-chakra-body-text);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 1rem;
@@ -117,7 +118,7 @@
 }
 
 .menu-item:hover {
-  background-color: var(--chakra-colors-chakra-hover-bg);
+  background-color: rgba(255, 111, 0, 0.08);
   color: var(--chakra-colors-chakra-body-text);
 }
 
@@ -151,4 +152,8 @@
 .profile-avatar-button:hover {
   transform: scale(1.05);
   box-shadow: var(--profile-avatar-hover-shadow);
+}
+
+[data-theme="dark"] .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
 }
